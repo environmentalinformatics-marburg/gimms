@@ -6,6 +6,9 @@
 #' server is not accessible (e.g. due to missing internet connection), load
 #' local version of file inventory.
 #'
+#' @param sort Logical. If \code{TRUE} (default), the available files are sorted
+#' by date prior to return.
+#'
 #' @return
 #' A vector of online filepaths.
 #'
@@ -17,7 +20,7 @@
 #'
 #' @export updateInventory
 #' @name updateInventory
-updateInventory <- function() {
+updateInventory <- function(sort = FALSE) {
 
   ## available files (online)
   cat("Trying to update GIMMS inventory from server...\n")
@@ -38,6 +41,10 @@ updateInventory <- function() {
     cat("Online update successful. You are now working with the latest version
         of the GIMMS inventory.")
   }
+
+  ## sort files (optional)
+  if (sort)
+    gimms_fls <- rearrangeFiles(gimms_fls)
 
   ## return files
   return(gimms_fls)

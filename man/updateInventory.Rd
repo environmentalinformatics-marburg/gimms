@@ -4,7 +4,11 @@
 \alias{updateInventory}
 \title{Update GIMMS 3G file inventory}
 \usage{
-updateInventory()
+updateInventory(sort = FALSE)
+}
+\arguments{
+\item{sort}{Logical. If \code{TRUE} (default), the available files are sorted
+by date prior to return.}
 }
 \value{
 A vector of online filepaths.
