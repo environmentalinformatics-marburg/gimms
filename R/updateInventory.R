@@ -35,11 +35,10 @@ updateInventory <- function(sort = FALSE) {
   ## available files (offline)
   if (class(gimms_fls) == "try-error") {
     cat("Online update failed. Using local inventory...\n")
-    gimms_fls <- readRDS(system.file("data", "inventory.rds",
+    gimms_fls <- readRDS(system.file("extdata", "inventory.rds",
                                      package = "gimms"))
   } else {
-    cat("Online update successful. You are now working with the latest version
-        of the GIMMS inventory.")
+    cat("Online update of the GIMMS file inventory successful!")
   }
 
   ## sort files (optional)
