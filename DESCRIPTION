@@ -1,0 +1,13 @@
+Package: gimms
+Type: Package
+Title: Download and Process GIMMS3g Data
+Version: 0.1
+Date: 2015-10-05
+Author: Florian Detsch
+Maintainer: Florian Detsch <florian.detsch@staff.uni-marburg.de>
+Description:
+    Set of functions to retrieve list of available GIMMS files, download and
+    extract compressed data, and import binary files into R as standard
+    'Raster*' objects.
+License: GPL (>= 3) | file LICENSE
+LazyData: TRUE
