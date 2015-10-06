@@ -77,14 +77,32 @@ img {
 </div>
 <div id="how-to-install" class="section level3">
 <h3>How to install</h3>
-<p>At present, <strong>gimms</strong> can be installed directly from <a href="https://github.com/environmentalinformatics-marburg/gimms">GitHub</a> via</p>
-<pre class="r"><code>## install 'gimms' package
-library(devtools)
-install_github(&quot;environmentalinformatics-marburg/gimms&quot;)
+<p>So far, the <strong>gimms</strong> package has not been submitted to CRAN but a preliminary package version can be installed directly from <a href="https://github.com/environmentalinformatics-marburg/gimms">GitHub</a> via</p>
+<pre class="r"><code># ## install 'gimms' package
+# library(devtools)
+# install_github(&quot;environmentalinformatics-marburg/gimms&quot;)
 
 ## load 'gimms' package
 library(gimms)</code></pre>
-<p>There is no such thing as a ‘development’ branch yet, but be assured that such things will possibly be provided in the near-distant future.</p>
+<p>There is no such thing as a ‘development’ branch yet, but be assured that such things will possibly be provided in the near-distant future given that there is a need for further functionality, improvements, bug-fixes etc.</p>
+</div>
+<div id="list-available-files" class="section level3">
+<h3>List available files</h3>
+<p>For any further processing, it is helpful to know which GIMMS files are currently hosted on the [ECOCAST servers]((<a href="http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/" class="uri">http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/</a>). <code>updateInventory</code> has been designed just for that purpose as it imports the file inventory stored online in <em>00FILE-LIST.txt</em> as ‘character’ vector directly into R. By setting <code>sort = TRUE</code>, it is even possible to return the output sorted by date which is anything but intuitive when dealing with naming conventions in the form of ‘geo83sep15a.n07-VI3g’). If there is no active internet connection available, <code>updateInventory</code> automatically imports the latest offline version of the file inventory which is stored (and regularly updated) in ‘inst/extdata/inventory.rds’.</p>
+<pre class="r"><code>gimms_files &lt;- updateInventory(sort = TRUE)</code></pre>
+<pre><code>## Trying to update GIMMS inventory from server...
+## Online update of the GIMMS file inventory successful!</code></pre>
+<pre class="r"><code>gimms_files[1:10]</code></pre>
+<pre><code>##  [1] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81jul15a.n07-VI3g&quot;
+##  [2] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81jul15b.n07-VI3g&quot;
+##  [3] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81aug15a.n07-VI3g&quot;
+##  [4] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81aug15b.n07-VI3g&quot;
+##  [5] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81sep15a.n07-VI3g&quot;
+##  [6] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81sep15b.n07-VI3g&quot;
+##  [7] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81oct15a.n07-VI3g&quot;
+##  [8] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81oct15b.n07-VI3g&quot;
+##  [9] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81nov15a.n07-VI3g&quot;
+## [10] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81nov15b.n07-VI3g&quot;</code></pre>
 </div>
 </div>
 

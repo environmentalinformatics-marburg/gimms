@@ -23,17 +23,44 @@ far. Feel free to comment, raise issues and provide (constructive) criticism.
 Any suggestions on how to improve the **gimms** package are highly appreciated!
 
 ### How to install
-At present, the **gimms** package can be installed directly from 
+So far, the **gimms** package has not been submitted to CRAN but a preliminary 
+package version can be installed directly from 
 [GitHub](https://github.com/environmentalinformatics-marburg/gimms) via 
 
-```{r install, eval = FALSE}
-## install 'gimms' package
-library(devtools)
-install_github("environmentalinformatics-marburg/gimms")
+```{r install, message = FALSE}
+# ## install 'gimms' package
+# library(devtools)
+# install_github("environmentalinformatics-marburg/gimms")
 
 ## load 'gimms' package
 library(gimms)
 ```
 
 There is no such thing as a 'development' branch yet, but be assured that such 
-things will possibly be provided in the near-distant future. 
+things will possibly be provided in the near-distant future given that there is 
+a need for further functionality, improvements, bug-fixes etc. 
+
+### List available files
+For any further processing, it is helpful to know which GIMMS files are 
+currently hosted on the [ECOCAST servers]((http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/). 
+`updateInventory` has been designed just for that purpose as it imports the file 
+inventory stored online in *00FILE-LIST.txt* as 'character' vector directly into 
+R. By setting `sort = TRUE`, it is even possible to return the output sorted by 
+date which is anything but intuitive when dealing with naming conventions in the 
+form of 'geo83sep15a.n07-VI3g'). If there is no active internet connection 
+available, `updateInventory` automatically imports the latest offline version of 
+the file inventory which is stored (and regularly updated) in 
+'inst/extdata/inventory.rds'.
+
+```{r updateInventory}
+gimms_files <- updateInventory(sort = TRUE)
+gimms_files[1:10]
+```
+
+### Download files
+With the information on files currently hosted on the remote server at hand, the 
+next logical step of the **gimms** processing chain is to download selected (if 
+not all) bi-monthly datasets. This can be achieved by running `downloadGimms`, 
+but since the function works with different types of input parameter (if any), 
+some *ex ante* information are possibly helpful for its proper use.
+further explanation seems reasonable.
