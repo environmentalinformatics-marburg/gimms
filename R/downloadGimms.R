@@ -18,7 +18,9 @@ if ( !isGeneric("downloadGimms") ) {
 #' all downloaded files will be stored in the current working directory.
 #' @param overwrite Logical. If \code{TRUE}, already downloaded files in 'dsn'
 #' will be overwritten.
-#' @param ... Further arguments. Currently not in use.
+#' @param quiet Logical. If \code{TRUE}, information sent to the console is
+#' reduced.
+#' @param ... Further arguments passed on to \code{\link{download.file}}.
 #'
 #' @return
 #' A vector of filepaths.
@@ -31,19 +33,20 @@ if ( !isGeneric("downloadGimms") ) {
 #'
 #' @examples
 #' \dontrun{
-#' # Download GIMMS 3G data from 1990 to 2009 (this might take some time...)
-#' downloadGimms(begin = 2000, dsn = paste(getwd(), "data", sep = "/"))
+#' # Download GIMMS 3G data from 2000 to 2005 (this might take some time...)
+#' downloadGimms(x = 2000, y = 2005, dsn = paste(getwd(), "data", sep = "/"))
 #' }
 #' @export downloadGimms
 #' @name downloadGimms
 
 ################################################################################
 ### function using numeric input (i.e. years) ##################################
+#' @aliases downloadGimms,numeric-method
 #' @rdname downloadGimms
 setMethod("downloadGimms",
           signature(x = "numeric"),
           function(x = 1981, y = 2013,
-                   dsn = getwd(), overwrite = FALSE,
+                   dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    ...) {
 
   ## available files
@@ -60,20 +63,21 @@ setMethod("downloadGimms",
   gimms_yrs_chr[id_new] <- paste0("20", gimms_yrs_chr[id_new])
   gimms_yrs_num <- as.numeric(gimms_yrs_chr)
 
-  gimms_fls <- gimms_fls[gimms_yrs_chr %in% seq(begin, end)]
+  gimms_fls <- gimms_fls[gimms_yrs_chr %in% seq(x, y)]
 
   ## download
   for (i in gimms_fls) {
     destfile <- paste0(dsn, "/", basename(i))
     if (file.exists(destfile) & !overwrite) {
-      cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
+      if (!quiet)
+        cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
     } else {
-      try(download.file(i, destfile = destfile), silent = TRUE)
+      try(download.file(i, destfile = destfile, ...), silent = TRUE)
     }
   }
 
   ## return vector with output files
-  gimms_out <- paste0(dsn, "/", gimms_fls)
+  gimms_out <- paste0(dsn, "/", basename(gimms_fls))
   return(gimms_out)
 
 })
@@ -81,23 +85,24 @@ setMethod("downloadGimms",
 
 ################################################################################
 ### function using character input (i.e. files) ################################
+#' @aliases downloadGimms,character-method
 #' @rdname downloadGimms
 setMethod("downloadGimms",
           signature(x = "character"),
-          function(x, dsn = getwd(), overwrite = FALSE, ...) {
+          function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE, ...) {
 
   ## download
-  for (i in gimms_fls) {
+  for (i in x) {
     destfile <- paste0(dsn, "/", basename(i))
     if (file.exists(destfile) & !overwrite) {
       cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
     } else {
-      try(download.file(i, destfile = destfile), silent = TRUE)
+      try(download.file(i, destfile = destfile, ...), silent = TRUE)
     }
   }
 
   ## return vector with output files
-  gimms_out <- paste0(dsn, "/", gimms_fls)
+  gimms_out <- paste0(dsn, "/", basename(x))
   return(gimms_out)
 
 })
@@ -105,10 +110,11 @@ setMethod("downloadGimms",
 
 ################################################################################
 ### function using character input (i.e. files) ################################
+#' @aliases downloadGimms,missing-method
 #' @rdname downloadGimms
 setMethod("downloadGimms",
           signature(x = "missing"),
-          function(dsn = getwd(), overwrite = FALSE, ...) {
+          function(dsn = getwd(), overwrite = FALSE, quiet = TRUE, ...) {
 
   ## available files
   gimms_fls <- updateInventory()
@@ -119,12 +125,12 @@ setMethod("downloadGimms",
     if (file.exists(destfile) & !overwrite) {
       cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
     } else {
-      try(download.file(i, destfile = destfile), silent = TRUE)
+      try(download.file(i, destfile = destfile, ...), silent = TRUE)
     }
   }
 
   ## return vector with output files
-  gimms_out <- paste0(dsn, "/", gimms_fls)
+  gimms_out <- paste0(dsn, "/", basename(gimms_fls))
   return(gimms_out)
 
 })

@@ -5,15 +5,17 @@
 \alias{downloadGimms}
 \alias{downloadGimms,character-method}
 \alias{downloadGimms,missing-method}
+\alias{downloadGimms,numeric-method}
 \title{Download GIMMS 3G data}
 \usage{
 \S4method{downloadGimms}{numeric}(x = 1981, y = 2013, dsn = getwd(),
-  overwrite = FALSE, ...)
+  overwrite = FALSE, quiet = TRUE, ...)
 
 \S4method{downloadGimms}{character}(x, dsn = getwd(), overwrite = FALSE,
-  ...)
+  quiet = TRUE, ...)
 
-\S4method{downloadGimms}{missing}(dsn = getwd(), overwrite = FALSE, ...)
+\S4method{downloadGimms}{missing}(dsn = getwd(), overwrite = FALSE,
+  quiet = TRUE, ...)
 }
 \arguments{
 \item{x}{If 'numeric', start year for download (e.g. 2000). If 'character',
@@ -30,7 +32,10 @@ all downloaded files will be stored in the current working directory.}
 \item{overwrite}{Logical. If \code{TRUE}, already downloaded files in 'dsn'
 will be overwritten.}
 
-\item{...}{Further arguments. Currently not in use.}
+\item{quiet}{Logical. If \code{TRUE}, information sent to the console is
+reduced.}
+
+\item{...}{Further arguments passed on to \code{\link{download.file}}.}
 }
 \value{
 A vector of filepaths.
@@ -41,8 +46,8 @@ Download GIMMS 3G binary data for a given time span from NASA FTP server
 }
 \examples{
 \dontrun{
-# Download GIMMS 3G data from 1990 to 2009 (this might take some time...)
-downloadGimms(begin = 2000, dsn = paste(getwd(), "data", sep = "/"))
+# Download GIMMS 3G data from 2000 to 2005 (this might take some time...)
+downloadGimms(x = 2000, y = 2005, dsn = paste(getwd(), "data", sep = "/"))
 }
 }
 \author{
