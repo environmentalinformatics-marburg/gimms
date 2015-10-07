@@ -33,8 +33,10 @@ if ( !isGeneric("downloadGimms") ) {
 #'
 #' @examples
 #' \dontrun{
-#' # Download GIMMS 3G data from 2000 to 2005 (this might take some time...)
-#' downloadGimms(x = 2000, y = 2005, dsn = paste(getwd(), "data", sep = "/"))
+#' ## Download GIMMS3g binary data from 2000-2005 (this might take some time...)
+#' gimms_files <- downloadGimms(x = 2000, y = 2005,
+#'                              dsn = paste0(getwd(), "/data"))
+#' gimms_files[1:10]
 #' }
 #' @export downloadGimms
 #' @name downloadGimms
@@ -45,12 +47,16 @@ if ( !isGeneric("downloadGimms") ) {
 #' @rdname downloadGimms
 setMethod("downloadGimms",
           signature(x = "numeric"),
-          function(x = 1981, y = 2013,
+          function(x, y,
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    ...) {
 
+  ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
+  if (missing(x) & missing(y))
+    downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet, ...)
+
   ## available files
-  gimms_fls <- updateInventory()
+  gimms_fls <- updateInventory(sort = TRUE)
 
   ## if specified, subset available files by time frame
   gimms_bsn <- basename(gimms_fls)
@@ -63,6 +69,12 @@ setMethod("downloadGimms",
   gimms_yrs_chr[id_new] <- paste0("20", gimms_yrs_chr[id_new])
   gimms_yrs_num <- as.numeric(gimms_yrs_chr)
 
+  ## start (finish) with the first (last) year available if 'x' ('y') is not
+  ## specified
+  if (missing(x)) x <- gimms_yrs_num[1]
+  if (missing(y)) y <- gimms_yrs_num[length(gimms_yrs_num)]
+
+  ## subset files
   gimms_fls <- gimms_fls[gimms_yrs_chr %in% seq(x, y)]
 
   ## download

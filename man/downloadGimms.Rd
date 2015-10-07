@@ -8,8 +8,8 @@
 \alias{downloadGimms,numeric-method}
 \title{Download GIMMS 3G data}
 \usage{
-\S4method{downloadGimms}{numeric}(x = 1981, y = 2013, dsn = getwd(),
-  overwrite = FALSE, quiet = TRUE, ...)
+\S4method{downloadGimms}{numeric}(x, y, dsn = getwd(), overwrite = FALSE,
+  quiet = TRUE, ...)
 
 \S4method{downloadGimms}{character}(x, dsn = getwd(), overwrite = FALSE,
   quiet = TRUE, ...)
@@ -46,8 +46,10 @@ Download GIMMS 3G binary data for a given time span from NASA FTP server
 }
 \examples{
 \dontrun{
-# Download GIMMS 3G data from 2000 to 2005 (this might take some time...)
-downloadGimms(x = 2000, y = 2005, dsn = paste(getwd(), "data", sep = "/"))
+## Download GIMMS3g binary data from 2000-2005 (this might take some time...)
+gimms_files <- downloadGimms(x = 2000, y = 2005,
+                             dsn = paste0(getwd(), "/data"))
+gimms_files[1:10]
 }
 }
 \author{
