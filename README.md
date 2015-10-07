@@ -35,12 +35,12 @@ package version can be installed directly from
 library(gimms)
 ```
 
-There is no such thing as a 'development' branch yet, but be assured that such 
-things will possibly be provided in the near-distant future given that there is 
-a need for further functionality, improvements, bug-fixes etc. 
+There is no 'development' branch yet, but be assured that such a thing will 
+possibly be opened in the near-distant future given that there is a need for 
+further functionality, improvements, bug-fixes etc. 
 
 ### List available files
-For any further processing, it is helpful to know which GIMMS files are 
+For any subsequent processing, it is helpful to know which GIMMS files are 
 currently hosted on the [ECOCAST servers]((http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/). 
 `updateInventory` has been designed just for that purpose as it imports the file 
 inventory stored online in *00FILE-LIST.txt* as 'character' vector directly into 
@@ -49,7 +49,8 @@ date which is anything but intuitive when dealing with naming conventions in the
 form of 'geo83sep15a.n07-VI3g'). If there is no active internet connection 
 available, `updateInventory` automatically imports the latest offline version of 
 the file inventory which is stored (and regularly updated) in 
-'inst/extdata/inventory.rds'.
+'inst/extdata/inventory.rds'. Additionally setting `sort = TRUE` tells the 
+function to return the list of available files sorted by date in ascending order.
 
 
 ```r
@@ -86,13 +87,14 @@ the next logical step of the **gimms** processing chain is to download selected
 parameters (if any), some *ex ante* information is possibly helpful to explain 
 the function's proper use.
 
-##### 'missing' input - download entire collection
-Specifying no particular input is possibly the most straightforward way to 
-perform data download. The function will automatically start to download the 
-entire collection of files (currently Jul 1981 to Dec 2013) and store the data 
-in `dsn`. It is up to the user's judgement to set `overwrite = TRUE` which would 
+##### 'missing' input = download entire collection
+Specifying no particular input is possibly the most straightforward way of data 
+acquisition. The function will automatically start to download the entire 
+collection of files (currently July 1981 to December 2013) and store the data in 
+`dsn`. It is up to the user's judgement to set `overwrite = TRUE` which would 
 tell R to overwrite previously downloaded data located in `dsn`. In most cases, 
-however, such a behavior is not particularly desirable.
+however, such a behavior is not particularly desirable, and instead setting 
+`overwrite = FALSE` would simply tell R to skip the currently processed file.
 
 
 ```r
@@ -100,9 +102,9 @@ however, such a behavior is not particularly desirable.
 downloadGimms(dsn = paste0(getwd(), "/data"))
 ```
 
-##### 'numeric' input - download temporal range
+##### 'numeric' input = download temporal range
 It is also possibly to specify a start year (`x`) and/or end year (`y`) to 
-restrain the temporal coverage of the datasets to be downloaded. In case `x` 
+limit the temporal coverage of the datasets to be downloaded. In case `x` 
 (or `y`) is missing, data download will automatically start from the first (or 
 finish with the last) year available. 
 
@@ -113,7 +115,7 @@ downloadGimms(x = 1998, y = 2000,
               dsn = paste0(getwd(), "/data"))
 ```
 
-##### 'character' input - download particular files
+##### 'character' input = download particular files
 As a third and final possibility to run `downloadGimms`, it is also possible to 
 supply a 'character' vector consisting of valid online filepaths. The latter can 
 easily be retrieved from `updateInventory` (as demonstrated above) and directly 
@@ -138,15 +140,14 @@ which may as well be executed as a stand-alone version later on.
 of (local or online) filenames passed on to `x` or with `list.files`-style 
 pattern matching. While the former approach is quite straightforward, the latter 
 requires the function to search the folder `dsn` for previously downloaded files 
-matchin a particular pattern (`pattern`; typically starting with the default 
-setting "^geo"). Importing a sorted vector of already downloaded files from 
-2013, for instance, would work as follows.
+matching a particular `pattern` (typically starting with the default setting 
+"^geo"). Importing a sorted vector of already downloaded files from 2013, for 
+instance, would work as follows.
 
 
 ```r
-gimms_files <- rearrangeFiles(dsn = paste0(getwd(), "/data"), 
-                              pattern = "^geo13")
-gimms_files
+rearrangeFiles(dsn = paste0(getwd(), "/data"), 
+               pattern = "^geo13")
 ```
 
 
@@ -159,10 +160,10 @@ gimms_files
 
 ### Create a header file
 In order to import the GIMMS binary files into R via `raster::raster`, the 
-creation of header files (.hdr) is mandatory that are located in the same folder 
-as the binary files to be processed. The standard files required to properly 
-process GIMMS3g data are created via `createHdr` and typically include the 
-following parameters. 
+creation of header files (.hdr) that are located in the same folder as the 
+binary files staged for processing is mandatory. The standard files required to 
+properly process GIMMS3g data are created via `createHdr` and typically include 
+the following parameters. 
 
 
 ```
@@ -207,18 +208,18 @@ readLines(gimms_header)
 ```
 
 ### Rasterize downloaded data
-As a final step, `rasterizeGimms` transforms the downloaded GIMMS files from 
-native binary format into objects of class 'Raster*', which is much easier to 
-handle as compared to simple ENVI files. The function works with both single and 
-multiple files passed on to `x` and, in the case of the latter, returns a
-'RasterStack' rather than a single 'RasterLayer'. It is up to the user to decide 
-whether or not to discard 'mask-water' values (-10,000) and 'mask-nodata' values 
-(-5,000) (see also the 
+`rasterizeGimms` is possibly the core part of the **gimms** package as it 
+transforms the downloaded GIMMS files from native binary format into objects of 
+class 'Raster*', which is much easier to handle as compared to simple ENVI 
+files. The function works with both single and multiple files passed on to `x` 
+and, in the case of the latter, returns a 'RasterStack' rather than a single 
+'RasterLayer'. It is up to the user to decide whether or not to discard 
+'mask-water' values (-10,000) and 'mask-nodata' values (-5,000) (see also the 
 [official README](http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt)). 
 Also, the application of the scaling factor (1/10,000) is not mandatory. Taking 
 the above set of `gimms_files` (Jul-Dec 2013) as input vector (notice the 
-`full.names` argument passed on to `list.files`), the function call looks as 
-follows.
+`full.names` argument passed on to `list.files` in the example below), the 
+function call looks as follows.
 
 
 ```r
@@ -235,8 +236,8 @@ gimms_raster <- rasterizeGimms(gimms_files)
 Since this operation usually takes some time, we highly recommend to make use of 
 the `filename` argument that automatically invokes `raster::writeRaster`. With a 
 little bit of effort and the help of **RColorBrewer** 
-(Neuwirth, 2014), it is now easy to check whether everything 
-worked out fine.
+(Neuwirth, 2014) and **spplot** (Pebesma and Bivand, 2005; Bivand, Pebesma, and Gomez-Rubio, 2013), it 
+is now easy to check whether everything worked out fine.
 
 
 ```r
@@ -276,7 +277,16 @@ gimms_files_tif <- sapply(gimms_raster@layers, function(i) attr(i@file, "name"))
 
 ## create monthly maximum value composites
 gimms_raster_mvc <- monthlyComposite(gimms_files_tif)
+```
 
+Again and this time with a little help from **reshape2** 
+(Wickham, 2007) and **ggplot2** (Wickham, 2009), 
+the effects from `monthlyComposite` can easily be seen. Displayed below are the 
+densityplots of all NDVI values during the 1st half of July 1981 (red), during 
+the 2nd half of July 1981 (green) and the resulting MVC values (blue).
+
+
+```r
 ## visualize difference between 1st and 2nd half of July 1981 and resulting MVC
 val <- data.frame("ndvi_15a" = na.omit(getValues(gimms_raster[[1]])), 
                   "ndvi_15b" = na.omit(getValues(gimms_raster[[2]])), 
@@ -343,3 +353,5 @@ system.time(
 #   user  system elapsed 
 #  0.142   0.102  29.144
 ```
+
+
