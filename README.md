@@ -223,8 +223,9 @@ gimms_raster <- rasterizeGimms(gimms_files)
 
 Since this operation usually takes some time, we highly recommend to make use of 
 the `filename` argument that automatically invokes `raster::writeRaster`. With a 
-little bit of effort (and the help of **RColorBrewer**), it is now easy to check 
-whether everything worked out fine.
+little bit of effort and the help of **RColorBrewer** 
+(Neuwirth, 2014), it is now easy to check whether everything 
+worked out fine.
 
 
 ```r
@@ -239,7 +240,9 @@ spplot(gimms_raster,
        col.regions = colorRampPalette(brewer.pal(11, "BrBG")))
 ```
 
-![plot of chunk visualize](figure/visualize-1.png) 
+<center>
+  <img src="http://i.imgur.com/Qr3FuNr.png" alt="spplot" style="width: 800px;"/>
+</center>
 
 ### Some considerations on code performance
 In order to speed things up a little bit, it is quite easy to add multi-core 
