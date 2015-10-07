@@ -7,8 +7,8 @@
 #' @param file Character. Absolute input filepath of the GIMMS binary file being
 #' processed.
 #' @param hdr Character. If not supplied, defaults to the default content of the
-#' companion header file for GIMMS3g binary data. See seection 'Examples' below
-#' for required file contents.
+#' companion header file for GIMMS NDVI3g binary data. See seection 'Examples'
+#' below for required file contents.
 #'
 #' @return
 #' A filename with the absolute location of the header file.
@@ -17,7 +17,7 @@
 #' Florian Detsch
 #'
 #' @examples
-#' # Create standard GIMMS3g header file
+#' # Create standard GIMMS NDVI3g header file
 #' gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 #' gimms_header
 #'
@@ -28,7 +28,7 @@ createHdr <- function(file, hdr) {
   ## location of header file
   file_hdr <- paste0(file, ".hdr")
 
-  ## default content of gimms3g-related header file
+  ## default content of gimms ndvi3g-related header file
   if (missing(hdr))
     hdr <- paste("ENVI",
                  "description = { R-language data }",

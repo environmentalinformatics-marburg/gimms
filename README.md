@@ -4,7 +4,7 @@
 
 ### What it is all about
 We've been collecting functions related to the download and processing of AVHRR 
-GIMMS data for quite some time and with the most recent update to GIMMS3g 
+GIMMS data for quite some time and with the most recent update to NDVI3g 
 (Pinzon and Tucker, 2014), we thought it was a good time to stuff the most 
 fundamental work steps into a proper R package. In this context, 'most 
 fundamental' refers to certain operations which we tended to repeat over and 
@@ -24,6 +24,7 @@ Any suggestions on how to improve the **gimms** package are highly appreciated!
 So far, the **gimms** package has not been submitted to CRAN but a preliminary 
 package version can be installed directly from 
 [GitHub](https://github.com/environmentalinformatics-marburg/gimms) via 
+`install_github` from the **devtools** package (Wickham and Chang, 2015).
 
 
 ```r
@@ -40,7 +41,7 @@ possibly be opened in the near-distant future given that there is a need for
 further functionality, improvements, bug-fixes etc. 
 
 ### List available files
-For any subsequent processing, it is helpful to know which GIMMS files are 
+For any subsequent processing steps, it is helpful to know which GIMMS files are 
 currently hosted on the [ECOCAST servers]((http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/). 
 `updateInventory` has been designed just for that purpose as it imports the file 
 inventory stored online in *00FILE-LIST.txt* as 'character' vector directly into 
@@ -162,8 +163,8 @@ rearrangeFiles(dsn = paste0(getwd(), "/data"),
 In order to import the GIMMS binary files into R via `raster::raster`, the 
 creation of header files (.hdr) that are located in the same folder as the 
 binary files staged for processing is mandatory. The standard files required to 
-properly process GIMMS3g data are created via `createHdr` and typically include 
-the following parameters. 
+properly process GIMMS NDVI3g data are created via `createHdr` and typically 
+include the following parameters. 
 
 
 ```
@@ -185,7 +186,7 @@ runs as stand-alone version.
 
 
 ```r
-## create gimms3g standard header file
+## create gimms ndvi3g standard header file
 gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 
 gimms_header
@@ -354,4 +355,36 @@ system.time(
 #  0.142   0.102  29.144
 ```
 
+In the context of parallel processing, feel free to also browse the advanced 
+applications based on GIMMS NDVI3g data below. There are some more examples 
+included demonstrating the reasonable use of **doParallel** functionality 
+(Analytics and Weston, 2014) along with the **gimms** package, which is 
+probably particulary applicable for `downloadGimms` (given that your internet 
+connection is fast enough to manage multi-core file downloads).
 
+
+
+
+### Advanced applications
+The last section of this brief introduction is meant to demonstrate the use of 
+GIMMS NDVI3g data in a more practical sense. Perhaps it might be interesting for 
+some of you...
+
+##### Global Mann-Kendall trend based on GIMMS NDVI3g
+
+```r
+## download entire gimms ndvi3g collection in parallel
+library(doParallel)
+cl <- makeCluster(4)
+registerDoParallel(cl)
+
+gimms_files <- updateInventory(sort = TRUE)
+gimms_files <- foreach(i = gimms_files, .packages = "gimms", 
+                       .combine = "c") %dopar% downloadGimms(i, dsn = "data/")
+
+stopImplicitCluster()
+
+## rasterize gimms ndvi3g binary files in parallel (see above function 
+## definition of `rasterizeGimmsParallel`)
+gimms_raster <- rasterizeGimmsParallel(gimms_files)
+```

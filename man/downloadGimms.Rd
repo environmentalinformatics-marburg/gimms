@@ -46,7 +46,7 @@ Download GIMMS 3G binary data for a given time span from NASA FTP server
 }
 \examples{
 \dontrun{
-## Download GIMMS3g binary data from 2000-2005 (this might take some time...)
+## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
 gimms_files <- downloadGimms(x = 2000, y = 2005,
                              dsn = paste0(getwd(), "/data"))
 gimms_files[1:10]

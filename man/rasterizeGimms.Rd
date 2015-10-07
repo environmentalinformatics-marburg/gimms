@@ -2,7 +2,7 @@
 % Please edit documentation in R/rasterizeGimms.R
 \name{rasterizeGimms}
 \alias{rasterizeGimms}
-\title{Rasterize GIMMS3g binary data}
+\title{Rasterize GIMMS NDVI3g binary data}
 \usage{
 rasterizeGimms(x, hdr = NULL, water2na = TRUE, nodata2na = TRUE,
   scaling = TRUE, remove_hdr = FALSE, filename = "", ...)
@@ -11,7 +11,7 @@ rasterizeGimms(x, hdr = NULL, water2na = TRUE, nodata2na = TRUE,
 \item{x}{Character. Vector of local filepaths.}
 
 \item{hdr}{Character. Companion header files corresponding to the binary data
-in 'x'. If missing, the standard header file for GIMMS3g binary data as
+in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data as
 created by \code{\link{createHdr}} will be used.}
 
 \item{water2na}{Logical. If \code{TRUE} (default), pixels with 'mask-water'
@@ -38,12 +38,12 @@ If 'x' is a single filename, an object of class 'RasterLayer'; <br>
 if 'x' is a vector of filenames, an object of class 'RasterStack'.
 }
 \description{
-Import GIMMS3g binary data into R as 'Raster*' objects based on a companion
-header file.
+Import GIMMS NDVI3g binary data into R as 'Raster*' objects based on a
+companion header file.
 }
 \examples{
 \dontrun{
-## Download GIMMS3g binary data from 2000-2005 (this might take some time...)
+## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
 gimms_files <- downloadGimms(x = 2000, y = 2005,
                              dsn = paste0(getwd(), "/data"))
 

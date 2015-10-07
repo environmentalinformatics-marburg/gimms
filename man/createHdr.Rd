@@ -11,8 +11,8 @@ createHdr(file, hdr)
 processed.}
 
 \item{hdr}{Character. If not supplied, defaults to the default content of the
-companion header file for GIMMS3g binary data. See seection 'Examples' below
-for required file contents.}
+companion header file for GIMMS NDVI3g binary data. See seection 'Examples'
+below for required file contents.}
 }
 \value{
 A filename with the absolute location of the header file.
@@ -22,7 +22,7 @@ Create an ENVI header file (see \url{http://www.exelisvis.com/docs/ENVIHeaderFil
 to properly import GIMMS binary data into native 'Raster*' format.
 }
 \examples{
-# Create standard GIMMS3g header file
+# Create standard GIMMS NDVI3g header file
 gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 gimms_header
 }

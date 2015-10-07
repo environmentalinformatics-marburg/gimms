@@ -9,9 +9,12 @@
 Download and Process GIMMS3g Data
 }
 \details{
-Set of functions to retrieve list of available GIMMS files, download and
-extract compressed data, and import binary files into R as standard
-'Raster*' objects.
+We provide a set of functions to retrieve information about GIMMS NDVI3g
+files currently available online; download and re-arrange the bi-monthly
+datasets according to creation time; import downloaded files from native
+binary (ENVI) format directly into R based on the widely applied 'raster'
+package; and calculate monthly value composites (e.g. maximum value
+composites, MVC) from the bi-monthly input data.
 }
 \author{
 Florian Detsch

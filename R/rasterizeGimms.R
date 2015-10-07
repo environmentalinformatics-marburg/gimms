@@ -1,12 +1,12 @@
-#' Rasterize GIMMS3g binary data
+#' Rasterize GIMMS NDVI3g binary data
 #'
 #' @description
-#' Import GIMMS3g binary data into R as 'Raster*' objects based on a companion
-#' header file.
+#' Import GIMMS NDVI3g binary data into R as 'Raster*' objects based on a
+#' companion header file.
 #'
 #' @param x Character. Vector of local filepaths.
 #' @param hdr Character. Companion header files corresponding to the binary data
-#' in 'x'. If missing, the standard header file for GIMMS3g binary data as
+#' in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data as
 #' created by \code{\link{createHdr}} will be used.
 #' @param water2na Logical. If \code{TRUE} (default), pixels with 'mask-water'
 #' value (-10000) will be discarded. See also
@@ -34,7 +34,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ## Download GIMMS3g binary data from 2000-2005 (this might take some time...)
+#' ## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
 #' gimms_files <- downloadGimms(x = 2000, y = 2005,
 #'                              dsn = paste0(getwd(), "/data"))
 #'
