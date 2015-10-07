@@ -23,10 +23,8 @@ to properly import GIMMS binary data into native 'Raster*' format.
 }
 \examples{
 # Create standard GIMMS3g header file
-gimms_header <- createHdr("data/geo13jul15a.n19-VI3g")
-
+gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 gimms_header
-readLines(gimms_header)
 }
 \author{
 Florian Detsch

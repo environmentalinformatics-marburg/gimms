@@ -18,22 +18,13 @@
 #'
 #' @examples
 #' # Create standard GIMMS3g header file
-#' gimms_header <- createHdr("data/geo13jul15a.n19-VI3g")
-#'
+#' gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 #' gimms_header
-#' readLines(gimms_header)
 #'
 #' @export createHdr
 #' @name createHdr
 createHdr <- function(file, hdr) {
 
-  ## default filepath of envi header file (.hdr)
-  if (missing(file)) {
-    { sink("/dev/null"); tmp_dir <- raster::rasterOptions()$tmpdir; sink(); }
-
-    raster::tmpDir(create = TRUE)
-    file <- paste0(tmp_dir, "/tmp.hdr")
-  }
   ## location of header file
   file_hdr <- paste0(file, ".hdr")
 

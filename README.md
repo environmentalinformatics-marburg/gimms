@@ -185,10 +185,25 @@ runs as stand-alone version.
 
 ```r
 ## create gimms3g standard header file
-gimms_header <- createHdr("data/geo13jul15a.n19-VI3g")
+gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 
 gimms_header
+```
+
+```
+## [1] "~/geo13jul15a.n19-VI3g.hdr"
+```
+
+```r
 readLines(gimms_header)
+```
+
+```
+## [1] "ENVI"                              "description = { R-language data }"
+## [3] "samples = 2160"                    "lines = 4320"                     
+## [5] "bands = 1"                         "data type = 2"                    
+## [7] "header offset = 0"                 "interleave = bsq"                 
+## [9] "byte order = 1"
 ```
 
 ### Rasterize downloaded data
