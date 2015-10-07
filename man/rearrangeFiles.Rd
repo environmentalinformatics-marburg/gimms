@@ -4,7 +4,7 @@
 \alias{rearrangeFiles}
 \title{Rearrange GIMMS files by date}
 \usage{
-rearrangeFiles(x = NULL, dsn = getwd(), pttrn = "^geo", ...)
+rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo", ...)
 }
 \arguments{
 \item{x}{Character. Vector of (local or online) filepaths. If \code{NULL},
@@ -13,7 +13,7 @@ rearrangeFiles(x = NULL, dsn = getwd(), pttrn = "^geo", ...)
 \item{dsn}{Character. Path to look for GIMMS data. If not supplied and
 \code{is.null(fls)}, this argument defaults to the current working directory.}
 
-\item{pttrn}{Character. A regular expression passed on to
+\item{pattern}{Character. A regular expression passed on to
 \code{\link{list.files}}.}
 
 \item{...}{Further arguments passed on to \code{\link{list.files}}.}

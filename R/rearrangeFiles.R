@@ -9,7 +9,7 @@
 #' \code{dsn} will be searched for available files via pattern matching.
 #' @param dsn Character. Path to look for GIMMS data. If not supplied and
 #' \code{is.null(fls)}, this argument defaults to the current working directory.
-#' @param pttrn Character. A regular expression passed on to
+#' @param pattern Character. A regular expression passed on to
 #' \code{\link{list.files}}.
 #' @param ... Further arguments passed on to \code{\link{list.files}}.
 #'
@@ -38,12 +38,12 @@
 #' @name rearrangeFiles
 rearrangeFiles <- function(x = NULL,
                            dsn = getwd(),
-                           pttrn = "^geo",
+                           pattern = "^geo",
                            ...) {
 
   ## if `is.null(fls)`, apply pattern matching in 'dsn'
   if (is.null(x))
-    x <- list.files(dsn, pattern = pttrn, ...)
+    x <- list.files(dsn, pattern = pattern, ...)
 
   ## vector to data.frame
   gimms_df <- data.frame(file = x, stringsAsFactors = FALSE)
