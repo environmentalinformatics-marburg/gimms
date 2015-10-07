@@ -104,6 +104,41 @@ library(gimms)</code></pre>
 ##  [9] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81nov15a.n07-VI3g&quot;
 ## [10] &quot;http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/1980s_new/geo81nov15b.n07-VI3g&quot;</code></pre>
 </div>
+<div id="download-files" class="section level3">
+<h3>Download files</h3>
+<p>With the information about files currently hosted on the remote server at hand, the next logical step of the <strong>gimms</strong> processing chain is to download selected (if not all) bi-monthly datasets. This can be achieved by running <code>downloadGimms</code>, but since the function works with different types of input parameters (if any), some <em>ex ante</em> information is possibly helpful to explain the function’s proper use.</p>
+<div id="missing-input---download-entire-collection" class="section level5">
+<h5>‘missing’ input - download entire collection</h5>
+<p>Specifying no particular input is possibly the most straightforward way to perform data download. The function will automatically start to download the entire collection of files (currently Jul 1981 to Dec 2013) and store the data in <code>dsn</code>. It is up to the user’s judgement to set <code>overwrite = TRUE</code> which would tell R to overwrite previously downloaded data located in <code>dsn</code>. In most cases, however, such a behavior is not particularly desirable.</p>
+<pre class="r"><code>## download entire gimms collection
+downloadGimms(dsn = paste0(getwd(), &quot;/data&quot;))</code></pre>
+</div>
+<div id="numeric-input---download-temporal-range" class="section level5">
+<h5>‘numeric’ input - download temporal range</h5>
+<p>It is also possibly to specify a start year (<code>x</code>) and/or end year (<code>y</code>) to restrain the temporal coverage of the datasets to be downloaded. In case <code>x</code> (or <code>y</code>) is missing, data download will automatically start from the first (or finish with the last) year available.</p>
+<pre class="r"><code>## download gimms data from 1998-2000
+downloadGimms(x = 1998, y = 2000, 
+              dsn = paste0(getwd(), &quot;/data&quot;))</code></pre>
+</div>
+<div id="character-input---download-particular-files" class="section level5">
+<h5>‘character’ input - download particular files</h5>
+<p>As a third and final possibility to run <code>downloadGimms</code>, it is also possible to supply a ‘character’ vector consisting of valid online filepaths. The latter can easily be retrieved from <code>updateInventory</code> (as demonstrated above) and directly passed on to the input argument <code>x</code>.</p>
+<pre class="r"><code>## download manually selected files
+downloadGimms(x = gimms_files[c(98:110, 132)], 
+              dsn = paste0(getwd(), &quot;/data&quot;))</code></pre>
+</div>
+</div>
+<div id="rearrange-files" class="section level3">
+<h3>Rearrange files</h3>
+<p>As mentioned above, it is possible to have <code>updateInventory</code> return a vector of filenames sorted by date in ascending order. Sorting the files surely makes sense when it comes to <code>stack</code>-ing continuous observations, calculating monthly MVC layers and so forth, but is not necessarily required at the initial stage. <code>updateInventory(sort = TRUE)</code> is merely a wrapper around <code>rearrangeFiles</code> which may as well be executed as a stand-alone version later on.</p>
+<p><code>rearrangeFiles</code> works in two different ways, either with a ‘character’ vector of (local or online) filenames passed on to <code>x</code> or with <code>list.files</code>-style pattern matching. While the former approach is quite straightforward, the latter requires the function to search the folder <code>dsn</code> for previously downloaded files matchin a particular pattern (<code>pttrn</code>; typically starting with the default setting “^geo”). Importing a sorted vector of already downloaded files from 2013, for instance, would work as follows.</p>
+<pre class="r"><code>gimms_files &lt;- rearrangeFiles(dsn = paste0(getwd(), &quot;/data&quot;), pttrn = &quot;^geo13&quot;)
+gimms_files</code></pre>
+<pre><code>##  [1] &quot;geo13jul15a.n19-VI3g&quot; &quot;geo13jul15b.n19-VI3g&quot; &quot;geo13aug15a.n19-VI3g&quot;
+##  [4] &quot;geo13aug15b.n19-VI3g&quot; &quot;geo13sep15a.n19-VI3g&quot; &quot;geo13sep15b.n19-VI3g&quot;
+##  [7] &quot;geo13oct15a.n19-VI3g&quot; &quot;geo13oct15b.n19-VI3g&quot; &quot;geo13nov15a.n19-VI3g&quot;
+## [10] &quot;geo13nov15b.n19-VI3g&quot; &quot;geo13dec15a.n19-VI3g&quot; &quot;geo13dec15b.n19-VI3g&quot;</code></pre>
+</div>
 </div>
 
 

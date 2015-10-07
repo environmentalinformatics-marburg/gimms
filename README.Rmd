@@ -58,9 +58,72 @@ gimms_files[1:10]
 ```
 
 ### Download files
-With the information on files currently hosted on the remote server at hand, the 
-next logical step of the **gimms** processing chain is to download selected (if 
-not all) bi-monthly datasets. This can be achieved by running `downloadGimms`, 
-but since the function works with different types of input parameter (if any), 
-some *ex ante* information are possibly helpful for its proper use.
-further explanation seems reasonable.
+With the information about files currently hosted on the remote server at hand, 
+the next logical step of the **gimms** processing chain is to download selected 
+(if not all) bi-monthly datasets. This can be achieved by running 
+`downloadGimms`, but since the function works with different types of input 
+parameters (if any), some *ex ante* information is possibly helpful to explain 
+the function's proper use.
+
+##### 'missing' input - download entire collection
+Specifying no particular input is possibly the most straightforward way to 
+perform data download. The function will automatically start to download the 
+entire collection of files (currently Jul 1981 to Dec 2013) and store the data 
+in `dsn`. It is up to the user's judgement to set `overwrite = TRUE` which would 
+tell R to overwrite previously downloaded data located in `dsn`. In most cases, 
+however, such a behavior is not particularly desirable.
+
+```{r downloadGIMMS_missing, eval = FALSE}
+## download entire gimms collection
+downloadGimms(dsn = paste0(getwd(), "/data"))
+```
+
+##### 'numeric' input - download temporal range
+It is also possibly to specify a start year (`x`) and/or end year (`y`) to 
+restrain the temporal coverage of the datasets to be downloaded. In case `x` 
+(or `y`) is missing, data download will automatically start from the first (or 
+finish with the last) year available. 
+
+```{r downloadGimms_numeric, eval = FALSE}
+## download gimms data from 1998-2000
+downloadGimms(x = 1998, y = 2000, 
+              dsn = paste0(getwd(), "/data"))
+```
+
+##### 'character' input - download particular files
+As a third and final possibility to run `downloadGimms`, it is also possible to 
+supply a 'character' vector consisting of valid online filepaths. The latter can 
+easily be retrieved from `updateInventory` (as demonstrated above) and directly 
+passed on to the input argument `x`. 
+
+```{r downloadGimms_character, eval = FALSE}
+## download manually selected files
+downloadGimms(x = gimms_files[c(98:110, 132)], 
+              dsn = paste0(getwd(), "/data"))
+```
+
+### Rearrange files
+As mentioned above, it is possible to have `updateInventory` return a vector of 
+filenames sorted by date in ascending order. Sorting the files surely makes 
+sense when it comes to `stack`-ing continuous observations, calculating monthly 
+MVC layers and so forth, but is not necessarily required at the initial stage. 
+`updateInventory(sort = TRUE)` is merely a wrapper around `rearrangeFiles` 
+which may as well be executed as a stand-alone version later on. 
+
+`rearrangeFiles` works in two different ways, either with a 'character' vector 
+of (local or online) filenames passed on to `x` or with `list.files`-style 
+pattern matching. While the former approach is quite straightforward, the latter 
+requires the function to search the folder `dsn` for previously downloaded files 
+matchin a particular pattern (`pttrn`; typically starting with the default 
+setting "^geo"). Importing a sorted vector of already downloaded files from 
+2013, for instance, would work as follows.
+
+```{r rearrangeFiles, eval = FALSE}
+gimms_files <- rearrangeFiles(dsn = paste0(getwd(), "/data"), pttrn = "^geo13")
+gimms_files
+```
+
+```{r rearrangeFiles_alt, echo = FALSE}
+ch_fls <- rearrangeFiles(dsn = "/media/permanent/programming/r/gimms/data/", 
+                         pttrn = "^geo13")
+ch_fls
