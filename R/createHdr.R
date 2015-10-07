@@ -4,29 +4,28 @@
 #' Create an ENVI header file (see \url{http://www.exelisvis.com/docs/ENVIHeaderFiles.html})
 #' to properly import GIMMS binary data into native 'Raster*' format.
 #'
-#' @param hdr Character. If not supplied, defaults to the companion header file
-#' for GIMMS3g binary data. See \code{\link{read.ENVI}} for further information
-#' and section 'Examples' below for required file contents.
-#' @param file Character. Output filepath, defaults to
-#' \code{paste0(raster::rasterOptions()$tmpdir, "/tmp.hdr")}.
+#' @param file Character. Absolute input filepath of the GIMMS binary file being
+#' processed.
+#' @param hdr Character. If not supplied, defaults to the default content of the
+#' companion header file for GIMMS3g binary data. See seection 'Examples' below
+#' for required file contents.
 #'
 #' @return
-#' A filename with the location of the (temporary) header file.
+#' A filename with the absolute location of the header file.
 #'
 #' @author
 #' Florian Detsch
 #'
-#' @seealso
-#' \code{\link{read.ENVI}}
-#'
 #' @examples
-#' # Create standard GIMMS3G header file
-#' gimms_header <- createHdr()
+#' # Create standard GIMMS3g header file
+#' gimms_header <- createHdr("data/geo13jul15a.n19-VI3g")
+#'
+#' gimms_header
 #' readLines(gimms_header)
 #'
 #' @export createHdr
 #' @name createHdr
-createHdr <- function(hdr, file) {
+createHdr <- function(file, hdr) {
 
   ## default filepath of envi header file (.hdr)
   if (missing(file)) {
@@ -35,8 +34,10 @@ createHdr <- function(hdr, file) {
     raster::tmpDir(create = TRUE)
     file <- paste0(tmp_dir, "/tmp.hdr")
   }
+  ## location of header file
+  file_hdr <- paste0(file, ".hdr")
 
-  ## default header
+  ## default content of gimms3g-related header file
   if (missing(hdr))
     hdr <- paste("ENVI",
                  "description = { R-language data }",
@@ -49,6 +50,6 @@ createHdr <- function(hdr, file) {
                  "byte order = 1", sep = "\n")
 
   ## write and return file
-  writeLines(hdr, file)
-  return(file)
+  writeLines(hdr, file_hdr)
+  return(file_hdr)
 }

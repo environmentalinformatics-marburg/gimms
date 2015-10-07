@@ -4,15 +4,15 @@
 \alias{rasterizeGimms}
 \title{Rasterize GIMMS3g binary data}
 \usage{
-rasterizeGimms(x, hdr, water2na = TRUE, nodata2na = TRUE, scaling = TRUE,
-  remove_hdr = TRUE, filename = "", ...)
+rasterizeGimms(x, hdr = NULL, water2na = TRUE, nodata2na = TRUE,
+  scaling = TRUE, remove_hdr = FALSE, filename = "", ...)
 }
 \arguments{
 \item{x}{Character. Vector of local filepaths.}
 
-\item{hdr}{Character. Companion header file passed on to
-\code{\link{read.ENVI}}. If missing, the standard header file for
-GIMMS3g binary data as created by \code{\link{createHdr}} will be used.}
+\item{hdr}{Character. Companion header files corresponding to the binary data
+in 'x'. If missing, the standard header file for GIMMS3g binary data as
+created by \code{\link{createHdr}} will be used.}
 
 \item{water2na}{Logical. If \code{TRUE} (default), pixels with 'mask-water'
 value (-10000) will be discarded. See also
@@ -24,7 +24,7 @@ value (-5000) will be discarded.}
 \item{scaling}{Logical. If \code{TRUE} (default), initial values will be
 scaled by a factor of 1/10000.}
 
-\item{remove_hdr}{Logical. If \code{TRUE} (default), the header file
+\item{remove_hdr}{Logical. If \code{FALSE} (default), the header file
 specified in 'hdr' or, if not specified, created internally via
 \code{\link{createHdr}} will be removed after all operations have finished.}
 
@@ -48,16 +48,15 @@ gimms_files <- downloadGimms(x = 2000, y = 2005,
                              dsn = paste0(getwd(), "/data"))
 
 ## Rasterize downloaded GIMMS files from 2000 (this might take even longer...)
-gimms_raster <- rasterizeGimms(x = gimms_files[1:24])
+gimms_raster <- rasterizeGimms(x = gimms_files[1:24], remove_hdr = TRUE)
 
-plot(rst_gimms)
+plot(gimms_raster[[1:4]])
 }
 }
 \author{
 Florian Detsch
 }
 \seealso{
-\code{\link{createHdr}}, \code{\link{read.ENVI}},
-\code{\link{raster}}, \code{\link{writeRaster}}.
+\code{\link{createHdr}}, \code{\link{raster}}, \code{\link{writeRaster}}.
 }
 

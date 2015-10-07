@@ -4,32 +4,31 @@
 \alias{createHdr}
 \title{Create ENVI header file}
 \usage{
-createHdr(hdr, file)
+createHdr(file, hdr)
 }
 \arguments{
-\item{hdr}{Character. If not supplied, defaults to the companion header file
-for GIMMS3g binary data. See \code{\link{read.ENVI}} for further information
-and section 'Examples' below for required file contents.}
+\item{file}{Character. Absolute input filepath of the GIMMS binary file being
+processed.}
 
-\item{file}{Character. Output filepath, defaults to
-\code{paste0(raster::rasterOptions()$tmpdir, "/tmp.hdr")}.}
+\item{hdr}{Character. If not supplied, defaults to the default content of the
+companion header file for GIMMS3g binary data. See seection 'Examples' below
+for required file contents.}
 }
 \value{
-A filename with the location of the (temporary) header file.
+A filename with the absolute location of the header file.
 }
 \description{
 Create an ENVI header file (see \url{http://www.exelisvis.com/docs/ENVIHeaderFiles.html})
 to properly import GIMMS binary data into native 'Raster*' format.
 }
 \examples{
-# Create standard GIMMS3G header file
-gimms_header <- createHdr()
+# Create standard GIMMS3g header file
+gimms_header <- createHdr("data/geo13jul15a.n19-VI3g")
+
+gimms_header
 readLines(gimms_header)
 }
 \author{
 Florian Detsch
-}
-\seealso{
-\code{\link{read.ENVI}}
 }
 
