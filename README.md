@@ -138,20 +138,150 @@ which may as well be executed as a stand-alone version later on.
 of (local or online) filenames passed on to `x` or with `list.files`-style 
 pattern matching. While the former approach is quite straightforward, the latter 
 requires the function to search the folder `dsn` for previously downloaded files 
-matchin a particular pattern (`pttrn`; typically starting with the default 
+matchin a particular pattern (`pattern`; typically starting with the default 
 setting "^geo"). Importing a sorted vector of already downloaded files from 
 2013, for instance, would work as follows.
 
 
 ```r
-gimms_files <- rearrangeFiles(dsn = paste0(getwd(), "/data"), pttrn = "^geo13")
+gimms_files <- rearrangeFiles(dsn = paste0(getwd(), "/data"), pattern = "^geo13")
 gimms_files
 ```
 
 
 ```
-##  [1] "geo13jul15a.n19-VI3g" "geo13jul15b.n19-VI3g" "geo13aug15a.n19-VI3g"
-##  [4] "geo13aug15b.n19-VI3g" "geo13sep15a.n19-VI3g" "geo13sep15b.n19-VI3g"
-##  [7] "geo13oct15a.n19-VI3g" "geo13oct15b.n19-VI3g" "geo13nov15a.n19-VI3g"
-## [10] "geo13nov15b.n19-VI3g" "geo13dec15a.n19-VI3g" "geo13dec15b.n19-VI3g"
+##  [1] "geo13jul15a.n19-VI3g"     "geo13jul15a.n19-VI3g.tif"
+##  [3] "geo13jul15b.n19-VI3g"     "geo13jul15b.n19-VI3g.tif"
+##  [5] "geo13aug15a.n19-VI3g"     "geo13aug15a.n19-VI3g.tif"
+##  [7] "geo13aug15b.n19-VI3g"     "geo13aug15b.n19-VI3g.tif"
+##  [9] "geo13sep15a.n19-VI3g"     "geo13sep15a.n19-VI3g.tif"
+## [11] "geo13sep15b.n19-VI3g"     "geo13sep15b.n19-VI3g.tif"
+## [13] "geo13oct15a.n19-VI3g"     "geo13oct15a.n19-VI3g.tif"
+## [15] "geo13oct15b.n19-VI3g"     "geo13oct15b.n19-VI3g.tif"
+## [17] "geo13nov15a.n19-VI3g"     "geo13nov15a.n19-VI3g.tif"
+## [19] "geo13nov15b.n19-VI3g"     "geo13nov15b.n19-VI3g.tif"
+## [21] "geo13dec15a.n19-VI3g"     "geo13dec15a.n19-VI3g.tif"
+## [23] "geo13dec15b.n19-VI3g"     "geo13dec15b.n19-VI3g.tif"
+```
+
+### Create a header file
+In order to import the GIMMS binary files into R via `caTools::read.ENVI`, the 
+creation of a header file (.hdr) is mandatory. The standard file required to 
+properly process GIMMS3g data is created via `createHdr` and includes the 
+following parameters. 
+
+
+```
+## [1] "ENVI"
+## [1] "description = { R-language data }"
+## [1] "samples = 2160"
+## [1] "lines = 4320"
+## [1] "bands = 1"
+## [1] "data type = 2"
+## [1] "header offset = 0"
+## [1] "interleave = bsq"
+## [1] "byte order = 1"
+```
+
+The file is by default written to the temporary folder of the **raster** package 
+as specified in `raster::rasterOptions()` and, unless otherwise specified, 
+removed after `rasterizeGimms` has finished. Although the latter automatically 
+invokes `createHdr`, the function may as well be operated separately.
+
+
+```r
+## create gimms3g standard header file
+gimms_header <- createHdr()
+gimms_header
+```
+
+### Rasterize downloaded data
+As a final step, `rasterizeGimms` transforms the downloaded GIMMS files from 
+native binary format into objects of class 'Raster*', which is much easier to 
+handle as compared to simple ENVI files. The function works with both single and 
+multiple files passed on to `x` and, in the case of the latter, returns a
+'RasterStack' rather than a single 'RasterLayer'. It is up to the user to decide 
+whether or not to discard 'mask-water' values (-10,000) and 'mask-nodata' values 
+(-5,000) (see also the 
+[official README](http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt)). 
+Also, the application of the scaling factor (1/10,000) is not mandatory. Taking 
+the above set of `gimms_files` (Jul-Dec 2013) as input vector (notice the 
+`full.names` argument passed on to `list.files`), the function call looks as 
+follows.
+
+
+```r
+## list available files
+gimms_files <- rearrangeFiles(dsn = paste0(getwd(), "/data"), 
+                              pattern = "^geo13", full.names = TRUE)
+
+## rasterize files
+gimms_raster <- rasterizeGimms(gimms_files)
+```
+
+
+
+Since this operation usually takes some time, we highly recommend to make use of 
+the `filename` argument that automatically invokes `raster::writeRaster`. With a 
+little bit of effort (and the help of **RColorBrewer**), it is now easy to check 
+whether everything worked out fine.
+
+
+```r
+## adjust layer names
+names(gimms_raster) <- basename(gimms_files)
+
+## visualize single layers
+library(RColorBrewer)
+spplot(gimms_raster, 
+       at = seq(-0.2, 1, 0.1), 
+       scales = list(draw = TRUE), 
+       col.regions = colorRampPalette(brewer.pal(11, "BrBG")))
+```
+
+![plot of chunk visualize](figure/visualize-1.png) 
+
+### Some considerations on code performance
+In order to speed things up a little bit, it is quite easy to add multi-core 
+functionality to the operations provided by **gimms**. This is particularly 
+applicable to `rasterizeGimms` with `raster::writeRaster` option enabled, i.e. 
+parameter `filename` specified. When run in parallel, the operation performs 
+considerably faster as compared to the base implementation. 
+
+
+```r
+## first, the base version from above
+system.time(
+  rasterizeGimms(gimms_files, 
+                 filename = paste0(gimms_files, ".tif"), overwrite = TRUE)
+)
+#    user  system elapsed 
+#  48.142   3.003  54.535
+
+## next, the parallelized version
+rasterizeGimmsParallel <- function(files, nodes = 4, ...) {
+
+  # create and register parallel backend
+  library(doParallel)
+  cl <- makeCluster(nodes)
+  registerDoParallel(cl)
+  
+  # loop over 'x' and process single files in parallel
+  ls_rst <- foreach(i = files, .packages = "gimms", 
+                    .export = ls(envir = globalenv())) %dopar% {
+                      rasterizeGimms(i, filename = paste0(i, ".tif"), ...)
+                    }
+  
+  # deregister parallel backend
+  closeAllConnections()
+  
+  # return stacked layers
+  return(stack(ls_rst))
+}
+
+system.time(
+  rasterizeGimmsParallel(gimms_files, overwrite = TRUE)
+)
+#   user  system elapsed 
+#  0.142   0.102  29.144
 ```
