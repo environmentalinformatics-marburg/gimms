@@ -144,30 +144,24 @@ setting "^geo"). Importing a sorted vector of already downloaded files from
 
 
 ```r
-gimms_files <- rearrangeFiles(dsn = paste0(getwd(), "/data"), pattern = "^geo13")
+gimms_files <- rearrangeFiles(dsn = paste0(getwd(), "/data"), 
+                              pattern = "^geo13")
 gimms_files
 ```
 
 
 ```
-##  [1] "geo13jul15a.n19-VI3g"     "geo13jul15a.n19-VI3g.tif"
-##  [3] "geo13jul15b.n19-VI3g"     "geo13jul15b.n19-VI3g.tif"
-##  [5] "geo13aug15a.n19-VI3g"     "geo13aug15a.n19-VI3g.tif"
-##  [7] "geo13aug15b.n19-VI3g"     "geo13aug15b.n19-VI3g.tif"
-##  [9] "geo13sep15a.n19-VI3g"     "geo13sep15a.n19-VI3g.tif"
-## [11] "geo13sep15b.n19-VI3g"     "geo13sep15b.n19-VI3g.tif"
-## [13] "geo13oct15a.n19-VI3g"     "geo13oct15a.n19-VI3g.tif"
-## [15] "geo13oct15b.n19-VI3g"     "geo13oct15b.n19-VI3g.tif"
-## [17] "geo13nov15a.n19-VI3g"     "geo13nov15a.n19-VI3g.tif"
-## [19] "geo13nov15b.n19-VI3g"     "geo13nov15b.n19-VI3g.tif"
-## [21] "geo13dec15a.n19-VI3g"     "geo13dec15a.n19-VI3g.tif"
-## [23] "geo13dec15b.n19-VI3g"     "geo13dec15b.n19-VI3g.tif"
+##  [1] "geo13jul15a.n19-VI3g" "geo13jul15b.n19-VI3g" "geo13aug15a.n19-VI3g"
+##  [4] "geo13aug15b.n19-VI3g" "geo13sep15a.n19-VI3g" "geo13sep15b.n19-VI3g"
+##  [7] "geo13oct15a.n19-VI3g" "geo13oct15b.n19-VI3g" "geo13nov15a.n19-VI3g"
+## [10] "geo13nov15b.n19-VI3g" "geo13dec15a.n19-VI3g" "geo13dec15b.n19-VI3g"
 ```
 
 ### Create a header file
-In order to import the GIMMS binary files into R via `caTools::read.ENVI`, the 
-creation of a header file (.hdr) is mandatory. The standard file required to 
-properly process GIMMS3g data is created via `createHdr` and includes the 
+In order to import the GIMMS binary files into R via `raster::raster`, the 
+creation of header files (.hdr) is mandatory that are located in the same folder 
+as the binary files to be processed. The standard files required to properly 
+process GIMMS3g data are created via `createHdr` and typically include the 
 following parameters. 
 
 
@@ -183,16 +177,18 @@ following parameters.
 ## [1] "byte order = 1"
 ```
 
-The file is by default written to the temporary folder of the **raster** package 
-as specified in `raster::rasterOptions()` and, unless otherwise specified, 
-removed after `rasterizeGimms` has finished. Although the latter automatically 
-invokes `createHdr`, the function may as well be operated separately.
+It is possibly to automatically remove the created header files by setting 
+`rasterizeGimms(..., remove_hdr = TRUE)` once all operations have finished. 
+Although `rasterizeGimms` automatically invokes `createHdr`, the function also 
+runs as stand-alone version.
 
 
 ```r
 ## create gimms3g standard header file
-gimms_header <- createHdr()
+gimms_header <- createHdr("data/geo13jul15a.n19-VI3g")
+
 gimms_header
+readLines(gimms_header)
 ```
 
 ### Rasterize downloaded data
@@ -242,6 +238,50 @@ spplot(gimms_raster,
 
 <center>
   <img src="http://i.imgur.com/Qr3FuNr.png" alt="spplot" style="width: 800px;"/>
+</center>
+
+
+### Generate monthly composites
+Sometimes, it is required to calculate monthly value composites from the 
+bi-monthly GIMMS datasets, e.g. to ensure temporal overlap with some other 
+ecological or eco-climatological time series. **gimms** features a function 
+called `monthlyComposite` which works both on vectors of filenames and entire 
+'RasterStack' objects (ideally returned by `rasterizeGimms`) and calculates 
+monthly values based on a user-defined function (e.g. `fun = max` to create 
+monthly MVC layers). Needless to say, the function is heavily based on 
+`stackApply` from the fabulous **raster** package and assumes numeric vectors 
+of monthly `indices` (or text substrings from `pos1` to `pos2` from which to 
+deduce such indices, see `?monthlyIndices`) as input variable. The actual code 
+work is relatively straightforward.
+
+
+```r
+## .tif files created during the previous step
+gimms_files_tif <- sapply(gimms_raster@layers, function(i) attr(i@file, "name"))
+
+## create monthly maximum value composites
+gimms_raster_mvc <- monthlyComposite(gimms_files_tif)
+
+## visualize difference between 1st and 2nd half of July 1981 and resulting MVC
+val <- data.frame("ndvi_15a" = na.omit(getValues(gimms_raster[[1]])), 
+                  "ndvi_15b" = na.omit(getValues(gimms_raster[[2]])), 
+                  "ndvi_mvc" = na.omit(getValues(gimms_raster_mvc[[1]])))
+
+library(reshape2)
+val_mlt <- melt(val)
+
+library(ggplot2)
+ggplot(aes(x = value, group = variable, colour = variable), 
+       data = val_mlt) + 
+  geom_density(size = 1.2) + 
+  labs(x = "\nNDVI", y = "Density\n") + 
+  theme_bw()
+```
+
+
+
+<center>
+  <img src="http://i.imgur.com/zrW1hRK.png" alt="ggplot" style="width: 600px;"/>
 </center>
 
 ### Some considerations on code performance
