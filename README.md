@@ -1,6 +1,6 @@
 
 
-# Introducing the R **gimms** package
+# Introducing the R 'gimms' package
 
 ### What it is all about
 We've been collecting functions related to the download and processing of AVHRR 

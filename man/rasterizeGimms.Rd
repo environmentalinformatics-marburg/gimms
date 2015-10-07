@@ -5,13 +5,13 @@
 \title{Rasterize GIMMS3g binary data}
 \usage{
 rasterizeGimms(x, hdr, water2na = TRUE, nodata2na = TRUE, scaling = TRUE,
-  filename = "", ...)
+  remove_hdr = TRUE, filename = "", ...)
 }
 \arguments{
 \item{x}{Character. Vector of local filepaths.}
 
 \item{hdr}{Character. Companion header file passed on to
-\code{\link{caTools::read.ENVI}}. If missing, the standard header file for
+\code{\link{read.ENVI}}. If missing, the standard header file for
 GIMMS3g binary data as created by \code{\link{createHdr}} will be used.}
 
 \item{water2na}{Logical. If \code{TRUE} (default), pixels with 'mask-water'
@@ -24,10 +24,14 @@ value (-5000) will be discarded.}
 \item{scaling}{Logical. If \code{TRUE} (default), initial values will be
 scaled by a factor of 1/10000.}
 
-\item{filename}{Character. Optional output filename, see
-\code{\link{raster::writeRaster}}.}
+\item{remove_hdr}{Logical. If \code{TRUE} (default), the header file
+specified in 'hdr' or, if not specified, created internally via
+\code{\link{createHdr}} will be removed after all operations have finished.}
 
-\item{...}{Further arguments passed on to \code{\link{raster::writeRaster}}.}
+\item{filename}{Character. Optional output filename, see
+\code{\link{writeRaster}}.}
+
+\item{...}{Further arguments passed on to \code{\link{writeRaster}}.}
 }
 \value{
 If 'x' is a single filename, an object of class 'RasterLayer'; <br>
@@ -53,7 +57,7 @@ plot(rst_gimms)
 Florian Detsch
 }
 \seealso{
-\code{\link{createHdr}}, \code{\link{caTools::read.ENVI}},
-\code{\link{raster::raster}}, \code{\link{raster::writeRaster}}.
+\code{\link{createHdr}}, \code{\link{read.ENVI}},
+\code{\link{raster}}, \code{\link{writeRaster}}.
 }
 

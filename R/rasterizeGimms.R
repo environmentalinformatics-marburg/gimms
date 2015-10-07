@@ -6,7 +6,7 @@
 #'
 #' @param x Character. Vector of local filepaths.
 #' @param hdr Character. Companion header file passed on to
-#' \code{\link{caTools::read.ENVI}}. If missing, the standard header file for
+#' \code{\link{read.ENVI}}. If missing, the standard header file for
 #' GIMMS3g binary data as created by \code{\link{createHdr}} will be used.
 #' @param water2na Logical. If \code{TRUE} (default), pixels with 'mask-water'
 #' value (-10000) will be discarded. See also
@@ -15,9 +15,12 @@
 #' value (-5000) will be discarded.
 #' @param scaling Logical. If \code{TRUE} (default), initial values will be
 #' scaled by a factor of 1/10000.
+#' @param remove_hdr Logical. If \code{TRUE} (default), the header file
+#' specified in 'hdr' or, if not specified, created internally via
+#' \code{\link{createHdr}} will be removed after all operations have finished.
 #' @param filename Character. Optional output filename, see
-#' \code{\link{raster::writeRaster}}.
-#' @param ... Further arguments passed on to \code{\link{raster::writeRaster}}.
+#' \code{\link{writeRaster}}.
+#' @param ... Further arguments passed on to \code{\link{writeRaster}}.
 #'
 #' @return
 #' If 'x' is a single filename, an object of class 'RasterLayer'; <br>
@@ -27,8 +30,8 @@
 #' Florian Detsch
 #'
 #' @seealso
-#' \code{\link{createHdr}}, \code{\link{caTools::read.ENVI}},
-#' \code{\link{raster::raster}}, \code{\link{raster::writeRaster}}.
+#' \code{\link{createHdr}}, \code{\link{read.ENVI}},
+#' \code{\link{raster}}, \code{\link{writeRaster}}.
 #'
 #' @examples
 #' \dontrun{
@@ -49,6 +52,7 @@ rasterizeGimms <-   function(x,
                              water2na = TRUE,
                              nodata2na = TRUE,
                              scaling = TRUE,
+                             remove_hdr = TRUE,
                              filename = '',
                              ...) {
 
@@ -94,6 +98,10 @@ rasterizeGimms <-   function(x,
     # return raster
     return(rst)
   })
+
+  ## if not otherwise specified, remove temporary header file
+  if (remove_hdr)
+    file.remove(hdr)
 
   ## return 'RasterLayer' (single file in 'x') or 'RasterStack'
   if (length(ls_rst) == 1) {
