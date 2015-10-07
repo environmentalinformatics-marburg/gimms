@@ -10,7 +10,7 @@
 #' @title Download and Process GIMMS3g Data
 #' @author Florian Detsch
 #'
-#' @import methods raster
+#' @import methods raster caTools
 #'
 #' @references Pinzon, JE & Tucker, CJ (2014). A Non-Stationary 1981–2012 AVHRR
 #' NDVI3g Time Series. Remote Sensing, 6(8), 6929-6960. Available online at
