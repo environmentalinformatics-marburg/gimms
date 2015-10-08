@@ -32,6 +32,9 @@ updateInventory <- function(sort = FALSE) {
       )
     )
 
+  ## remove duplicate entries
+  gimms_fls <- gimms_fls[!duplicated(basename(gimms_fls))]
+
   ## available files (offline)
   if (class(gimms_fls) == "try-error") {
     cat("Online update failed. Using local inventory...\n")
