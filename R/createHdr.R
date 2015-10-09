@@ -17,9 +17,11 @@
 #' Florian Detsch
 #'
 #' @examples
+#' \dontrun{
 #' # Create standard GIMMS NDVI3g header file
 #' gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 #' gimms_header
+#' }
 #'
 #' @export createHdr
 #' @name createHdr

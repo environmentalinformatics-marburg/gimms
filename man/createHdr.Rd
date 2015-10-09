@@ -22,9 +22,11 @@ Create an ENVI header file (see \url{http://www.exelisvis.com/docs/ENVIHeaderFil
 to properly import GIMMS binary data into native 'Raster*' format.
 }
 \examples{
+\dontrun{
 # Create standard GIMMS NDVI3g header file
 gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
 gimms_header
+}
 }
 \author{
 Florian Detsch
