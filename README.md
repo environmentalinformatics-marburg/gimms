@@ -21,8 +21,19 @@ far. Feel free to comment, raise issues and provide (constructive) criticism.
 Any suggestions on how to improve the **gimms** package are highly appreciated!
 
 ### How to install
-So far, the **gimms** package has not been submitted to CRAN but a preliminary 
-package version can be installed directly from 
+The **gimms** package is now officially on CRAN and can be install directly via 
+
+
+```r
+# ## install 'gimms' package
+# install.packages("gimms")
+
+## load 'gimms' package
+library(gimms)
+```
+
+If you wish to install the development version including latest bug-fixes etc. 
+instead (no liability assumed!), directly install the package from 
 [GitHub](https://github.com/environmentalinformatics-marburg/gimms) via 
 `install_github` from the **devtools** package (Wickham and Chang, 2015).
 
@@ -30,7 +41,7 @@ package version can be installed directly from
 ```r
 # ## install 'gimms' package
 # library(devtools)
-# install_github("environmentalinformatics-marburg/gimms")
+# install_github("environmentalinformatics-marburg/gimms", ref = "develop")
 
 ## load 'gimms' package
 library(gimms)
@@ -153,10 +164,14 @@ rearrangeFiles(dsn = paste0(getwd(), "/data"),
 
 
 ```
-##  [1] "geo13jul15a.n19-VI3g" "geo13jul15b.n19-VI3g" "geo13aug15a.n19-VI3g"
-##  [4] "geo13aug15b.n19-VI3g" "geo13sep15a.n19-VI3g" "geo13sep15b.n19-VI3g"
-##  [7] "geo13oct15a.n19-VI3g" "geo13oct15b.n19-VI3g" "geo13nov15a.n19-VI3g"
-## [10] "geo13nov15b.n19-VI3g" "geo13dec15a.n19-VI3g" "geo13dec15b.n19-VI3g"
+##  [1] "geo13jan15a.n19-VI3g" "geo13jan15b.n19-VI3g" "geo13feb15a.n19-VI3g"
+##  [4] "geo13feb15b.n19-VI3g" "geo13mar15a.n19-VI3g" "geo13mar15b.n19-VI3g"
+##  [7] "geo13apr15a.n19-VI3g" "geo13apr15b.n19-VI3g" "geo13may15a.n19-VI3g"
+## [10] "geo13may15b.n19-VI3g" "geo13jun15a.n19-VI3g" "geo13jun15b.n19-VI3g"
+## [13] "geo13jul15a.n19-VI3g" "geo13jul15b.n19-VI3g" "geo13aug15a.n19-VI3g"
+## [16] "geo13aug15b.n19-VI3g" "geo13sep15a.n19-VI3g" "geo13sep15b.n19-VI3g"
+## [19] "geo13oct15a.n19-VI3g" "geo13oct15b.n19-VI3g" "geo13nov15a.n19-VI3g"
+## [22] "geo13nov15b.n19-VI3g" "geo13dec15a.n19-VI3g" "geo13dec15b.n19-VI3g"
 ```
 
 ### Create a header file
@@ -328,24 +343,30 @@ system.time(
 #  48.142   3.003  54.535
 
 ## next, the parallelized version
-rasterizeGimmsParallel <- function(files, nodes = 4, ...) {
+rasterizeGimmsParallel <- function(files, nodes = 4, overwrite = FALSE, ...) {
 
-  # create and register parallel backend
-  library(doParallel)
-  cl <- makeCluster(nodes)
-  registerDoParallel(cl)
-  
-  # loop over 'x' and process single files in parallel
-  ls_rst <- foreach(i = files, .packages = "gimms", 
-                    .export = ls(envir = globalenv())) %dopar% {
-                      rasterizeGimms(i, filename = paste0(i, ".tif"), ...)
+# create and register parallel backend
+library(doParallel)
+cl <- makeCluster(nodes)
+registerDoParallel(cl)
+
+# loop over 'x' and process single files in parallel
+ls_rst <- foreach(i = files, .packages = "gimms", 
+                  .export = ls(envir = globalenv())) %dopar% {
+                    filename <- paste0(i, ".tif")
+                    
+                    if (overwrite | !file.exists(filename)) {
+                      rasterizeGimms(i, filename = filename, overwrite = TRUE, ...)
+                    } else {
+                      raster(i, crs = "+init=epsg:4326")
                     }
-  
-  # deregister parallel backend
-  closeAllConnections()
-  
-  # return stacked layers
-  return(stack(ls_rst))
+                  }
+
+# deregister parallel backend
+closeAllConnections()
+
+# return stacked layers
+return(stack(ls_rst))
 }
 
 system.time(
@@ -386,5 +407,16 @@ stopImplicitCluster()
 
 ## rasterize gimms ndvi3g binary files in parallel (see above function 
 ## definition of `rasterizeGimmsParallel`)
-gimms_raster <- rasterizeGimmsParallel(gimms_files)
+gimms_raster <- rasterizeGimmsParallel(gimms_files, overwrite = TRUE)
+
+## remove incomplete first year
+gimms_raster <- gimms_raster[[-(1:12)]]
+
+## remove seasonal signal; avoid stack overflow by setting `use.cpp = FALSE`
+library(remote)
+gimms_raster_dsn <- deseason(gimms_raster, 
+                             cycle.window = 24, use.cpp = FALSE)
+
+## apply mann-kendall trend test and retrieve kendall's tau
+gimms_raster_tau <- 
 ```
