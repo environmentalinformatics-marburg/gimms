@@ -388,12 +388,17 @@ connection is fast enough to manage multi-core file downloads).
 
 ### Advanced applications
 The last section of this brief introduction is meant to demonstrate the use of 
-GIMMS NDVI3g data in a more practical sense. Perhaps it might be interesting for 
+GIMMS NDVI3g data in a more practical sense. Note that all necessary work steps 
+are briefly documented as in-line comments. Perhaps it might be interesting for 
 some of you...
 
 ##### Global Mann-Kendall trend based on GIMMS NDVI3g
 
 ```r
+################################################################################
+## download data
+################################################################################
+
 ## download entire gimms ndvi3g collection in parallel
 library(doParallel)
 cl <- makeCluster(4)
@@ -405,18 +410,94 @@ gimms_files <- foreach(i = gimms_files, .packages = "gimms",
 
 stopImplicitCluster()
 
+################################################################################
+## rasterize binary files
+################################################################################
+
 ## rasterize gimms ndvi3g binary files in parallel (see above function 
 ## definition of `rasterizeGimmsParallel`)
 gimms_raster <- rasterizeGimmsParallel(gimms_files, overwrite = TRUE)
 
 ## remove incomplete first year
+gimms_files <- gimms_files[-(1:12)]
 gimms_raster <- gimms_raster[[-(1:12)]]
 
-## remove seasonal signal; avoid stack overflow by setting `use.cpp = FALSE`
-library(remote)
-gimms_raster_dsn <- deseason(gimms_raster, 
-                             cycle.window = 24, use.cpp = FALSE)
+################################################################################
+## resample to a lower spatial resolution (to avoid stack overflow)
+################################################################################
 
-## apply mann-kendall trend test and retrieve kendall's tau
-gimms_raster_tau <- 
+## aggregate to a lower spatial resolution
+cl <- makeCluster(4)
+registerDoParallel(cl)
+
+gimms_raster_agg <- foreach(i = 1:nlayers(gimms_raster), 
+                            .packages = c("raster", "rgdal")) %dopar%
+  aggregate(gimms_raster[[i]], fact = 3, fun = median, 
+            filename = paste0("data/agg/AGG_", names(gimms_raster[[i]])), 
+            format = "GTiff", overwrite = TRUE)
+
+gimms_raster_agg <- stack(gimms_raster_agg)
+
+################################################################################
+## remove seasonal signal
+################################################################################
+
+## calculate long-term bi-monthly means
+gimms_list_means <- foreach(i = 1:24, 
+                            .packages = c("raster", "rgdal")) %dopar% {
+  
+  # layers corresponding to current period (e.g. '82jan15a')
+  id <- seq(i, nlayers(gimms_raster_agg), 24)
+  gimms_raster_agg_tmp <- gimms_raster_agg[[id]]
+  
+  # calculate long-term mean of current period (e.g. for 1982-2013 'jan15a')
+  calc(gimms_raster_agg_tmp, fun = mean, na.rm = TRUE)
+} 
+
+gimms_raster_means <- stack(gimms_list_means)
+
+## replicate bi-monthly 'gimms_raster_means' to match up with number of layers of 
+## initial 'gimms_raster_agg' (as `foreach` does not support recycling!)
+gimms_list_means <- replicate(nlayers(gimms_raster_agg) / nlayers(gimms_raster_means), 
+                              gimms_raster_means)
+gimms_raster_means <- stack(gimms_list_means)
+
+## subtract long-term mean from bi-monthly values
+files_out <- names(gimms_raster_agg)
+gimms_list_deseason <- foreach(i = 1:nlayers(gimms_raster_agg), 
+                               .packages = c("raster", "rgdal")) %dopar% {
+  
+  rst <- gimms_raster_agg[[i]] - gimms_raster_means[[i]]
+  rst <- writeRaster(rst, 
+                     filename = paste0("data/dsn/DSN_", names(gimms_raster_agg[[i]])), 
+                     format = "GTiff", overwrite = TRUE)
+  
+}
+
+gimms_raster_deseason <- stack(gimms_list_deseason)
+
+################################################################################
+## mann-kendall trend test (p < 0.001)
+################################################################################
+
+## custom function that returns significant values of tau only
+library(Kendall)
+
+significantTau <- function(x) {
+  mk <- MannKendall(x)
+  # reject value of tau if p >= 0.001
+  if (mk$sl >= 0.001) {
+    return(NA) 
+  # keep value of tau if p < 0.001
+  } else {
+    return(mk$tau)
+  }
+}
+
+## apply custom function on a pixel basis
+gimms_raster_trend <- overlay(gimms_raster_deseason, fun = significantTau, 
+                              filename = "data/out/gimms_mk001_8213", 
+                              format = "GTiff", overwrite = TRUE)
 ```
+
+
