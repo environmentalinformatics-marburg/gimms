@@ -498,6 +498,25 @@ significantTau <- function(x) {
 gimms_raster_trend <- overlay(gimms_raster_deseason, fun = significantTau, 
                               filename = "data/out/gimms_mk001_8213", 
                               format = "GTiff", overwrite = TRUE)
+
+################################################################################
+## visualize data
+################################################################################
+
+## complementary shapefile data
+library(rworldmap)
+data("countriesCoarse")
+
+## colors, see http://colorbrewer2.org/
+library(RColorBrewer)
+cols <- colorRampPalette(brewer.pal(11, "BrBG"))
+
+## create plot
+spplot(gimms_raster_trend, col.regions = cols(100), scales = list(draw = TRUE), 
+       sp.layout = list("sp.polygons", countriesCoarse, col = "grey65"), 
+       at = seq(-.6, .6, .1))
 ```
+
+![plot of chunk visualize_mk](figure/visualize_mk-1.png) 
 
 
