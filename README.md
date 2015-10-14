@@ -270,6 +270,7 @@ spplot(gimms_raster,
 
 <center>
   <img src="http://i.imgur.com/Qr3FuNr.png" alt="spplot" style="width: 800px;"/>
+  <br><br><b>Figure 1.</b>Global bi-monthly GIMMS NDVI3g images from July to December 2013.
 </center>
 
 
@@ -323,7 +324,8 @@ ggplot(aes(x = value, group = variable, colour = variable),
 
 <center>
   <img src="http://i.imgur.com/zrW1hRK.png" alt="ggplot" style="width: 600px;"/>
-</center>
+  <br><br><b>Figure 2.</b> Kernel density distribution of GIMMS NDVI3g values during the first (red) and second half of January 1982 (green) and resulting value distribution of the maximum value composite (MVC; blue) layer for January 1982. 
+</center> 
 
 ### Some considerations on code performance
 In order to speed things up a little bit, it is quite easy to add multi-core 
@@ -517,6 +519,11 @@ spplot(gimms_raster_trend, col.regions = cols(100), scales = list(draw = TRUE),
        at = seq(-.6, .6, .1))
 ```
 
-![plot of chunk visualize_mk](figure/visualize_mk-1.png) 
+
+
+<center>
+  <img src="http://i.imgur.com/WjRTFyD.png" alt="spplot" style="width: 600px;"/><br>
+  <b>Figure 3.</b> Global GIMMS NDVI3g trends (<i>p<0.001</i>) derived from pixel-based Mann-Kendall trend tests.
+</center>
 
 
