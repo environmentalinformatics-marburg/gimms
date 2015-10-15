@@ -1,5 +1,12 @@
 
 
+<b>Package downloads from the [RStudio CRAN Mirror](http://cran-logs.rstudio.com/)</b>
+
+*This month*                                                     *In total*
+---------------------------------------------------------------- -----------
+![momth](http://cranlogs.r-pkg.org/badges/gimms?color=green)     ![total](http://cranlogs.r-pkg.org/badges/grand-total/gimms?color=green)
+---------------------------------------------------------------- -----------
+
 # Introducing the R 'gimms' package
 
 ### What it is all about
@@ -299,32 +306,49 @@ gimms_raster_mvc <- monthlyComposite(gimms_files_tif)
 Again and this time with a little help from **reshape2** 
 (Wickham, 2007) and **ggplot2** (Wickham, 2009), 
 the effects from `monthlyComposite` can easily be seen. Displayed below are the 
-densityplots of all NDVI values during the 1st half of July 1981 (red), during 
-the 2nd half of July 1981 (green) and the resulting MVC values (blue).
+densityplots of all NDVI values during the 1st half of July 1981 (green), during 
+the 2nd half of July 1981 (turquoise) and the resulting MVC values (black).
 
 
 ```r
-## visualize difference between 1st and 2nd half of July 1981 and resulting MVC
+## concatenate data
 val <- data.frame("ndvi_15a" = na.omit(getValues(gimms_raster[[1]])), 
                   "ndvi_15b" = na.omit(getValues(gimms_raster[[2]])), 
                   "ndvi_mvc" = na.omit(getValues(gimms_raster_mvc[[1]])))
 
+## wide to long format
 library(reshape2)
 val_mlt <- melt(val)
 
+## colors
+devtools::install_github("environmentalinformatics-marburg/Rsenal")
+library(Rsenal)
+cols <- envinmrPalette(5)[c(3, 2, 5)]
+names(cols) <- levels(val_mlt$variable)
+
+## linetypes
+ltys <- c("solid", "solid", "longdash")
+names(ltys) <- levels(val_mlt$variable)
+
+## build ggplot
 library(ggplot2)
-ggplot(aes(x = value, group = variable, colour = variable), 
-       data = val_mlt) + 
-  geom_density(size = 1.2) + 
+ggplot(aes(x = value, group = variable, colour = variable, 
+           linetype = variable), data = val_mlt) + 
+  geom_hline(yintercept = 0, size = .5, colour = "grey65") +
+  geom_line(stat = "density", size = 1.2) + 
+  scale_colour_manual("dataset", values = cols) + 
+  scale_linetype_manual("dataset", values = ltys) + 
   labs(x = "\nNDVI", y = "Density\n") + 
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid = element_blank(), 
+        legend.key.width = grid::unit(1.8, "cm"))
 ```
 
 
 
 <center>
-  <img src="http://i.imgur.com/zrW1hRK.png" alt="ggplot" style="width: 600px;"/>
-  <br><br><b>Figure 2.</b> Kernel density distribution of GIMMS NDVI3g values during the first (red) and second half of January 1982 (green) and resulting value distribution of the maximum value composite (MVC; blue) layer for January 1982. 
+  <img src="http://i.imgur.com/WmTlFyV.png" alt="ggplot" style="width: 650px;"/>
+  <br><br><b>Figure 2.</b> Kernel density distribution of GIMMS NDVI3g values during the first (green) and second half of July 2013 (turquoise) and resulting value distribution of the maximum value composite layer (MVC; black). 
 </center> 
 
 ### Some considerations on code performance
@@ -522,8 +546,8 @@ spplot(gimms_raster_trend, col.regions = cols(100), scales = list(draw = TRUE),
 
 
 <center>
-  <img src="http://i.imgur.com/WjRTFyD.png" alt="spplot" style="width: 600px;"/><br>
-  <b>Figure 3.</b> Global GIMMS NDVI3g trends (<i>p<0.001</i>) derived from pixel-based Mann-Kendall trend tests.
+  <img src="http://i.imgur.com/M6sUz6z.png" alt="spplot" style="width: 800px;"/><br><br>
+  <b>Figure 3.</b> Long-term trend (1982-2013; <i>p<0.001</i>) in global GIMMS NDVI3g derived from pixel-based Mann-Kendall trend tests (Mann, 1945).
 </center>
 
 
