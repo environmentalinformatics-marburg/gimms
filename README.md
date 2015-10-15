@@ -1,10 +1,9 @@
 
 
-<b>Package downloads from the [RStudio CRAN Mirror](http://cran-logs.rstudio.com/)</b>
+#### Package downloads from the [RStudio CRAN Mirror](http://cran-logs.rstudio.com/)</b>
 
-
+This month      | In total
 --------------- | -----------
-This month    | In total
 ![month](http://cranlogs.r-pkg.org/badges/gimms) | ![total](http://cranlogs.r-pkg.org/badges/grand-total/gimms)
 
 
