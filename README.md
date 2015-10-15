@@ -2,9 +2,10 @@
 
 <b>Package downloads from the [RStudio CRAN Mirror](http://cran-logs.rstudio.com/)</b>
 
-*This month*    | *In total*
+
 --------------- | -----------
-![](http://cranlogs.r-pkg.org/badges/gimms) | ![](http://cranlogs.r-pkg.org/badges/grand-total/gimms)
+This month    | In total
+![month](http://cranlogs.r-pkg.org/badges/gimms) | ![total](http://cranlogs.r-pkg.org/badges/grand-total/gimms)
 
 
 # Introducing the R 'gimms' package
@@ -547,7 +548,7 @@ spplot(gimms_raster_trend, col.regions = cols(100), scales = list(draw = TRUE),
 
 <center>
   <img src="http://i.imgur.com/M6sUz6z.png" alt="spplot" style="width: 800px;"/><br><br>
-  <b>Figure 3.</b> Long-term trend (1982-2013; <i>p<0.001</i>) in global GIMMS NDVI3g derived from pixel-based Mann-Kendall trend tests (Mann, 1945).
+  <b>Figure 3.</b> Long-term trend (1982-2013; <i>p<0.01</i>) in global GIMMS NDVI3g derived from pixel-based Mann-Kendall trend tests (Mann, 1945).
 </center>
 
 
