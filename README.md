@@ -6,6 +6,7 @@ This month      | In total
 --------------- | -----------
 ![month](http://cranlogs.r-pkg.org/badges/gimms) | ![total](http://cranlogs.r-pkg.org/badges/grand-total/gimms)
 
+<hr>
 
 # Introducing the R 'gimms' package
 
