@@ -2,10 +2,10 @@
 
 <b>Package downloads from the [RStudio CRAN Mirror](http://cran-logs.rstudio.com/)</b>
 
-*This month*                                                     *In total*
----------------------------------------------------------------- -----------
-![momth](http://cranlogs.r-pkg.org/badges/gimms?color=green)     ![total](http://cranlogs.r-pkg.org/badges/grand-total/gimms?color=green)
----------------------------------------------------------------- -----------
+*This month*    | *In total*
+--------------- | -----------
+![](http://cranlogs.r-pkg.org/badges/gimms) | ![](http://cranlogs.r-pkg.org/badges/grand-total/gimms)
+
 
 # Introducing the R 'gimms' package
 
