@@ -7,9 +7,13 @@
 #' @param x Character. Vector of (local or online) filenames.
 #' @param pos1,pos2 Numeric. The first and last element of the date string in
 #' 'x', defaults to the GIMMS naming convention; see \code{\link{substr}}.
+#' @param to_date Logical. If \code{TRUE}, an actual timestamp (formatted
+#' according to \code{...}) is returned rather than a vector of indices.
+#' @param ... Further arguments passed on to \code{\link{strftime}}.
 #'
 #' @return
-#' A numeric vector with unique monthly indices.
+#' A numeric vector with unique monthly indices or, if \code{to_date = TRUE},
+#' a character vector with formatted timestamps.
 #'
 #' @author
 #' Florian Detsch
@@ -25,17 +29,47 @@
 #'
 #' ## extract monthly indices
 #' monthlyIndices(gimms_files)
+#' monthlyIndices(gimms_files, to_date = TRUE, format = "%b %y")
 #'
 #' @export monthlyIndices
 #' @name monthlyIndices
-monthlyIndices <- function(x, pos1 = 4L, pos2 = 8L) {
+monthlyIndices <- function(x, pos1 = 4L, pos2 = 8L, to_date = FALSE, ...) {
 
   ## extract timestamp
   ch_id <- substr(basename(x), pos1, pos2)
-  fc_id <- factor(ch_id, levels = unique(ch_id))
+
+  ## return formatted date
+  if (to_date) {
+
+    # switch current locale time to us standard
+    systime_locale <- Sys.getlocale(category = "LC_TIME")
+    invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
+
+    # year
+    ch_year <- substr(ch_id, 1, 2)
+    # month
+    ch_month <- substr(ch_id, 3, 5)
+    for (i in 1:length(ch_month)) {
+      ch_month[i] <- month.abb[which(tolower(month.abb) == ch_month[i])]
+    }
+    # day
+    ch_day <- substr(basename(x), pos2+3, pos2+3)
+    ch_day <- ifelse(ch_day == "a", 1, 15)
+
+    # concatenate and reformat date string
+    ch_date <- paste0(ch_day, ch_month, ch_year)
+    dt_time <- as.Date(ch_date, format = "%d%b%y")
+    ch_time <- strftime(dt_time, ...)
+
+    # revoke locale time adjustment
+    Sys.setlocale(category = "LC_TIME", locale = systime_locale)
+    return(ch_time)
 
   ## return numeric indices
-  num_id <- as.numeric(fc_id)
-  return(num_id)
+  } else {
+    fc_id <- factor(ch_id, levels = unique(ch_id))
+    num_id <- as.numeric(fc_id)
+    return(num_id)
+  }
 
 }
