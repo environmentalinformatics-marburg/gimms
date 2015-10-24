@@ -11,6 +11,10 @@
 #' \code{is.null(fls)}, this argument defaults to the current working directory.
 #' @param pattern Character. A regular expression passed on to
 #' \code{\link{list.files}}.
+#' @param pos Integer. The start positions of year, month and period ('a' or
+#' 'b') in the desired GIMMS NDVI3g files. Unless modified, this usually
+#' defaults to \code{c(4, 6, 11)}
+#' (see also \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}).
 #' @param ... Further arguments passed on to \code{\link{list.files}}.
 #'
 #' @return
@@ -39,7 +43,11 @@
 rearrangeFiles <- function(x = NULL,
                            dsn = getwd(),
                            pattern = "^geo",
+                           pos = c(4, 6, 11),
                            ...) {
+
+  if (length(pos) != 3)
+    stop("'pos' must be a vector of length 3 (i.e., start position of year, month and day); see ?rearrangeFiles. \n")
 
   ## if `is.null(fls)`, apply pattern matching in 'dsn'
   if (is.null(x))
@@ -54,9 +62,9 @@ rearrangeFiles <- function(x = NULL,
 
   ## create columns 'year', 'month' and 'day'
   gimms_df <- transform(gimms_df,
-                        "year" = substr(basename(file), 4, 5),
-                        "month" = substr(basename(file), 6, 8),
-                        "day" = ifelse(substr(basename(file), 11, 11) == "a", 1, 15))
+                        "year" = substr(basename(file), pos[1], pos[1] + 1),
+                        "month" = substr(basename(file), pos[2], pos[2] + 2),
+                        "day" = ifelse(substr(basename(file), pos[3], pos[3]) == "a", 1, 15))
 
   ## create column 'date'
   gimms_df$date <- as.Date(paste0(gimms_df$day, gimms_df$month, gimms_df$year),

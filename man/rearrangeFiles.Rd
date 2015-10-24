@@ -4,7 +4,8 @@
 \alias{rearrangeFiles}
 \title{Rearrange GIMMS files by date}
 \usage{
-rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo", ...)
+rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo", pos = c(4, 6,
+  11), ...)
 }
 \arguments{
 \item{x}{Character. Vector of (local or online) filepaths. If \code{NULL},
@@ -15,6 +16,11 @@ rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo", ...)
 
 \item{pattern}{Character. A regular expression passed on to
 \code{\link{list.files}}.}
+
+\item{pos}{Integer. The start positions of year, month and period ('a' or
+'b') in the desired GIMMS NDVI3g files. Unless modified, this usually
+defaults to \code{c(4, 6, 11)}
+(see also \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}).}
 
 \item{...}{Further arguments passed on to \code{\link{list.files}}.}
 }
