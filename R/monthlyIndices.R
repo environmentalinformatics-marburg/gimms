@@ -7,12 +7,12 @@
 #' @param x Character. Vector of (local or online) filenames.
 #' @param pos1,pos2 Numeric. The first and last element of the date string in
 #' 'x', defaults to the GIMMS naming convention; see \code{\link{substr}}.
-#' @param to_date Logical. If \code{TRUE}, an actual timestamp (formatted
+#' @param timestamp Logical. If \code{TRUE}, an actual timestamp (formatted
 #' according to \code{...}) is returned rather than a vector of indices.
 #' @param ... Further arguments passed on to \code{\link{strftime}}.
 #'
 #' @return
-#' A numeric vector with unique monthly indices or, if \code{to_date = TRUE},
+#' A numeric vector with unique monthly indices or, if \code{timestamp = TRUE},
 #' a character vector with formatted timestamps.
 #'
 #' @author
@@ -29,21 +29,26 @@
 #'
 #' ## extract monthly indices
 #' monthlyIndices(gimms_files)
-#' monthlyIndices(gimms_files, to_date = TRUE, format = "%b %y")
+#' monthlyIndices(gimms_files, timestamp = TRUE, format = "%b %y")
 #'
 #' @export monthlyIndices
 #' @name monthlyIndices
-monthlyIndices <- function(x, pos1 = 4L, pos2 = 8L, to_date = FALSE, ...) {
+monthlyIndices <- function(x, pos1 = 4L, pos2 = 8L, timestamp = FALSE, ...) {
 
   ## extract timestamp
   ch_id <- substr(basename(x), pos1, pos2)
 
   ## return formatted date
-  if (to_date) {
+  if (timestamp) {
 
     # switch current locale time to us standard
+
     systime_locale <- Sys.getlocale(category = "LC_TIME")
-    invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
+    if (Sys.info()[["sysname"]] == "Windows") {
+      invisible(Sys.setlocale(category = "LC_TIME", locale = "C"))
+    } else {
+      invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
+    }
 
     # year
     ch_year <- substr(ch_id, 1, 2)

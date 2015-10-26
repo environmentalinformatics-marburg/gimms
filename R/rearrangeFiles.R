@@ -58,7 +58,12 @@ rearrangeFiles <- function(x = NULL,
 
   ## switch current locale time to us standard
   systime_locale <- Sys.getlocale(category = "LC_TIME")
-  invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
+
+  if (Sys.info()[["sysname"]] == "Windows") {
+    invisible(Sys.setlocale(category = "LC_TIME", locale = "C"))
+  } else {
+    invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
+  }
 
   ## create columns 'year', 'month' and 'day'
   gimms_df <- transform(gimms_df,

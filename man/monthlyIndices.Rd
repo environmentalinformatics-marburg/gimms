@@ -4,7 +4,7 @@
 \alias{monthlyIndices}
 \title{Monthly indices from GIMMS filenames}
 \usage{
-monthlyIndices(x, pos1 = 4L, pos2 = 8L, to_date = FALSE, ...)
+monthlyIndices(x, pos1 = 4L, pos2 = 8L, timestamp = FALSE, ...)
 }
 \arguments{
 \item{x}{Character. Vector of (local or online) filenames.}
@@ -12,13 +12,13 @@ monthlyIndices(x, pos1 = 4L, pos2 = 8L, to_date = FALSE, ...)
 \item{pos1,pos2}{Numeric. The first and last element of the date string in
 'x', defaults to the GIMMS naming convention; see \code{\link{substr}}.}
 
-\item{to_date}{Logical. If \code{TRUE}, an actual timestamp (formatted
+\item{timestamp}{Logical. If \code{TRUE}, an actual timestamp (formatted
 according to \code{...}) is returned rather than a vector of indices.}
 
 \item{...}{Further arguments passed on to \code{\link{strftime}}.}
 }
 \value{
-A numeric vector with unique monthly indices or, if \code{to_date = TRUE},
+A numeric vector with unique monthly indices or, if \code{timestamp = TRUE},
 a character vector with formatted timestamps.
 }
 \description{
@@ -33,7 +33,7 @@ gimms_files <- c("geo85aug15a.n09-VI3g", "geo85aug15b.n09-VI3g",
 
 ## extract monthly indices
 monthlyIndices(gimms_files)
-monthlyIndices(gimms_files, to_date = TRUE, format = "\%b \%y")
+monthlyIndices(gimms_files, timestamp = TRUE, format = "\%b \%y")
 }
 \author{
 Florian Detsch
