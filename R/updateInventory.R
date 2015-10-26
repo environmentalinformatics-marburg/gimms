@@ -41,7 +41,7 @@ updateInventory <- function(sort = FALSE) {
     gimms_fls <- readRDS(system.file("extdata", "inventory.rds",
                                      package = "gimms"))
   } else {
-    cat("Online update of the GIMMS file inventory successful!")
+    cat("Online update of the GIMMS file inventory successful!\n")
   }
 
   ## sort files (optional)

@@ -9,13 +9,13 @@
 \title{Download GIMMS 3G data}
 \usage{
 \S4method{downloadGimms}{numeric}(x, y, dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, ...)
+  quiet = TRUE, mode = "wb", ...)
 
 \S4method{downloadGimms}{character}(x, dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, ...)
+  quiet = TRUE, mode = "wb", ...)
 
 \S4method{downloadGimms}{missing}(dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, ...)
+  quiet = TRUE, mode = "wb", ...)
 }
 \arguments{
 \item{x}{If 'numeric', start year for download (e.g. 2000). If 'character',
@@ -35,7 +35,10 @@ will be overwritten.}
 \item{quiet}{Logical. If \code{TRUE}, information sent to the console is
 reduced.}
 
-\item{...}{Further arguments passed on to \code{\link{download.file}}.}
+\item{mode}{See \code{\link{download.file}}.}
+
+\item{...}{Further arguments passed on to \code{\link{download.file}}, e.g.
+'method'.}
 }
 \value{
 A vector of filepaths.
