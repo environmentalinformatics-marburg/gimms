@@ -87,8 +87,8 @@ setMethod("downloadGimms",
       if (!quiet)
         cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
     } else {
-      try(download.file(i, destfile = destfile, mode = mode, ...),
-          silent = TRUE)
+      try(download.file(i, destfile = destfile, mode = mode,
+                        quiet = quiet, ...), silent = TRUE)
     }
   }
 
@@ -114,8 +114,8 @@ setMethod("downloadGimms",
     if (file.exists(destfile) & !overwrite) {
       cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
     } else {
-      try(download.file(i, destfile = destfile, mode = mode, ...),
-          silent = TRUE)
+      try(download.file(i, destfile = destfile, mode = mode,
+                        quiet = quiet, ...), silent = TRUE)
     }
   }
 
@@ -144,8 +144,8 @@ setMethod("downloadGimms",
     if (file.exists(destfile) & !overwrite) {
       cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
     } else {
-      try(download.file(i, destfile = destfile, mode = mode, ...),
-          silent = TRUE)
+      try(download.file(i, destfile = destfile, mode = mode,
+                        quiet = quiet, ...), silent = TRUE)
     }
   }
 
