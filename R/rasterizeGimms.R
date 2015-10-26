@@ -5,9 +5,9 @@
 #' companion header file.
 #'
 #' @param x Character. Vector of local filepaths.
-#' @param hdr Character. Companion header files corresponding to the binary data
+#' @param header Character. Companion header files corresponding to the binary data
 #' in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data as
-#' created by \code{\link{createHdr}} will be used.
+#' created by \code{\link{createHeader}} will be used.
 #' @param water2na Logical. If \code{TRUE} (default), pixels with 'mask-water'
 #' value (-10000) will be discarded. See also
 #' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}.
@@ -15,9 +15,9 @@
 #' value (-5000) will be discarded.
 #' @param scaling Logical. If \code{TRUE} (default), initial values will be
 #' scaled by a factor of 1/10000.
-#' @param remove_hdr Logical. If \code{FALSE} (default), the header file
-#' specified in 'hdr' or, if not specified, created internally via
-#' \code{\link{createHdr}} will be removed after all operations have finished.
+#' @param remove_header Logical. If \code{FALSE} (default), the header file
+#' specified in 'header' or, if not specified, created internally via
+#' \code{\link{createHeader}} will be removed after all operations have finished.
 #' @param filename Character. Optional output filename, see
 #' \code{\link{writeRaster}}.
 #' @param ... Further arguments passed on to \code{\link{writeRaster}}.
@@ -30,7 +30,7 @@
 #' Florian Detsch
 #'
 #' @seealso
-#' \code{\link{createHdr}}, \code{\link{raster}}, \code{\link{writeRaster}}.
+#' \code{\link{createHeader}}, \code{\link{raster}}, \code{\link{writeRaster}}.
 #'
 #' @examples
 #' \dontrun{
@@ -39,7 +39,7 @@
 #'                              dsn = paste0(getwd(), "/data"))
 #'
 #' ## Rasterize downloaded GIMMS files from 2000 (this might take even longer...)
-#' gimms_raster <- rasterizeGimms(x = gimms_files[1:24], remove_hdr = TRUE)
+#' gimms_raster <- rasterizeGimms(x = gimms_files[1:24], remove_header = TRUE)
 #'
 #' plot(gimms_raster[[1:4]])
 #' }
@@ -47,11 +47,11 @@
 #' @export rasterizeGimms
 #' @name rasterizeGimms
 rasterizeGimms <-   function(x,
-                             hdr = NULL,
+                             header = NULL,
                              water2na = TRUE,
                              nodata2na = TRUE,
                              scaling = TRUE,
-                             remove_hdr = FALSE,
+                             remove_header = FALSE,
                              filename = '',
                              ...) {
 
@@ -63,8 +63,9 @@ rasterizeGimms <-   function(x,
   ls_rst <- lapply(1:length(x), function(i) {
 
     # import binary data as 'RasterLayer' and flip
-    if (is.null(hdr))
-      hdr <- createHdr(x[i])
+    if (is.null(header))
+      header <- createHeader(x[i])
+
     rst <- raster::raster(x[i])
     rst <- raster::t(rst)
 
@@ -89,13 +90,13 @@ rasterizeGimms <-   function(x,
     if (length(filename) >= i & nchar(filename[i]) > 0)
       rst <- raster::writeRaster(rst, filename = filename[i], ...)
 
+    # if not otherwise specified, remove temporary header file
+    if (remove_header)
+      file.remove(header)
+
     # return raster
     return(rst)
   })
-
-  ## if not otherwise specified, remove temporary header file
-  if (remove_hdr)
-    file.remove(hdr)
 
   ## return 'RasterLayer' (single file in 'x') or 'RasterStack'
   if (length(ls_rst) == 1) {
