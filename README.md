@@ -8,6 +8,20 @@ This month      | In total
 
 <hr>
 
+
+#### What's new?
+
+I recently received an invaluable bug report about some strange behavior of `downloadGimms` and a rather awkward look of the rasterized images resulting therefrom. 
+
+<center>
+  <img src="http://i.imgur.com/MySaI9F.png" alt="windows_bug" style="width: 650px;"/
+</center>
+
+The problem was obviously related to `download.file` which worked just fine under Linux when using the default settings but introduced distortions under Windows. In the newest package version which is currently on GitHub (install via `devtools::install_github("environmentalinformatics-marburg/gimms", ref = "develop")`) and (hopefully) soon on CRAN, I therefore specified `download.file(..., mode = "wb")` to explicitly enable binary writing mode. 
+
+Thanks again for the input! 
+
+
 # Introducing the R 'gimms' package
 
 ### What it is all about
@@ -186,7 +200,7 @@ rearrangeFiles(dsn = paste0(getwd(), "/data"),
 In order to import the GIMMS binary files into R via `raster::raster`, the 
 creation of header files (.hdr) that are located in the same folder as the 
 binary files staged for processing is mandatory. The standard files required to 
-properly process GIMMS NDVI3g data are created via `createHdr` and typically 
+properly process GIMMS NDVI3g data are created via `createHeader` and typically 
 include the following parameters. 
 
 
@@ -203,14 +217,14 @@ include the following parameters.
 ```
 
 It is possibly to automatically remove the created header files by setting 
-`rasterizeGimms(..., remove_hdr = TRUE)` once all operations have finished. 
-Although `rasterizeGimms` automatically invokes `createHdr`, the function also 
+`rasterizeGimms(..., remove_header = TRUE)` once all operations have finished. 
+Although `rasterizeGimms` automatically invokes `createHeader`, the function also 
 runs as stand-alone version.
 
 
 ```r
 ## create gimms ndvi3g standard header file
-gimms_header <- createHdr("~/geo13jul15a.n19-VI3g")
+gimms_header <- createHeader("~/geo13jul15a.n19-VI3g")
 
 gimms_header
 ```
@@ -406,7 +420,7 @@ system.time(
 In the context of parallel processing, feel free to also browse the advanced 
 applications based on GIMMS NDVI3g data below. There are some more examples 
 included demonstrating the reasonable use of **doParallel** functionality 
-(Analytics and Weston, 2014) along with the **gimms** package, which is 
+(Analytics and Weston, 2015) along with the **gimms** package, which is 
 probably particulary applicable for `downloadGimms` (given that your internet 
 connection is fast enough to manage multi-core file downloads).
 
@@ -428,7 +442,7 @@ some of you...
 
 ## download entire gimms ndvi3g collection in parallel
 library(doParallel)
-cl <- makeCluster(4)
+cl <- makeCluster(3)
 registerDoParallel(cl)
 
 gimms_files <- updateInventory(sort = TRUE)
@@ -551,4 +565,7 @@ spplot(gimms_raster_trend, col.regions = cols(100), scales = list(draw = TRUE),
   <b>Figure 3.</b> Long-term trend (1982-2013; <i>p<0.01</i>) in global GIMMS NDVI3g derived from pixel-based Mann-Kendall trend tests (Mann, 1945).
 </center>
 
+
+
+##### Global vegetation response to the 1997/98 El Niño
 
