@@ -35,9 +35,11 @@ if ( !isGeneric("downloadGimms") ) {
 #'
 #' @examples
 #' \dontrun{
+#' ## Destination folder for data download
+#' gimms_dir <- paste0(getwd(), "/data")
+#'
 #' ## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
-#' gimms_files <- downloadGimms(x = 2000, y = 2005,
-#'                              dsn = paste0(getwd(), "/data"))
+#' gimms_files <- downloadGimms(x = 2000, y = 2005, dsn = gimms_dir)
 #' gimms_files[1:10]
 #' }
 #' @export downloadGimms

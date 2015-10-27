@@ -34,12 +34,18 @@ if ( !isGeneric("monthlyComposite") ) {
 #'
 #' @examples
 #' \dontrun{
-#' ## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
-#' gimms_files <- downloadGimms(x = 2000, y = 2005,
-#'                              dsn = paste0(getwd(), "/data"))
+#' ## Destination folder for data download
+#' gimms_dir <- paste0(getwd(), "/data")
+#'
+#' ## Download GIMMS NDVI3g binary data from 2000-2005
+#' gimms_files <- downloadGimms(x = 2000, y = 2005, dsn = gimms_dir)
+#'
+#' ## Rasterize downloaded GIMMS files from 2000
+#' gimms_raster <- rasterizeGimms(x = gimms_files[1:24], remove_header = TRUE)
 #'
 #' ## Calculate monthly maximum value composites
-#' gimms_raster_mvc <- monthlyComposite(gimms_files)
+#' indices <- monthlyIndices(gimms_files[1:24])
+#' gimms_raster_mvc <- monthlyComposite(gimms_raster, indices = indices)
 #'
 #' plot(gimms_raster_mvc[[1:4]])
 #' }

@@ -34,14 +34,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' ## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
-#' gimms_files <- downloadGimms(x = 2000, y = 2005,
-#'                              dsn = paste0(getwd(), "/data"))
+#' ## Destination folder for data download
+#' gimms_dir <- paste0(getwd(), "/data")
 #'
-#' ## Rasterize downloaded GIMMS files from 2000 (this might take even longer...)
-#' gimms_raster <- rasterizeGimms(x = gimms_files[1:24], remove_header = TRUE)
+#' ## Download GIMMS NDVI3g binary data from 2000-2005
+#' gimms_files <- downloadGimms(x = 2000, y = 2005, dsn = gimms_dir)
 #'
-#' plot(gimms_raster[[1:4]])
+#' ## Rasterize downloaded GIMMS files from January and February 2000
+#' gimms_raster <- rasterizeGimms(x = gimms_files[1:4], remove_header = TRUE)
+#'
+#' plot(gimms_raster)
 #' }
 #'
 #' @export rasterizeGimms
