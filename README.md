@@ -11,16 +11,17 @@ This month      | In total
 
 #### What's new?
 
-I recently received an invaluable bug report about some strange behavior of `downloadGimms` and a rather awkward look of the rasterized images resulting therefrom. 
+I recently received an invaluable bug report about some strange behavior of `downloadGimms` which resulted in a rather awkward look of the rasterized images. 
 
 <center>
-  <img src="http://i.imgur.com/MySaI9F.png" alt="windows_bug" style="width: 650px;"/
+  <img src="http://i.imgur.com/MySaI9F.png" alt="windows_bug" style="width: 650px;"/>
 </center>
 
-The problem was obviously related to `download.file` which worked just fine under Linux when using the default settings but introduced distortions under Windows. In the newest package version which is currently on GitHub (install via `devtools::install_github("environmentalinformatics-marburg/gimms", ref = "develop")`) and (hopefully) soon on CRAN, I therefore specified `download.file(..., mode = "wb")` to explicitly enable binary writing mode. 
+The problem was obviously related to `download.file` which worked just fine under Linux when using the default settings, but introduced distortions under Windows. In the newest package version 0.2.0 which is now brand-new on CRAN, I therefore specified `download.file(..., mode = "wb")` to explicitly enable binary writing mode. 
 
 Thanks again for the input! 
 
+<hr>
 
 # Introducing the R 'gimms' package
 
