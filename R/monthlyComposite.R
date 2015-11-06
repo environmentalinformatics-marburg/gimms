@@ -5,7 +5,7 @@ if ( !isGeneric("monthlyComposite") ) {
 #' Calculate monthly composite images
 #'
 #' @description
-#' Based on a user-defined function, e.g. \code{sum} for maximum value
+#' Based on a user-defined function, e.g. \code{max} for maximum value
 #' composites (MVC), aggregate bi-monthly GIMMS datasets to monthly composites.
 #'
 #' @param x RasterStack (requires 'indices') or character vector of filenames.
