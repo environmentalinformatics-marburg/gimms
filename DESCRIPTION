@@ -5,15 +5,18 @@ Version: 0.2.0
 Date: 2015-10-26
 Author: Florian Detsch
 Maintainer: Florian Detsch <admin@environmentalinformatics-marburg.de>
-Description:
-    We provide a set of functions to retrieve information about GIMMS NDVI3g
-    files currently available online; download and re-arrange the bi-monthly
-    datasets according to creation time; import downloaded files from native
-    binary (ENVI) format directly into R based on the widely applied 'raster'
-    package; and calculate monthly value composites (e.g. maximum value
-    composites, MVC) from the bi-monthly input data.
+Description: We provide a set of functions to retrieve information about GIMMS
+    NDVI3g files currently available online; download and re-arrange the bi-monthly
+    datasets according to creation time; import downloaded files from native binary
+    (ENVI) format directly into R based on the widely applied 'raster' package; and
+    calculate monthly value composites (e.g. maximum value composites, MVC) from the
+    bi-monthly input data.
 Depends:
     raster,
     methods
+Imports:
+    Kendall,
+    zyp
 License: GPL (>= 3) | file LICENSE
 LazyData: TRUE
+RoxygenNote: 5.0.0
