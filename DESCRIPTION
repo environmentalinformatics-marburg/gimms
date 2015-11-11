@@ -19,4 +19,4 @@ Imports:
     zyp
 License: GPL (>= 3) | file LICENSE
 LazyData: TRUE
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
