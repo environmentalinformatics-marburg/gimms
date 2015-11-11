@@ -4,14 +4,17 @@
 \alias{updateInventory}
 \title{Update GIMMS 3G file inventory}
 \usage{
-updateInventory(sort = FALSE)
+updateInventory(sort = TRUE, quiet = TRUE)
 }
 \arguments{
-\item{sort}{Logical. If \code{TRUE} (default), the available files are sorted
+\item{sort}{'logical'. If \code{TRUE}, the list of available files is sorted
 by date prior to return.}
+
+\item{quiet}{'logical'. If \code{FALSE}, some details about the online file
+retrieval are printed to the console.}
 }
 \value{
-A vector of online filepaths.
+A 'character' vector of online filepaths.
 }
 \description{
 Download the latest version of the GIMMS 3G file inventory from NASA FTP

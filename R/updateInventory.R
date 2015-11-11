@@ -6,11 +6,13 @@
 #' server is not accessible (e.g. due to missing internet connection), load
 #' local version of file inventory.
 #'
-#' @param sort Logical. If \code{TRUE} (default), the available files are sorted
+#' @param sort 'logical'. If \code{TRUE}, the list of available files is sorted
 #' by date prior to return.
+#' @param quiet 'logical'. If \code{FALSE}, some details about the online file
+#' retrieval are printed to the console.
 #'
 #' @return
-#' A vector of online filepaths.
+#' A 'character' vector of online filepaths.
 #'
 #' @author
 #' Florian Detsch
@@ -20,10 +22,12 @@
 #'
 #' @export updateInventory
 #' @name updateInventory
-updateInventory <- function(sort = FALSE) {
+updateInventory <- function(sort = TRUE, quiet = TRUE) {
 
   ## available files (online)
-  cat("Trying to update GIMMS inventory from server...\n")
+  if (!quiet)
+    cat("Trying to update GIMMS inventory from server...\n")
+
   gimms_fls <-
     suppressWarnings(
       try(
@@ -37,11 +41,14 @@ updateInventory <- function(sort = FALSE) {
 
   ## available files (offline)
   if (class(gimms_fls) == "try-error") {
-    cat("Online update failed. Using local inventory...\n")
+    if (!quiet)
+      cat("Online update failed. Using local inventory...\n")
+
     gimms_fls <- readRDS(system.file("extdata", "inventory.rds",
                                      package = "gimms"))
   } else {
-    cat("Online update of the GIMMS file inventory successful!\n")
+    if (!quiet)
+      cat("Online update of the GIMMS file inventory successful!\n")
   }
 
   ## sort files (optional)
