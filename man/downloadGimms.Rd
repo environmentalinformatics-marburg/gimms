@@ -3,11 +3,15 @@
 \docType{methods}
 \name{downloadGimms}
 \alias{downloadGimms}
+\alias{downloadGimms,Date-method}
 \alias{downloadGimms,character-method}
 \alias{downloadGimms,missing-method}
 \alias{downloadGimms,numeric-method}
 \title{Download GIMMS 3G data}
 \usage{
+\S4method{downloadGimms}{Date}(x, y, dsn = getwd(), overwrite = FALSE,
+  quiet = TRUE, mode = "wb", ...)
+
 \S4method{downloadGimms}{numeric}(x, y, dsn = getwd(), overwrite = FALSE,
   quiet = TRUE, mode = "wb", ...)
 
@@ -18,13 +22,14 @@
   quiet = TRUE, mode = "wb", ...)
 }
 \arguments{
-\item{x}{If 'numeric', start year for download (e.g. 2000). If 'character',
-a vector of full online filepath(s) to download, typically returned from
+\item{x}{If 'Date', start date for download (e.g. "2000-01-01"). If
+'numeric', start year for download (e.g. 2000). If 'character', a vector of
+full online filepath(s) to download, typically returned from
 \code{\link{updateInventory}}. If not supplied, download will start from the
-first year available.}
+oldest file available.}
 
-\item{y}{'numeric'. End year for download. If not supplied, download will
-stop at the last year available.}
+\item{y}{If 'Date', end date for download. If 'numeric', end year for
+download. If not supplied, download will stop with the latest file available.}
 
 \item{dsn}{'character'. Destination folder for file download. If not supplied,
 all downloaded files will be stored in the current working directory.}
@@ -52,10 +57,23 @@ Download GIMMS 3G binary data for a given time span from NASA FTP server
 ## Destination folder for data download
 gimms_dir <- paste0(getwd(), "/data")
 
-## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
-gimms_files <- downloadGimms(x = 2000, y = 2005, dsn = gimms_dir)
-gimms_files[1:10]
+## 'Date' method
+gimms_files_date <- downloadGimms(x = as.Date("2000-01-01"),
+                                  y = as.Date("2000-06-30"),
+                                  dsn = gimms_dir)
+
+## 'numeric' method, i.e. full years
+gimms_files_year <- downloadGimms(x = 2000, y = 2002, dsn = gimms_dir)
+
+## 'character' method, i.e. file names
+gimms_files <- updateInventory()
+gimms_files <- gimms_files[grep("geo00", gimms_files)]
+gimms_files_char <- downloadGimms(x = gimms_files, dsn = gimms_dir)
+
+## 'missing' method, i.e. entire collection
+gimms_files_full <- downloadGimms(dsn = gimms_dir)
 }
+
 }
 \author{
 Florian Detsch
