@@ -1,3 +1,7 @@
+if ( !isGeneric("significantTau") ) {
+  setGeneric("significantTau", function(x, ...)
+    standardGeneric("significantTau"))
+}
 #' Compute (pre-whitened) Kendall's tau
 #'
 #' @description
@@ -13,10 +17,14 @@
 #' to the Mann-Kendall trend test.
 #' @param df 'logical'. If \code{TRUE}, a 'data.frame' holding the value of
 #' Kendall's tau and the referring significance level.
+#' @param filename 'character'. Optional output filename, see
+#' \code{\link{writeRaster}}. Needs to include an appropriate file format
+#' extension, see \code{\link{writeFormats}}.
 #' @param ... Further arguments passed on to \code{\link{zyp.trend.vector}}.
 #'
 #' @return If \code{df = FALSE} (default) and \code{p} was not exceeded, a
-#' single 'numeric'; else a 'data.frame' with Kendall's tau and the referring
+#' single 'numeric'; if \code{df = FALSE} and \code{p} was exceeded, a 'logical'
+#' (\code{NA}); else a 'data.frame' with Kendall's tau and the corresponding
 #' significance level.
 #'
 #' @author
@@ -53,62 +61,135 @@
 #' plot(PrecipGL)
 #'
 #' ## Mann-Kendall trend test without pre-whitening
-#' significantTau(PrecipGL, p = 0.001)
+#' x <- as.numeric(PrecipGL)
+#' significantTau(x, p = 0.001, prewhitening = FALSE, df = TRUE)
 #'
 #' ## Mann-Kendall trend test with pre-whitening
-#' significantTau(PrecipGL, p = 0.001, prewhitening = TRUE)
+#' significantTau(x, p = 0.001, prewhitening = TRUE, df = TRUE)
+#'
+#' #############################################################################
+#' ### use case: significant (p < 0.001) mann-kendall trends (2009-13) #########
+#' #############################################################################
+#'
+#' \dontrun{
+#' ## download files from 2009-2013
+#' gimms_files <- downloadGimms(x = as.Date("2009-01-01"),
+#'                              dsn = paste0(getwd(), "/data"))
+#'
+#' ## convert binary files to 'Raster*' format
+#' gimms_rasters <- rasterizeGimms(gimms_files, filename = gimms_files,
+#'                                 format = "GTiff", overwrite = TRUE)
+#'
+#' ## crop iran
+#' library(rworldmap)
+#' data(countriesLow)
+#' gimms_iran <- crop(gimms_rasters,
+#'                      subset(countriesLow, ADMIN == "Iran"))
+#'
+#' ## remove seasonal signal via remote::deseason
+#' library(remote)
+#' gimms_deseason <- deseason(gimms_iran, cycle.window = 24, use.cpp = TRUE)
+#'
+#' ## identify long-term monotonous trends from mann-kendall trend test; all values
+#' ## of kendall's tau with p >= 0.001 are set to NA; note that pre-whitening is
+#' ## applied prior to the actual trend test
+#' gimms_trends <- significantTau(gimms_deseason, p = 0.001,
+#'                                prewhitening = TRUE)
+#'
+#' ## create figure
+#' library(RColorBrewer)
+#' library(latticeExtra)
+#' cols <- colorRampPalette(brewer.pal(11, "BrBG"))
+#' spplot(gimms_trends, col.regions = cols(100), scales = list(draw = TRUE),
+#'        at = seq(-.525, .525, .025),
+#'        main = expression("Kendall's" ~ tau ~ "(2009-2013)")) +
+#'   layer(sp.polygons(countriesLow))
+#' }
 #'
 #' @export significantTau
 #' @name significantTau
-significantTau <- function(x, p = 0.001, prewhitening = FALSE, df = FALSE, ...) {
 
-  # if only one unique value exists in 'x', return NA
-  if (length(unique(x)) == 1)
-    return(NA)
+################################################################################
+### function using 'numeric' input #############################################
+#' @aliases significantTau,numeric-method
+#' @rdname significantTau
+setMethod("significantTau",
+          signature(x = "numeric"),
+          function(x, p = 0.001, prewhitening = TRUE, df = FALSE, ...) {
 
-  # with prewhitening
-  if (prewhitening) {
+            # if only one unique value exists in 'x', return NA
+            if (length(unique(x)) == 1)
+              return(NA)
 
-    # try to compute pre-whitened mann-kendall trend test
-    try(mk <- zyp::zyp.trend.vector(x, ...), silent = TRUE)
+            # with prewhitening
+            if (prewhitening) {
 
-    # if previous computation fails, return NA
-    if (!exists("mk")) {
-      sig <- tau <- NA
-      # else return kendall's tau and referring p value
-    } else {
+              # try to compute pre-whitened mann-kendall trend test
+              try(mk <- zyp::zyp.trend.vector(x, ...), silent = TRUE)
 
-      id_sig <- grep("sig", names(mk))
-      sig <- mk[id_sig]
+              # if previous computation fails, return NA
+              if (!exists("mk")) {
+                sig <- tau <- NA
+                # else return kendall's tau and referring p value
+              } else {
 
-      id_tau <- grep("tau", names(mk))
-      tau <- mk[id_tau]
-    }
+                id_sig <- grep("sig", names(mk))
+                sig <- mk[id_sig]
 
-    # without prewhitening
-  } else {
-    mk <- Kendall::MannKendall(x)
+                id_tau <- grep("tau", names(mk))
+                tau <- mk[id_tau]
+              }
 
-    sig <- mk$sl
-    tau <- mk$tau
-  }
+              # without prewhitening
+            } else {
+              mk <- Kendall::MannKendall(x)
 
-  # return data.frame
-  if (df) {
-    return(data.frame(tau = tau, p = sig))
+              sig <- mk$sl
+              tau <- mk$tau
+            }
 
-    # reject value of tau if p >= 0.001
-  } else {
+            # return data.frame
+            if (df) {
+              return(data.frame(tau = tau, p = sig))
 
-    if (is.logical(sig) | is.logical(p)) {
-      return(NA)
-    } else {
-      if (sig >= p) {
-        return(NA)
-        # keep value of tau if p < 0.001
-      } else {
-        return(tau)
-      }
-    }
-  }
-}
+              # reject value of tau if p >= 0.001
+            } else {
+
+              if (is.logical(sig) | is.logical(p)) {
+                return(NA)
+              } else {
+                if (sig >= p) {
+                  return(NA)
+                  # keep value of tau if p < 0.001
+                } else {
+                  return(tau)
+                }
+              }
+            }
+          }
+)
+
+
+################################################################################
+### function using 'RasterStack' input #########################################
+#' @aliases significantTau,RasterStack-method
+#' @rdname significantTau
+setMethod("significantTau",
+          signature(x = "RasterStackBrick"),
+          function(x, p = 0.001, prewhitening = TRUE, df = FALSE,
+                   filename = "", ...) {
+
+            rst_mk <- raster::overlay(x, fun = function(y, ...) {
+              significantTau(y, p = p,
+                             prewhitening = prewhitening, df = df, ...)
+            })
+
+            ## write to file
+            if (nchar(filename) > 0)
+              rst_mk <- raster::writeRaster(rst_mk, filename = filename,
+                                            overwrite = TRUE)
+
+            ## return
+            return(rst_mk)
+          }
+)
