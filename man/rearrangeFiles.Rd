@@ -4,8 +4,8 @@
 \alias{rearrangeFiles}
 \title{Rearrange GIMMS files by date}
 \usage{
-rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo", pos = c(4, 6,
-  11), ...)
+rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo.*.VI3g$",
+  pos = c(4, 6, 11), ...)
 }
 \arguments{
 \item{x}{Character. Vector of (local or online) filepaths. If \code{NULL},
@@ -34,15 +34,12 @@ current working directory.
 }
 \examples{
 ## latest version of files inventory
-gimms_files <- updateInventory()
+gimms_files <- updateInventory(sort = FALSE)
 head(gimms_files)
 
 ## re-arrange vector with available files according to date
 gimms_files_arr <- rearrangeFiles(gimms_files)
 head(gimms_files_arr)
-
-## (or simply use the two-in-one solution)
-gimms_files <- updateInventory(sort = TRUE)
 
 }
 \author{
