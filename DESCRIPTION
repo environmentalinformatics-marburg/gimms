@@ -11,7 +11,7 @@ Description: We provide a set of functions to retrieve information about GIMMS
     (ENVI) format directly into R based on the widely applied 'raster' package;
     calculate monthly value composites (e.g. maximum value composites, MVC) from the
     bi-monthly input data; and derive long-term monotonous trends from the
-    Mann-Kendall trend test, optionally featuring previous pre-whitening to
+    Mann-Kendall trend test, optionally featuring pre-whitening to
     account for lag-1 autocorrelation.
 Depends:
     raster,
