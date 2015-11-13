@@ -14,6 +14,8 @@
 #' @author Florian Detsch
 #'
 #' @import methods raster
+#' @importFrom Kendall MannKendall
+#' @importFrom zyp zyp.trend.vector
 #' @importFrom utils download.file
 #'
 #' @references Pinzon, JE & Tucker, CJ (2014). A Non-Stationary 1981-2012 AVHRR

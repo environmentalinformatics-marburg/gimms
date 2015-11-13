@@ -23,7 +23,7 @@
 #' @param ... Further arguments passed on to \code{\link{writeRaster}}.
 #'
 #' @return
-#' If 'x' is a single filename, an object of class 'RasterLayer'; <br>
+#' If 'x' is a single filename, an object of class 'RasterLayer';
 #' if 'x' is a vector of filenames, an object of class 'RasterStack'.
 #'
 #' @author

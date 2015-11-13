@@ -8,12 +8,13 @@ if ( !isGeneric("downloadGimms") ) {
 #' Download GIMMS 3G binary data for a given time span from NASA FTP server
 #' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}).
 #'
-#' @param x If 'numeric', start year for download (e.g. 2000). If 'character',
-#' a vector of full online filepath(s) to download, typically returned from
+#' @param x If 'Date', start date for download (e.g. "2000-01-01"). If
+#' 'numeric', start year for download (e.g. 2000). If 'character', a vector of
+#' full online filepath(s) to download, typically returned from
 #' \code{\link{updateInventory}}. If not supplied, download will start from the
-#' first year available.
-#' @param y 'numeric'. End year for download. If not supplied, download will
-#' stop at the last year available.
+#' oldest file available.
+#' @param y If 'Date', end date for download. If 'numeric', end year for
+#' download. If not supplied, download will stop with the latest file available.
 #' @param dsn 'character'. Destination folder for file download. If not supplied,
 #' all downloaded files will be stored in the current working directory.
 #' @param overwrite Logical. If \code{TRUE}, already downloaded files in 'dsn'
@@ -38,12 +39,77 @@ if ( !isGeneric("downloadGimms") ) {
 #' ## Destination folder for data download
 #' gimms_dir <- paste0(getwd(), "/data")
 #'
-#' ## Download GIMMS NDVI3g binary data from 2000-2005 (this might take some time...)
-#' gimms_files <- downloadGimms(x = 2000, y = 2005, dsn = gimms_dir)
-#' gimms_files[1:10]
+#' ## 'Date' method
+#' gimms_files_date <- downloadGimms(x = as.Date("2000-01-01"),
+#'                                   y = as.Date("2000-06-30"),
+#'                                   dsn = gimms_dir)
+#'
+#' ## 'numeric' method, i.e. full years
+#' gimms_files_year <- downloadGimms(x = 2000, y = 2002, dsn = gimms_dir)
+#'
+#' ## 'character' method, i.e. file names
+#' gimms_files <- updateInventory()
+#' gimms_files <- gimms_files[grep("geo00", gimms_files)]
+#' gimms_files_char <- downloadGimms(x = gimms_files, dsn = gimms_dir)
+#'
+#' ## 'missing' method, i.e. entire collection
+#' gimms_files_full <- downloadGimms(dsn = gimms_dir)
 #' }
+#'
 #' @export downloadGimms
 #' @name downloadGimms
+
+################################################################################
+### function using 'Date' input ################################################
+#' @aliases downloadGimms,Date-method
+#' @rdname downloadGimms
+setMethod("downloadGimms",
+          signature(x = "Date"),
+          function(x, y,
+                   dsn = getwd(), overwrite = FALSE, quiet = TRUE,
+                   mode = "wb", ...) {
+
+            ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
+            if (missing(x) & missing(y))
+              downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet,
+                            mode = mode, ...)
+
+            ## available files
+            gimms_fls <- updateInventory()
+
+            ## extract timestamps
+            gimms_dts_chr <- monthlyIndices(gimms_fls, timestamp = TRUE,
+                                            format = "%Y-%m-%d")
+            gimms_dts <- as.Date(gimms_dts_chr)
+
+            ## start (finish) with the first (last) timestamp available if 'x'
+            ## ('y') is not specified
+            if (missing(x)) x <- gimms_dts[1]
+            if (missing(y)) y <- gimms_dts[length(gimms_dts)]
+
+            ## create subset of available files covering user-defined temporal range
+            user_dts <- seq(x, y, 1)
+            user_dts <- user_dts[which(substr(user_dts, 9, 10) %in% c("01", "15"))]
+            gimms_fls <- gimms_fls[gimms_dts %in% user_dts]
+
+            ## download
+            for (i in gimms_fls) {
+              destfile <- paste0(dsn, "/", basename(i))
+              if (file.exists(destfile) & !overwrite) {
+                if (!quiet)
+                  cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
+              } else {
+                try(download.file(i, destfile = destfile, mode = mode,
+                                  quiet = quiet, ...), silent = TRUE)
+              }
+            }
+
+            ## return vector with output files
+            gimms_out <- paste0(dsn, "/", basename(gimms_fls))
+            return(gimms_out)
+
+          })
+
 
 ################################################################################
 ### function using numeric input (i.e. years) ##################################
@@ -61,7 +127,7 @@ setMethod("downloadGimms",
                   mode = mode, ...)
 
   ## available files
-  gimms_fls <- updateInventory(sort = TRUE)
+  gimms_fls <- updateInventory()
 
   ## if specified, subset available files by time frame
   gimms_bsn <- basename(gimms_fls)
@@ -114,7 +180,8 @@ setMethod("downloadGimms",
   for (i in x) {
     destfile <- paste0(dsn, "/", basename(i))
     if (file.exists(destfile) & !overwrite) {
-      cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
+      if (!quiet)
+        cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
     } else {
       try(download.file(i, destfile = destfile, mode = mode,
                         quiet = quiet, ...), silent = TRUE)
@@ -129,7 +196,7 @@ setMethod("downloadGimms",
 
 
 ################################################################################
-### function using character input (i.e. files) ################################
+### function using no input (i.e. download entire collection) ##################
 #' @aliases downloadGimms,missing-method
 #' @rdname downloadGimms
 setMethod("downloadGimms",
@@ -156,3 +223,5 @@ setMethod("downloadGimms",
   return(gimms_out)
 
 })
+
+

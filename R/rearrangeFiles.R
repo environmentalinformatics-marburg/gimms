@@ -28,21 +28,18 @@
 #'
 #' @examples
 #' ## latest version of files inventory
-#' gimms_files <- updateInventory()
+#' gimms_files <- updateInventory(sort = FALSE)
 #' head(gimms_files)
 #'
 #' ## re-arrange vector with available files according to date
 #' gimms_files_arr <- rearrangeFiles(gimms_files)
 #' head(gimms_files_arr)
 #'
-#' ## (or simply use the two-in-one solution)
-#' gimms_files <- updateInventory(sort = TRUE)
-#'
 #' @export rearrangeFiles
 #' @name rearrangeFiles
 rearrangeFiles <- function(x = NULL,
                            dsn = getwd(),
-                           pattern = "^geo",
+                           pattern = "^geo.*.VI3g$",
                            pos = c(4, 6, 11),
                            ...) {
 
