@@ -23,6 +23,8 @@ It's Friday 13th and an updated version of the **gimms** package has been publis
 * the below compatibility update of `downloadGimms` that enabled 'Date' input;
 * and some minor bug-fixes.
 
+<hr>
+
 ##### 2015-11-11, `downloadGimms` now works with 'Date' input
 In response to recent user suggestions, I decided to enable 'Date' input for `downloadGimms` which grants the user a finer control over the temporal coverage of the data to be downloaded. The changes are currently available from the 'develop' branch via 
 
