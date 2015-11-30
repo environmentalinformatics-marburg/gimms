@@ -176,12 +176,11 @@ setMethod("significantTau",
 #' @rdname significantTau
 setMethod("significantTau",
           signature(x = "RasterStackBrick"),
-          function(x, p = 0.001, prewhitening = TRUE, df = FALSE,
-                   filename = "", ...) {
+          function(x, p = 0.001, prewhitening = TRUE, filename = "", ...) {
 
             rst_mk <- raster::overlay(x, fun = function(y, ...) {
               significantTau(y, p = p,
-                             prewhitening = prewhitening, df = df, ...)
+                             prewhitening = prewhitening, df = FALSE, ...)
             })
 
             ## write to file

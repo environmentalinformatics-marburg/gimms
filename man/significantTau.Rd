@@ -12,7 +12,7 @@
   df = FALSE, ...)
 
 \S4method{significantTau}{RasterStackBrick}(x, p = 0.001,
-  prewhitening = TRUE, df = FALSE, filename = "", ...)
+  prewhitening = TRUE, filename = "", ...)
 }
 \arguments{
 \item{x}{A 'numeric' vector.}
