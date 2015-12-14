@@ -59,14 +59,39 @@ if ( !isGeneric("monthlyComposite") ) {
 #' @rdname monthlyComposite
 setMethod("monthlyComposite",
           signature(x = "RasterStack"),
-          function(x, indices, fun = max, ...) {
+          function(x, indices, fun = max, cores = 1L, ...) {
 
             ## stop if 'indices' is missing
             if (missing(indices))
               stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
 
-            ## immediately run 'stackApply'
-            raster::stackApply(x, indices = indices, fun = fun, ...)
+            ## single-core version
+            if (cores == 1L) {
+
+              # immediately run 'stackApply'
+              raster::stackApply(x, indices = indices, fun = fun, ...)
+
+            } else {
+
+              # initialize parallel backend
+              cl <- parallel::makePSOCKcluster(cores)
+
+              # export required variables
+              parallel::clusterExport(cl, varlist = c("x", "indices", "fun"),
+                                      envir = environment())
+
+              ### overlay layers with unique indices
+              x_composite <- parallel::parLapply(cl, unique(indices), function(i) {
+                x_sub <- raster::subset(x, which(indices == i))
+                raster::overlay(x_sub, fun = fun)
+              })
+              )
+
+              ### stop the cluster #########################################################
+              stopCluster(cl)
+            })
+
+            }
 
           })
 
