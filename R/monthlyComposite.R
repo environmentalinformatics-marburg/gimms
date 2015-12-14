@@ -17,6 +17,8 @@ if ( !isGeneric("monthlyComposite") ) {
 #' identical months; see \code{\link{stackApply}}.
 #' @param fun Function. Used to calculate monthly composite layers, defaults to
 #' \code{sum}, i.e. MVC; see \code{\link{stackApply}}.
+#' @param cores Integer. The number of cores to use for parallel processing. By
+#' default, parallel processing is disabled.
 #' @param pos1,pos2 Numeric. If 'x' is a vector of filenames, the first and last
 #' element of the date string to build monthly indices from. Defaults to the
 #' GIMMS naming convention; see \code{\link{monthlyIndices}} and
@@ -42,6 +44,10 @@ if ( !isGeneric("monthlyComposite") ) {
 #'
 #' ## Rasterize downloaded GIMMS files from 2000
 #' gimms_raster <- rasterizeGimms(x = gimms_files[1:24], remove_header = TRUE)
+#'
+#' ## Restrict spatial extent to Germany
+#' spy_germany <- getData("GADM", country = "DEU", level = 0, path = gimms_dir)
+#' gimms_raster <- crop(gimms_raster, spy_germany)
 #'
 #' ## Calculate monthly maximum value composites
 #' indices <- monthlyIndices(gimms_files[1:24])
