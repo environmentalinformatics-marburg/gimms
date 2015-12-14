@@ -3,7 +3,6 @@
 \docType{methods}
 \name{significantTau}
 \alias{significantTau}
-\alias{significantTau,RasterStack-method}
 \alias{significantTau,RasterStackBrick-method}
 \alias{significantTau,numeric-method}
 \title{Compute (pre-whitened) Kendall's tau}

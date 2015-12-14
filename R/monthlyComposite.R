@@ -17,8 +17,6 @@ if ( !isGeneric("monthlyComposite") ) {
 #' identical months; see \code{\link{stackApply}}.
 #' @param fun Function. Used to calculate monthly composite layers, defaults to
 #' \code{sum}, i.e. MVC; see \code{\link{stackApply}}.
-#' @param cores Integer. The number of cores to use for parallel processing. By
-#' default, parallel processing is disabled.
 #' @param pos1,pos2 Numeric. If 'x' is a vector of filenames, the first and last
 #' element of the date string to build monthly indices from. Defaults to the
 #' GIMMS naming convention; see \code{\link{monthlyIndices}} and
@@ -36,68 +34,42 @@ if ( !isGeneric("monthlyComposite") ) {
 #'
 #' @examples
 #' \dontrun{
-#' ## Destination folder for data download
+#' ## Download sample data
 #' gimms_dir <- paste0(getwd(), "/data")
 #'
-#' ## Download GIMMS NDVI3g binary data from 2000-2005
-#' gimms_files <- downloadGimms(x = 2000, y = 2005, dsn = gimms_dir)
+#' gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
+#'                              y = as.Date("2000-12-31"), dsn = gimms_dir)
 #'
-#' ## Rasterize downloaded GIMMS files from 2000
-#' gimms_raster <- rasterizeGimms(x = gimms_files[1:24], remove_header = TRUE)
+#' ## Rasterize files
+#' gimms_raster <- rasterizeGimms(x = gimms_files, remove_header = TRUE)
 #'
-#' ## Restrict spatial extent to Germany
-#' spy_germany <- getData("GADM", country = "DEU", level = 0, path = gimms_dir)
-#' gimms_raster <- crop(gimms_raster, spy_germany)
-#'
-#' ## Calculate monthly maximum value composites
-#' indices <- monthlyIndices(gimms_files[1:24])
+#' ## Create monthly maximum value composites
+#' indices <- monthlyIndices(gimms_files)
 #' gimms_raster_mvc <- monthlyComposite(gimms_raster, indices = indices)
 #'
-#' plot(gimms_raster_mvc[[1:4]])
+#' ## Visualize data
+#' library(sp)
+#' names(gimms_raster_mvc) <- paste(month.abb, 2000)
+#' spplot(gimms_raster_mvc)
 #' }
 #'
 #' @export monthlyComposite
 #' @name monthlyComposite
 
 ################################################################################
-### function using 'RasterStack' ###############################################
-#' @aliases monthlyComposite,RasterStack-method
+### function using 'RasterStack' or 'RasterBrick' ##############################
+#' @aliases monthlyComposite,RasterStackBrick-method
 #' @rdname monthlyComposite
 setMethod("monthlyComposite",
-          signature(x = "RasterStack"),
-          function(x, indices, fun = max, cores = 1L, ...) {
+          signature(x = "RasterStackBrick"),
+          function(x, indices, fun = max, ...) {
 
             ## stop if 'indices' is missing
             if (missing(indices))
               stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
 
-            ## single-core version
-            if (cores == 1L) {
-
-              # immediately run 'stackApply'
-              raster::stackApply(x, indices = indices, fun = fun, ...)
-
-            } else {
-
-              # initialize parallel backend
-              cl <- parallel::makePSOCKcluster(cores)
-
-              # export required variables
-              parallel::clusterExport(cl, varlist = c("x", "indices", "fun"),
-                                      envir = environment())
-
-              ### overlay layers with unique indices
-              x_composite <- parallel::parLapply(cl, unique(indices), function(i) {
-                x_sub <- raster::subset(x, which(indices == i))
-                raster::overlay(x_sub, fun = fun)
-              })
-              )
-
-              ### stop the cluster #########################################################
-              stopCluster(cl)
-            })
-
-            }
+            # immediately run 'stackApply'
+            raster::stackApply(x, indices = indices, fun = fun, ...)
 
           })
 

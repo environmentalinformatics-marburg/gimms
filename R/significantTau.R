@@ -171,8 +171,8 @@ setMethod("significantTau",
 
 
 ################################################################################
-### function using 'RasterStack' input #########################################
-#' @aliases significantTau,RasterStack-method
+### function using 'RasterStack' or 'RasterBrick' input ########################
+#' @aliases significantTau,RasterStackBrick-method
 #' @rdname significantTau
 setMethod("significantTau",
           signature(x = "RasterStackBrick"),
