@@ -17,6 +17,7 @@ if ( !isGeneric("monthlyComposite") ) {
 #' identical months; see \code{\link{stackApply}}.
 #' @param fun Function. Used to calculate monthly composite layers, defaults to
 #' \code{sum}, i.e. MVC; see \code{\link{stackApply}}.
+#' @param cores Integer. Number of cores for parallel computing.
 #' @param pos1,pos2 Numeric. If 'x' is a vector of filenames, the first and last
 #' element of the date string to build monthly indices from. Defaults to the
 #' GIMMS naming convention; see \code{\link{monthlyIndices}} and
@@ -62,15 +63,41 @@ if ( !isGeneric("monthlyComposite") ) {
 #' @rdname monthlyComposite
 setMethod("monthlyComposite",
           signature(x = "RasterStackBrick"),
-          function(x, indices, fun = max, ...) {
+          function(x, indices, fun = max, cores = 1L, ...) {
 
             ## stop if 'indices' is missing
             if (missing(indices))
               stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
 
-            # immediately run 'stackApply'
-            raster::stackApply(x, indices = indices, fun = fun, ...)
+            ## immediately run 'stackApply'
+            if (cores == 1L) {
 
+              raster::stackApply(x, indices = indices, fun = fun)
+
+            ## or run it in parallel
+            } else {
+
+              # initialize cluster
+              cl <- parallel::makePSOCKcluster(cores)
+
+              # export required variables
+              parallel::clusterExport(cl, c("x", "indices", "fun"),
+                                      envir = environment())
+
+              # loop over unique layer indices and apply 'fun'
+              lst_composite <- parallel::parLapply(cl, unique(indices), function(i) {
+                x_sub <- raster::subset(x, which(indices == i))
+                raster::stackApply(raster::subset(x, which(indices == i)),
+                                   fun = fun,
+                                   indices = rep(1, length(which(indices == i))))
+              })
+
+              # deregister parallel backend
+              parallel::stopCluster(cl)
+
+              # stack layers
+              raster::stack(lst_composite)
+            }
           })
 
 
@@ -80,14 +107,15 @@ setMethod("monthlyComposite",
 #' @rdname monthlyComposite
 setMethod("monthlyComposite",
           signature(x = "character"),
-          function(x, pos1 = 4L, pos2 = 8L, fun = max, ...) {
+          function(x, pos1 = 4L, pos2 = 8L, fun = max, cores = 1L, ...) {
 
             ## extract timestamp from 'x'
             indices <- monthlyIndices(x, pos1 = pos1, pos2 = pos2)
 
-            ## stack files and run 'stackApply'
+            ## stack files and run 'monthlyComposite,RasterStackBrick-method'
             rst <- raster::stack(x)
-            raster::stackApply(rst, indices = indices, fun = fun, ...)
+            monthlyComposite(rst, indices = indices, fun = fun, cores = cores,
+                             ...)
 
           })
 

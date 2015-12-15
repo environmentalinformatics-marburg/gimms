@@ -7,10 +7,11 @@
 \alias{monthlyComposite,character-method}
 \title{Calculate monthly composite images}
 \usage{
-\S4method{monthlyComposite}{RasterStackBrick}(x, indices, fun = max, ...)
+\S4method{monthlyComposite}{RasterStackBrick}(x, indices, fun = max,
+  cores = 1L, ...)
 
 \S4method{monthlyComposite}{character}(x, pos1 = 4L, pos2 = 8L, fun = max,
-  ...)
+  cores = 1L, ...)
 }
 \arguments{
 \item{x}{RasterStack (requires 'indices') or character vector of filenames.
@@ -24,6 +25,8 @@ identical months; see \code{\link{stackApply}}.}
 
 \item{fun}{Function. Used to calculate monthly composite layers, defaults to
 \code{sum}, i.e. MVC; see \code{\link{stackApply}}.}
+
+\item{cores}{Integer. Number of cores for parallel computing.}
 
 \item{...}{Further arguments passed on to \code{\link{writeRaster}}.}
 
