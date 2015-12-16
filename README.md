@@ -16,6 +16,11 @@ This month      | In total
 
 #### What's new?
 
+##### 2015-12-16, added parallel support
+I decided to add optional multi-core support to `downloadGimms`, `rasterizeGimms` and `monthlyComposite`. The referring arument is called 'cores' and, if not specified otherwise, defaults to 1 (i.e., parallel computing is disabled). In the course of this, the **gimms** package version on branch 'develop' has been incremented to 0.4.0 and can be installed via `devtools::install_github` (see further below).
+
+<hr>
+
 ##### 2015-11-13, **gimms** 0.3.0 is now on CRAN
 It's Friday 13th and an updated version of the **gimms** package has been published on [CRAN](https://cran.r-project.org/web/packages/gimms/index.html). The new version includes
 
