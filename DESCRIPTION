@@ -1,8 +1,8 @@
 Package: gimms
 Type: Package
 Title: Download and Process GIMMS NDVI3g Data
-Version: 0.3.0
-Date: 2015-11-12
+Version: 0.4.0
+Date: 2015-12-16
 Author: Florian Detsch
 Maintainer: Florian Detsch <admin@environmentalinformatics-marburg.de>
 Description: We provide a set of functions to retrieve information about GIMMS
