@@ -18,6 +18,8 @@ if ( !isGeneric("monthlyComposite") ) {
 #' @param fun Function. Used to calculate monthly composite layers, defaults to
 #' \code{sum}, i.e. MVC; see \code{\link{stackApply}}.
 #' @param cores Integer. Number of cores for parallel computing.
+#' @param filename Character. Optional output filename, see
+#' \code{\link{writeRaster}}.
 #' @param pos1,pos2 Numeric. If 'x' is a vector of filenames, the first and last
 #' element of the date string to build monthly indices from. Defaults to the
 #' GIMMS naming convention; see \code{\link{monthlyIndices}} and
@@ -63,7 +65,7 @@ if ( !isGeneric("monthlyComposite") ) {
 #' @rdname monthlyComposite
 setMethod("monthlyComposite",
           signature(x = "RasterStackBrick"),
-          function(x, indices, fun = max, cores = 1L, ...) {
+          function(x, indices, fun = max, cores = 1L, filename = "", ...) {
 
             ## stop if 'indices' is missing
             if (missing(indices))
@@ -72,7 +74,7 @@ setMethod("monthlyComposite",
             ## immediately run 'stackApply'
             if (cores == 1L) {
 
-              raster::stackApply(x, indices = indices, fun = fun)
+              out <- raster::stackApply(x, indices = indices, fun = fun)
 
             ## or run it in parallel
             } else {
@@ -85,7 +87,7 @@ setMethod("monthlyComposite",
                                       envir = environment())
 
               # loop over unique layer indices and apply 'fun'
-              lst_composite <- parallel::parLapply(cl, unique(indices), function(i) {
+              lst_out <- parallel::parLapply(cl, unique(indices), function(i) {
                 x_sub <- raster::subset(x, which(indices == i))
                 raster::stackApply(raster::subset(x, which(indices == i)),
                                    fun = fun,
@@ -96,8 +98,14 @@ setMethod("monthlyComposite",
               parallel::stopCluster(cl)
 
               # stack layers
-              raster::stack(lst_composite)
+              out <- raster::stack(lst_out)
             }
+
+            ## write to file and return
+            if (nchar("filename") > 0)
+              out <- raster::writeRaster(out, filename = filename, ...)
+
+            return(out)
           })
 
 
@@ -107,7 +115,8 @@ setMethod("monthlyComposite",
 #' @rdname monthlyComposite
 setMethod("monthlyComposite",
           signature(x = "character"),
-          function(x, pos1 = 4L, pos2 = 8L, fun = max, cores = 1L, ...) {
+          function(x, pos1 = 4L, pos2 = 8L, fun = max, cores = 1L,
+                   filename = "", ...) {
 
             ## extract timestamp from 'x'
             indices <- monthlyIndices(x, pos1 = pos1, pos2 = pos2)
@@ -115,7 +124,7 @@ setMethod("monthlyComposite",
             ## stack files and run 'monthlyComposite,RasterStackBrick-method'
             rst <- raster::stack(x)
             monthlyComposite(rst, indices = indices, fun = fun, cores = cores,
-                             ...)
+                             filename = filename, ...)
 
           })
 

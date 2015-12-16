@@ -15,9 +15,9 @@ Description: We provide a set of functions to retrieve information about GIMMS
     account for lag-1 autocorrelation.
 Depends:
     raster,
-    methods,
-    parallel
+    methods
 Imports:
+    parallel,
     Kendall,
     zyp
 License: GPL (>= 3) | file LICENSE

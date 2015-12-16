@@ -8,10 +8,10 @@
 \title{Calculate monthly composite images}
 \usage{
 \S4method{monthlyComposite}{RasterStackBrick}(x, indices, fun = max,
-  cores = 1L, ...)
+  cores = 1L, filename = "", ...)
 
 \S4method{monthlyComposite}{character}(x, pos1 = 4L, pos2 = 8L, fun = max,
-  cores = 1L, ...)
+  cores = 1L, filename = "", ...)
 }
 \arguments{
 \item{x}{RasterStack (requires 'indices') or character vector of filenames.
@@ -27,6 +27,9 @@ identical months; see \code{\link{stackApply}}.}
 \code{sum}, i.e. MVC; see \code{\link{stackApply}}.}
 
 \item{cores}{Integer. Number of cores for parallel computing.}
+
+\item{filename}{Character. Optional output filename, see
+\code{\link{writeRaster}}.}
 
 \item{...}{Further arguments passed on to \code{\link{writeRaster}}.}
 
