@@ -22,6 +22,7 @@ if ( !isGeneric("downloadGimms") ) {
 #' @param quiet Logical. If \code{TRUE}, information sent to the console is
 #' reduced.
 #' @param mode See \code{\link{download.file}}.
+#' @param cores Integer. Number of cores for parallel computing.
 #' @param ... Further arguments passed on to \code{\link{download.file}}, e.g.
 #' 'method'.
 #'
@@ -67,12 +68,12 @@ setMethod("downloadGimms",
           signature(x = "Date"),
           function(x, y,
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
-                   mode = "wb", ...) {
+                   mode = "wb", cores = 1L, ...) {
 
             ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
             if (missing(x) & missing(y))
               downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet,
-                            mode = mode, ...)
+                            mode = mode, cores = cores, ...)
 
             ## available files
             gimms_fls <- updateInventory()
@@ -93,21 +94,11 @@ setMethod("downloadGimms",
             gimms_fls <- gimms_fls[gimms_dts %in% user_dts]
 
             ## download
-            for (i in gimms_fls) {
-              destfile <- paste0(dsn, "/", basename(i))
-              if (file.exists(destfile) & !overwrite) {
-                if (!quiet)
-                  cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
-              } else {
-                try(download.file(i, destfile = destfile, mode = mode,
-                                  quiet = quiet, ...), silent = TRUE)
-              }
-            }
+            gimms_out <- downloader(gimms_fls, dsn = dsn, overwrite = overwrite,
+                                    quiet = quiet, mode = mode, cores = cores, ...)
 
-            ## return vector with output files
-            gimms_out <- paste0(dsn, "/", basename(gimms_fls))
+            ## return local filenames
             return(gimms_out)
-
           })
 
 
@@ -119,52 +110,42 @@ setMethod("downloadGimms",
           signature(x = "numeric"),
           function(x, y,
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
-                   mode = "wb", ...) {
+                   mode = "wb", cores = 1L, ...) {
 
-  ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
-  if (missing(x) & missing(y))
-    downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet,
-                  mode = mode, ...)
+            ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
+            if (missing(x) & missing(y))
+              downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet,
+                            mode = mode, cores = cores, ...)
 
-  ## available files
-  gimms_fls <- updateInventory()
+            ## available files
+            gimms_fls <- updateInventory()
 
-  ## if specified, subset available files by time frame
-  gimms_bsn <- basename(gimms_fls)
-  gimms_yrs_chr <- substr(gimms_bsn, 4, 5)
-  gimms_yrs_num <- as.numeric(gimms_yrs_chr)
+            ## if specified, subset available files by time frame
+            gimms_bsn <- basename(gimms_fls)
+            gimms_yrs_chr <- substr(gimms_bsn, 4, 5)
+            gimms_yrs_num <- as.numeric(gimms_yrs_chr)
 
-  id_old <- gimms_yrs_num >= 81
-  id_new <- gimms_yrs_num <= 80
-  gimms_yrs_chr[id_old] <- paste0("19", gimms_yrs_chr[id_old])
-  gimms_yrs_chr[id_new] <- paste0("20", gimms_yrs_chr[id_new])
-  gimms_yrs_num <- as.numeric(gimms_yrs_chr)
+            id_old <- gimms_yrs_num >= 81
+            id_new <- gimms_yrs_num <= 80
+            gimms_yrs_chr[id_old] <- paste0("19", gimms_yrs_chr[id_old])
+            gimms_yrs_chr[id_new] <- paste0("20", gimms_yrs_chr[id_new])
+            gimms_yrs_num <- as.numeric(gimms_yrs_chr)
 
-  ## start (finish) with the first (last) year available if 'x' ('y') is not
-  ## specified
-  if (missing(x)) x <- gimms_yrs_num[1]
-  if (missing(y)) y <- gimms_yrs_num[length(gimms_yrs_num)]
+            ## start (finish) with the first (last) year available if 'x' ('y') is not
+            ## specified
+            if (missing(x)) x <- gimms_yrs_num[1]
+            if (missing(y)) y <- gimms_yrs_num[length(gimms_yrs_num)]
 
-  ## subset files
-  gimms_fls <- gimms_fls[gimms_yrs_chr %in% seq(x, y)]
+            ## subset files
+            gimms_fls <- gimms_fls[gimms_yrs_chr %in% seq(x, y)]
 
-  ## download
-  for (i in gimms_fls) {
-    destfile <- paste0(dsn, "/", basename(i))
-    if (file.exists(destfile) & !overwrite) {
-      if (!quiet)
-        cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
-    } else {
-      try(download.file(i, destfile = destfile, mode = mode,
-                        quiet = quiet, ...), silent = TRUE)
-    }
-  }
+            ## download
+            gimms_out <- downloader(gimms_fls, dsn = dsn, overwrite = overwrite,
+                                    quiet = quiet, mode = mode, cores = cores, ...)
 
-  ## return vector with output files
-  gimms_out <- paste0(dsn, "/", basename(gimms_fls))
-  return(gimms_out)
-
-})
+            ## return local filenames
+            return(gimms_out)
+          })
 
 
 ################################################################################
@@ -174,25 +155,15 @@ setMethod("downloadGimms",
 setMethod("downloadGimms",
           signature(x = "character"),
           function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
-                   mode = "wb", ...) {
+                   mode = "wb", cores = 1L, ...) {
 
-  ## download
-  for (i in x) {
-    destfile <- paste0(dsn, "/", basename(i))
-    if (file.exists(destfile) & !overwrite) {
-      if (!quiet)
-        cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
-    } else {
-      try(download.file(i, destfile = destfile, mode = mode,
-                        quiet = quiet, ...), silent = TRUE)
-    }
-  }
+            ## download
+            gimms_out <- downloader(x, dsn = dsn, overwrite = overwrite,
+                                    quiet = quiet, mode = mode, cores = cores, ...)
 
-  ## return vector with output files
-  gimms_out <- paste0(dsn, "/", basename(x))
-  return(gimms_out)
-
-})
+            ## return vector with output files
+            return(gimms_out)
+          })
 
 
 ################################################################################
@@ -202,26 +173,17 @@ setMethod("downloadGimms",
 setMethod("downloadGimms",
           signature(x = "missing"),
           function(dsn = getwd(), overwrite = FALSE, quiet = TRUE,
-                   mode = "wb", ...) {
+                   mode = "wb", cores = 1L, ...) {
 
-  ## available files
-  gimms_fls <- updateInventory()
+            ## available files
+            gimms_fls <- updateInventory()
 
-  ## download
-  for (i in gimms_fls) {
-    destfile <- paste0(dsn, "/", basename(i))
-    if (file.exists(destfile) & !overwrite) {
-      cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
-    } else {
-      try(download.file(i, destfile = destfile, mode = mode,
-                        quiet = quiet, ...), silent = TRUE)
-    }
-  }
+            ## download
+            gimms_out <- downloader(gimms_fls, dsn = dsn, overwrite = overwrite,
+                                    quiet = quiet, mode = mode, cores = cores, ...)
 
-  ## return vector with output files
-  gimms_out <- paste0(dsn, "/", basename(gimms_fls))
-  return(gimms_out)
-
-})
+            ## return local filenames
+            return(gimms_out)
+          })
 
 

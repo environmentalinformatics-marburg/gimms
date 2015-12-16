@@ -10,16 +10,16 @@
 \title{Download GIMMS 3G data}
 \usage{
 \S4method{downloadGimms}{Date}(x, y, dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, mode = "wb", ...)
+  quiet = TRUE, mode = "wb", cores = 1L, ...)
 
 \S4method{downloadGimms}{numeric}(x, y, dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, mode = "wb", ...)
+  quiet = TRUE, mode = "wb", cores = 1L, ...)
 
 \S4method{downloadGimms}{character}(x, dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, mode = "wb", ...)
+  quiet = TRUE, mode = "wb", cores = 1L, ...)
 
 \S4method{downloadGimms}{missing}(dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, mode = "wb", ...)
+  quiet = TRUE, mode = "wb", cores = 1L, ...)
 }
 \arguments{
 \item{x}{If 'Date', start date for download (e.g. "2000-01-01"). If
@@ -41,6 +41,8 @@ will be overwritten.}
 reduced.}
 
 \item{mode}{See \code{\link{download.file}}.}
+
+\item{cores}{Integer. Number of cores for parallel computing.}
 
 \item{...}{Further arguments passed on to \code{\link{download.file}}, e.g.
 'method'.}
