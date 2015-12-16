@@ -3,7 +3,8 @@ Type: Package
 Title: Download and Process GIMMS NDVI3g Data
 Version: 0.4.0
 Date: 2015-12-16
-Author: Florian Detsch
+Authors@R:
+    person("Florian", "Detsch", email = "admin@environmentalinformatics-marburg.de", role = c("cre", "aut"))
 Maintainer: Florian Detsch <admin@environmentalinformatics-marburg.de>
 Description: We provide a set of functions to retrieve information about GIMMS
     NDVI3g files currently available online; download and re-arrange the bi-monthly

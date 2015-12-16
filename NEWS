@@ -1,0 +1,8 @@
+gimms 0.4.0 (version 'develop', 2015-12-16)
+==============
+
+Changes:
+
+* Created NEWS file.
+* Added multi-core support for the following functions: downloadGimms, rasterizeGimms, monthlyComposite. The related argument 'cores' defaults to 1 (i.e., parallel computing is disabled if not specified otherwise).
+* Cleared up examples.
