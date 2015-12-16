@@ -5,7 +5,7 @@
 \title{Rasterize GIMMS NDVI3g binary data}
 \usage{
 rasterizeGimms(x, header = NULL, water2na = TRUE, nodata2na = TRUE,
-  scaling = TRUE, remove_header = FALSE, filename = "", ...)
+  scaling = TRUE, remove_header = FALSE, cores = 1L, filename = "", ...)
 }
 \arguments{
 \item{x}{Character. Vector of local filepaths.}
@@ -28,6 +28,9 @@ scaled by a factor of 1/10000.}
 specified in 'header' or, if not specified, created internally via
 \code{\link{createHeader}} will be removed after all operations have finished.}
 
+\item{cores}{Integer. Number of cores for parallel computing. If 'filename'
+is not specified, the parallel option is automatically disabled.}
+
 \item{filename}{Character. Optional output filename, see
 \code{\link{writeRaster}}.}
 
@@ -43,14 +46,14 @@ companion header file.
 }
 \examples{
 \dontrun{
-## Destination folder for data download
+## Download sample data
 gimms_dir <- paste0(getwd(), "/data")
 
-## Download GIMMS NDVI3g binary data from 2000-2005
-gimms_files <- downloadGimms(x = 2000, y = 2005, dsn = gimms_dir)
+gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
+                             y = as.Date("2000-06-30"), dsn = gimms_dir)
 
-## Rasterize downloaded GIMMS files from January and February 2000
-gimms_raster <- rasterizeGimms(x = gimms_files[1:4], remove_header = TRUE)
+## Rasterize files
+gimms_raster <- rasterizeGimms(x = gimms_files, remove_header = TRUE)
 
 plot(gimms_raster)
 }
