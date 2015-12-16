@@ -10,11 +10,25 @@ This month      | In total
 
 #### Introducing the 'gimms' package
 
-... is an open-access tutorial about the **gimms** package which is now available from [GitBook](https://www.gitbook.com/book/fdetsch/gimmsgitbook/details). The book will be continuously updated as **gimms** develops further, so make sure to check it out regularly!
+... is an open-access tutorial about the **gimms** package which is now available from [GitBook](https://www.gitbook.com/book/envin-marburg/introducing-the-r-gimms-package/details). The book will be continuously updated as **gimms** develops further, so make sure to check it out regularly!
 
 <hr>
 
 #### What's new?
+
+##### 2015-12-16, added parallel support
+I decided to add optional multi-core support to `downloadGimms`, `rasterizeGimms` and `monthlyComposite`. The referring arument is called 'cores' and, if not specified otherwise, defaults to 1 (i.e., parallel computing is disabled). In the course of this, the **gimms** package version on branch 'develop' has been incremented to 0.4.0 and can be installed via `devtools::install_github` (see further below).
+
+<hr>
+
+##### 2015-11-13, **gimms** 0.3.0 is now on CRAN
+It's Friday 13th and an updated version of the **gimms** package has been published on [CRAN](https://cran.r-project.org/web/packages/gimms/index.html). The new version includes
+
+* `significantTau` to calculate pixel-based (and optionally pre-whitened) Mann-Kendall trend tests from a previously processed GIMMS NDVI<sub>3g</sub> (or any kind of) 'RasterStack/Brick' object. Note that it also works with simple 'numeric' vectors (i.e., univariate time series observations);
+* the below compatibility update of `downloadGimms` that enabled 'Date' input;
+* and some minor bug-fixes.
+
+<hr>
 
 ##### 2015-11-11, `downloadGimms` now works with 'Date' input
 In response to recent user suggestions, I decided to enable 'Date' input for `downloadGimms` which grants the user a finer control over the temporal coverage of the data to be downloaded. The changes are currently available from the 'develop' branch via 
