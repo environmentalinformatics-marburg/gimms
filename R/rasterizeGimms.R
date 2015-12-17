@@ -116,13 +116,12 @@ rasterizeGimms <-   function(x,
     ## initialize cluster
     cl <- parallel::makePSOCKcluster(cores)
 
-    ## export required variables
-    parallel::clusterExport(cl, c("x", "header", "water2na", "nodata2na",
-                                  "scaling", "remove_header", "filename"),
-                            envir = environment())
+    ## backup initial header specification
+    header_init <- header
 
     ## loop over files in 'x'
-    ls_rst <- parallel::parLapply(cl, 1:length(x), function(i) {
+    i <- 1
+    ls_rst <- foreach::foreach(i = 1:length(x)) %dopar% {
 
       # import binary data as 'RasterLayer' and flip
       if (is.null(header))
@@ -156,11 +155,14 @@ rasterizeGimms <-   function(x,
       if (remove_header)
         file.remove(header)
 
+      # restore initial header specification
+      header <- header_init
+
       # return raster
       return(rst)
-    })
+    }
 
-    # deregister parallel backend
+    ## deregister parallel backend
     parallel::stopCluster(cl)
   }
 
@@ -168,6 +170,6 @@ rasterizeGimms <-   function(x,
   if (length(ls_rst) == 1) {
     return(ls_rst[[1]])
   } else {
-    return(stack(ls_rst))
+    return(raster::stack(ls_rst))
   }
 }

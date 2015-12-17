@@ -19,6 +19,7 @@ Depends:
     methods
 Imports:
     parallel,
+    foreach,
     Kendall,
     zyp
 License: GPL (>= 3) | file LICENSE
