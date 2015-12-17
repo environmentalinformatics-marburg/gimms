@@ -19,6 +19,7 @@ Depends:
     methods
 Imports:
     parallel,
+    doParallel,
     foreach,
     Kendall,
     zyp

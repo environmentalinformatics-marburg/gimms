@@ -14,6 +14,7 @@
 #' @author Florian Detsch
 #'
 #' @import methods raster parallel foreach
+#' @importFrom doParallel registerDoParallel
 #' @importFrom Kendall MannKendall
 #' @importFrom zyp zyp.trend.vector
 #' @importFrom utils download.file

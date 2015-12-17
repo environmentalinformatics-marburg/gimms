@@ -115,6 +115,7 @@ rasterizeGimms <-   function(x,
 
     ## initialize cluster
     cl <- parallel::makePSOCKcluster(cores)
+    doParallel::registerDoParallel(cl)
 
     ## backup initial header specification
     header_init <- header
