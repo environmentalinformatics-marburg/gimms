@@ -24,16 +24,15 @@ previously been created via \code{\link{rasterizeGimms}}.}
 identical months; see \code{\link{stackApply}}.}
 
 \item{fun}{Function. Used to calculate monthly composite layers, defaults to
-\code{sum}, i.e. MVC; see \code{\link{stackApply}}.}
+\code{max}; see \code{\link{stackApply}}.}
 
 \item{cores}{Integer. Number of cores for parallel computing.}
 
-\item{filename}{Character. Optional output filename. In contrast to
-\code{\link{rasterizeGimms}}, it is up to the user whether to create a single
-or multiple output files; see \code{\link{writeRaster}} and '...' below.}
+\item{filename}{Character. Optional output filename(s); see
+\code{\link{writeRaster}}. If \code{cores > 1}, the number of supplied
+filenames must match up with the number of unique monthly indices.}
 
-\item{...}{Further arguments passed on to \code{\link{writeRaster}}
-(including 'bylayer' and 'suffix').}
+\item{...}{Further arguments passed on to \code{\link{writeRaster}}.}
 
 \item{pos1, pos2}{Numeric. If 'x' is a vector of filenames, the first and last
 element of the date string to build monthly indices from. Defaults to the

@@ -11,8 +11,8 @@ rasterizeGimms(x, header = NULL, water2na = TRUE, nodata2na = TRUE,
 \item{x}{Character. Vector of local filepaths.}
 
 \item{header}{Character. Companion header files corresponding to the binary data
-in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data as
-created by \code{\link{createHeader}} will be used.}
+in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data
+will be used.}
 
 \item{water2na}{Logical. If \code{TRUE} (default), pixels with 'mask-water'
 value (-10000) will be discarded. See also
@@ -26,12 +26,12 @@ scaled by a factor of 1/10000.}
 
 \item{remove_header}{Logical. If \code{FALSE} (default), the header file
 specified in 'header' or, if not specified, created internally via
-\code{\link{createHeader}} will be removed after all operations have finished.}
+\code{gimms:::createHeader} will be removed after all operations have finished.}
 
 \item{cores}{Integer. Number of cores for parallel computing. If 'filename'
 is not specified, the parallel option is automatically disabled.}
 
-\item{filename}{Character. Optional vector of output filename with the same
+\item{filename}{Character. Optional vector of output filenames with the same
 length as 'x'; see \code{\link{writeRaster}}.}
 
 \item{...}{Further arguments passed on to \code{\link{writeRaster}} (except
@@ -64,6 +64,6 @@ plot(gimms_raster)
 Florian Detsch
 }
 \seealso{
-\code{\link{createHeader}}, \code{\link{raster}}, \code{\link{writeRaster}}.
+\code{gimms:::createHeader}, \code{\link{raster}}, \code{\link{writeRaster}}.
 }
 

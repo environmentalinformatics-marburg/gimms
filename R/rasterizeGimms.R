@@ -6,8 +6,8 @@
 #'
 #' @param x Character. Vector of local filepaths.
 #' @param header Character. Companion header files corresponding to the binary data
-#' in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data as
-#' created by \code{\link{createHeader}} will be used.
+#' in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data
+#' will be used.
 #' @param water2na Logical. If \code{TRUE} (default), pixels with 'mask-water'
 #' value (-10000) will be discarded. See also
 #' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}.
@@ -17,10 +17,10 @@
 #' scaled by a factor of 1/10000.
 #' @param remove_header Logical. If \code{FALSE} (default), the header file
 #' specified in 'header' or, if not specified, created internally via
-#' \code{\link{createHeader}} will be removed after all operations have finished.
+#' \code{gimms:::createHeader} will be removed after all operations have finished.
 #' @param cores Integer. Number of cores for parallel computing. If 'filename'
 #' is not specified, the parallel option is automatically disabled.
-#' @param filename Character. Optional vector of output filename with the same
+#' @param filename Character. Optional vector of output filenames with the same
 #' length as 'x'; see \code{\link{writeRaster}}.
 #' @param ... Further arguments passed on to \code{\link{writeRaster}} (except
 #' for 'bylayer' and 'suffix').
@@ -33,7 +33,7 @@
 #' Florian Detsch
 #'
 #' @seealso
-#' \code{\link{createHeader}}, \code{\link{raster}}, \code{\link{writeRaster}}.
+#' \code{gimms:::createHeader}, \code{\link{raster}}, \code{\link{writeRaster}}.
 #'
 #' @examples
 #' \dontrun{
