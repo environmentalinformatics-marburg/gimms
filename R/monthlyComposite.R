@@ -76,38 +76,34 @@ setMethod("monthlyComposite",
             ## immediately run 'stackApply'
             if (cores == 1L) {
 
-              out <- raster::stackApply(x, indices = indices, fun = fun)
+              raster::stackApply(x, indices = indices, fun = fun,
+                                 filename = filename, ...)
 
             ## or run it in parallel
             } else {
 
               # initialize cluster
               cl <- parallel::makePSOCKcluster(cores)
-
-              # export required variables
-              parallel::clusterExport(cl, c("x", "indices", "fun"),
-                                      envir = environment())
+              doParallel::registerDoParallel(cl)
 
               # loop over unique layer indices and apply 'fun'
-              lst_out <- parallel::parLapply(cl, unique(indices), function(i) {
+              i <- 1; j <- 1
+              lst_out <- foreach::foreach(i = unique(indices)) %dopar% {
                 x_sub <- raster::subset(x, which(indices == i))
                 raster::stackApply(raster::subset(x, which(indices == i)),
                                    fun = fun,
-                                   indices = rep(1, length(which(indices == i))))
-              })
+                                   indices = rep(1, length(which(indices == i))),
+                                   filename = ifelse(length(filename) == length(unique(indices)),
+                                                     filename[which(unique(indices) == i)], ""),
+                                   ...)
+              }
 
               # deregister parallel backend
               parallel::stopCluster(cl)
 
               # stack layers
-              out <- raster::stack(lst_out)
+              raster::stack(lst_out)
             }
-
-            ## write to file and return
-            if (nchar(filename) > 0)
-              out <- raster::writeRaster(out, filename = filename, ...)
-
-            return(out)
           })
 
 
