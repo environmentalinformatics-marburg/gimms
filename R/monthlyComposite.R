@@ -18,13 +18,15 @@ if ( !isGeneric("monthlyComposite") ) {
 #' @param fun Function. Used to calculate monthly composite layers, defaults to
 #' \code{sum}, i.e. MVC; see \code{\link{stackApply}}.
 #' @param cores Integer. Number of cores for parallel computing.
-#' @param filename Character. Optional output filename, see
-#' \code{\link{writeRaster}}.
+#' @param filename Character. Optional output filename. In contrast to
+#' \code{\link{rasterizeGimms}}, it is up to the user whether to create a single
+#' or multiple output files; see \code{\link{writeRaster}} and '...' below.
 #' @param pos1,pos2 Numeric. If 'x' is a vector of filenames, the first and last
 #' element of the date string to build monthly indices from. Defaults to the
 #' GIMMS naming convention; see \code{\link{monthlyIndices}} and
 #' \code{\link{substr}}.
-#' @param ... Further arguments passed on to \code{\link{writeRaster}}.
+#' @param ... Further arguments passed on to \code{\link{writeRaster}}
+#' (including 'bylayer' and 'suffix').
 #'
 #' @return
 #' A 'RasterStack' object with monthly composite layers.
@@ -102,7 +104,7 @@ setMethod("monthlyComposite",
             }
 
             ## write to file and return
-            if (nchar("filename") > 0)
+            if (nchar(filename) > 0)
               out <- raster::writeRaster(out, filename = filename, ...)
 
             return(out)

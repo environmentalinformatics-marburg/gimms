@@ -28,10 +28,12 @@ identical months; see \code{\link{stackApply}}.}
 
 \item{cores}{Integer. Number of cores for parallel computing.}
 
-\item{filename}{Character. Optional output filename, see
-\code{\link{writeRaster}}.}
+\item{filename}{Character. Optional output filename. In contrast to
+\code{\link{rasterizeGimms}}, it is up to the user whether to create a single
+or multiple output files; see \code{\link{writeRaster}} and '...' below.}
 
-\item{...}{Further arguments passed on to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed on to \code{\link{writeRaster}}
+(including 'bylayer' and 'suffix').}
 
 \item{pos1, pos2}{Numeric. If 'x' is a vector of filenames, the first and last
 element of the date string to build monthly indices from. Defaults to the

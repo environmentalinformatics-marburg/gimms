@@ -20,9 +20,10 @@
 #' \code{\link{createHeader}} will be removed after all operations have finished.
 #' @param cores Integer. Number of cores for parallel computing. If 'filename'
 #' is not specified, the parallel option is automatically disabled.
-#' @param filename Character. Optional output filename, see
-#' \code{\link{writeRaster}}.
-#' @param ... Further arguments passed on to \code{\link{writeRaster}}.
+#' @param filename Character. Optional vector of output filename with the same
+#' length as 'x'; see \code{\link{writeRaster}}.
+#' @param ... Further arguments passed on to \code{\link{writeRaster}} (except
+#' for 'bylayer' and 'suffix').
 #'
 #' @return
 #' If 'x' is a single filename, an object of class 'RasterLayer';

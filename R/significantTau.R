@@ -17,7 +17,7 @@ if ( !isGeneric("significantTau") ) {
 #' to the Mann-Kendall trend test.
 #' @param df 'logical'. If \code{TRUE}, a 'data.frame' holding the value of
 #' Kendall's tau and the referring significance level.
-#' @param filename 'character'. Optional output filename, see
+#' @param filename 'character'. Optional output filename; see
 #' \code{\link{writeRaster}}. Needs to include an appropriate file format
 #' extension, see \code{\link{writeFormats}}.
 #' @param ... Further arguments passed on to \code{\link{zyp.trend.vector}}.

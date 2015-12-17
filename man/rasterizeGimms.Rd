@@ -31,10 +31,11 @@ specified in 'header' or, if not specified, created internally via
 \item{cores}{Integer. Number of cores for parallel computing. If 'filename'
 is not specified, the parallel option is automatically disabled.}
 
-\item{filename}{Character. Optional output filename, see
-\code{\link{writeRaster}}.}
+\item{filename}{Character. Optional vector of output filename with the same
+length as 'x'; see \code{\link{writeRaster}}.}
 
-\item{...}{Further arguments passed on to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed on to \code{\link{writeRaster}} (except
+for 'bylayer' and 'suffix').}
 }
 \value{
 If 'x' is a single filename, an object of class 'RasterLayer';

@@ -26,7 +26,7 @@ Kendall's tau and the referring significance level.}
 
 \item{...}{Further arguments passed on to \code{\link{zyp.trend.vector}}.}
 
-\item{filename}{'character'. Optional output filename, see
+\item{filename}{'character'. Optional output filename; see
 \code{\link{writeRaster}}. Needs to include an appropriate file format
 extension, see \code{\link{writeFormats}}.}
 }
