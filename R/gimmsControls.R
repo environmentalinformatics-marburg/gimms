@@ -51,3 +51,28 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
   gimms_out <- paste(dsn, basename(x), sep = "/")
   return(gimms_out)
 }
+
+
+### create gimms-specific envi header file -------------------------------------
+
+createHeader <- function(file, header) {
+
+  ## location of header file
+  file_hdr <- paste0(file, ".hdr")
+
+  ## default content of gimms ndvi3g-related header file
+  if (missing(header))
+    header <- paste("ENVI",
+                    "description = { R-language data }",
+                    "samples = 2160",
+                    "lines = 4320",
+                    "bands = 1",
+                    "data type = 2",
+                    "header offset = 0",
+                    "interleave = bsq",
+                    "byte order = 1", sep = "\n")
+
+  ## write and return file
+  writeLines(header, file_hdr)
+  return(file_hdr)
+}
