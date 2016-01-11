@@ -5,6 +5,9 @@
 #' companion header file.
 #'
 #' @param x Character. Vector of local filepaths.
+#' @param flag Logical. If \code{TRUE}, returns flag values instead of NDVI. See
+#' \url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
+#' for further reading. Note that this will be ignored if \code{scaling = FALSE}.
 #' @param header Character. Companion header files corresponding to the binary data
 #' in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data
 #' will be used.
@@ -13,8 +16,8 @@
 #' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}.
 #' @param nodata2na Logical. If \code{TRUE} (default), pixels with 'mask-nodata'
 #' value (-5000) will be discarded.
-#' @param scaling Logical. If \code{TRUE} (default), initial values will be
-#' scaled by a factor of 1/10000.
+#' @param scaling Logical. If \code{TRUE} (default), scaling is enabled which
+#' allows to retrieve NDVI or flag values (depending on 'flag').
 #' @param remove_header Logical. If \code{FALSE} (default), the header file
 #' specified in 'header' or, if not specified, created internally via
 #' \code{gimms:::createHeader} will be removed after all operations have finished.
@@ -35,6 +38,10 @@
 #' @seealso
 #' \code{gimms:::createHeader}, \code{\link{raster}}, \code{\link{writeRaster}}.
 #'
+#' @references
+#' \url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
+#' (last accessed on 11 January, 2016).
+#'
 #' @examples
 #' \dontrun{
 #' ## Download sample data
@@ -52,6 +59,7 @@
 #' @export rasterizeGimms
 #' @name rasterizeGimms
 rasterizeGimms <-   function(x,
+                             flag = FALSE,
                              header = NULL,
                              water2na = TRUE,
                              nodata2na = TRUE,
@@ -64,6 +72,10 @@ rasterizeGimms <-   function(x,
   ## stop if 'x' and 'filename' are of unequal length
   if (length(x) != length(filename) & all(nchar(filename)) > 0)
     stop("Parameters 'x' and 'filename' are of unequal length.")
+
+  ## check 'cores'
+  cores <- checkCores(cores)
+
 
   ### single core --------------------------------------------------------------
 
@@ -93,8 +105,14 @@ rasterizeGimms <-   function(x,
         rst[rst[] == -5000] <- NA
 
       # scale values (optional)
-      if (scaling)
-        rst <- rst / 10000
+      if (scaling) {
+        # create flags
+        if (flag)
+          rst <- rst - floor(rst/10) * 10 + 1
+        # create ndvi
+        else
+          rst <- floor(rst/10) / 1000
+      }
 
       # store output (optional)
       if (length(filename) >= i & nchar(filename[i]) > 0)
@@ -145,8 +163,14 @@ rasterizeGimms <-   function(x,
         rst[rst[] == -5000] <- NA
 
       # scale values (optional)
-      if (scaling)
-        rst <- rst / 10000
+      if (scaling) {
+        # create flags
+        if (flag)
+          rst <- rst - floor(rst/10) * 10 + 1
+        # create ndvi
+        else
+          rst <- floor(rst/10) / 1000
+      }
 
       # store output (optional)
       if (length(filename) >= i & nchar(filename[i]) > 0)
