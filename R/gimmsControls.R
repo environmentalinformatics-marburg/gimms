@@ -76,3 +76,20 @@ createHeader <- function(file, header) {
   writeLines(header, file_hdr)
   return(file_hdr)
 }
+
+
+### check desired number of cores ----------------------------------------------
+
+checkCores <- function(cores) {
+
+  ## available cores
+  cores_avl <- parallel::detectCores()
+
+  ## resize if 'cores' exceeds number of available cores
+  if (cores > cores_avl) {
+    cores <- cores_avl - 1
+    warning("Desired number of cores is invalid. Resizing parallel cluster to ", cores, " cores.")
+  }
+
+  return(cores)
+}

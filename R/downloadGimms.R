@@ -70,6 +70,9 @@ setMethod("downloadGimms",
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
+            ## check 'cores'
+            cores <- checkCores(cores)
+
             ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
             if (missing(x) & missing(y))
               downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet,
@@ -111,6 +114,9 @@ setMethod("downloadGimms",
           function(x, y,
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
+
+            ## check 'cores'
+            cores <- checkCores(cores)
 
             ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
             if (missing(x) & missing(y))
@@ -157,6 +163,9 @@ setMethod("downloadGimms",
           function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
+            ## check 'cores'
+            cores <- checkCores(cores)
+
             ## download
             gimms_out <- downloader(x, dsn = dsn, overwrite = overwrite,
                                     quiet = quiet, mode = mode, cores = cores, ...)
@@ -175,6 +184,9 @@ setMethod("downloadGimms",
           function(dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
+            ## check 'cores'
+            cores <- checkCores(cores)
+
             ## available files
             gimms_fls <- updateInventory()
 
@@ -185,5 +197,3 @@ setMethod("downloadGimms",
             ## return local filenames
             return(gimms_out)
           })
-
-

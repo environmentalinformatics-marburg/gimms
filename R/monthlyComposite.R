@@ -72,6 +72,9 @@ setMethod("monthlyComposite",
             if (missing(indices))
               stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
 
+            ## check 'cores'
+            cores <- checkCores(cores)
+
             ## immediately run 'stackApply'
             if (cores == 1L) {
 
@@ -114,6 +117,9 @@ setMethod("monthlyComposite",
           signature(x = "character"),
           function(x, pos1 = 4L, pos2 = 8L, fun = max, cores = 1L,
                    filename = "", ...) {
+
+            ## check 'cores'
+            cores <- checkCores(cores)
 
             ## extract timestamp from 'x'
             indices <- monthlyIndices(x, pos1 = pos1, pos2 = pos2)
