@@ -10,7 +10,7 @@ monthlyIndices(x, pos1 = 4L, pos2 = 8L, timestamp = FALSE, ...)
 \item{x}{Character. Vector of (local or online) filenames.}
 
 \item{pos1, pos2}{Numeric. The first and last element of the date string in
-'x', defaults to the GIMMS naming convention; see \code{\link{substr}}.}
+'x', defaults to the GIMMS naming convention.}
 
 \item{timestamp}{Logical. If \code{TRUE}, an actual timestamp (formatted
 according to \code{...}) is returned rather than a vector of indices.}
@@ -18,8 +18,8 @@ according to \code{...}) is returned rather than a vector of indices.}
 \item{...}{Further arguments passed on to \code{\link{strftime}}.}
 }
 \value{
-A numeric vector with unique monthly indices or, if \code{timestamp = TRUE},
-a character vector with formatted timestamps.
+A 'numeric' vector with unique monthly indices or,
+if \code{timestamp = TRUE}, a 'character' vector with formatted timestamps.
 }
 \description{
 Create numeric monthly indices from (local or online) GIMMS filenames as

@@ -3,7 +3,6 @@
 \docType{methods}
 \name{significantTau}
 \alias{significantTau}
-\alias{significantTau,RasterStack-method}
 \alias{significantTau,RasterStackBrick-method}
 \alias{significantTau,numeric-method}
 \title{Compute (pre-whitened) Kendall's tau}
@@ -12,24 +11,23 @@
   df = FALSE, ...)
 
 \S4method{significantTau}{RasterStackBrick}(x, p = 0.001,
-  prewhitening = TRUE, df = FALSE, filename = "", ...)
+  prewhitening = TRUE, filename = "", ...)
 }
 \arguments{
 \item{x}{A 'numeric' vector.}
 
 \item{p}{Significance level to be tested.}
 
-\item{prewhitening}{'logical'. If \code{TRUE}, pre-whitening is applied prior
+\item{prewhitening}{Logical. If \code{TRUE}, pre-whitening is applied prior
 to the Mann-Kendall trend test.}
 
-\item{df}{'logical'. If \code{TRUE}, a 'data.frame' holding the value of
+\item{df}{Logical. If \code{TRUE}, a 'data.frame' holding the value of
 Kendall's tau and the referring significance level.}
 
 \item{...}{Further arguments passed on to \code{\link{zyp.trend.vector}}.}
 
-\item{filename}{'character'. Optional output filename, see
-\code{\link{writeRaster}}. Needs to include an appropriate file format
-extension, see \code{\link{writeFormats}}.}
+\item{filename}{Character. Optional output filename. Needs to include an
+appropriate file format extension, see \code{\link{writeFormats}}.}
 }
 \value{
 If \code{df = FALSE} (default) and \code{p} was not exceeded, a

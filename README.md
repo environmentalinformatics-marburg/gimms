@@ -22,7 +22,7 @@ I decided to add optional multi-core support to `downloadGimms`, `rasterizeGimms
 <hr>
 
 ##### 2015-11-13, **gimms** 0.3.0 is now on CRAN
-It's Friday 13th and an updated version of the **gimms** package has been published on [CRAN](https://cran.r-project.org/web/packages/gimms/index.html). The new version includes
+It's Friday 13th and an updated version of the **gimms** package has been published on [CRAN](https://CRAN.R-project.org/package=gimms). The new version includes
 
 * `significantTau` to calculate pixel-based (and optionally pre-whitened) Mann-Kendall trend tests from a previously processed GIMMS NDVI<sub>3g</sub> (or any kind of) 'RasterStack/Brick' object. Note that it also works with simple 'numeric' vectors (i.e., univariate time series observations);
 * the below compatibility update of `downloadGimms` that enabled 'Date' input;
@@ -53,7 +53,7 @@ I recently received a bug report about some strange behavior of `downloadGimms` 
   <img src="http://i.imgur.com/MySaI9F.png" alt="windows_bug" style="width: 650px;"/>
 </center>
 
-The problem was obviously related to `download.file` which worked just fine on Linux when using the default settings, but introduced distortions on Windows. In the newest package version 0.2.0 which is now brand-new on [CRAN](https://cran.r-project.org/web/packages/gimms/index.html), I therefore specified `download.file(..., mode = "wb")` to explicitly enable binary writing mode. 
+The problem was obviously related to `download.file` which worked just fine on Linux when using the default settings, but introduced distortions on Windows. In the newest package version 0.2.0 which is now brand-new on [CRAN](https://CRAN.R-project.org/package=gimms), I therefore specified `download.file(..., mode = "wb")` to explicitly enable binary writing mode. 
 
 Thanks again for the input! 
 

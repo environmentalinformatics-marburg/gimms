@@ -13,13 +13,12 @@ if ( !isGeneric("significantTau") ) {
 #'
 #' @param x A 'numeric' vector.
 #' @param p Significance level to be tested.
-#' @param prewhitening 'logical'. If \code{TRUE}, pre-whitening is applied prior
+#' @param prewhitening Logical. If \code{TRUE}, pre-whitening is applied prior
 #' to the Mann-Kendall trend test.
-#' @param df 'logical'. If \code{TRUE}, a 'data.frame' holding the value of
+#' @param df Logical. If \code{TRUE}, a 'data.frame' holding the value of
 #' Kendall's tau and the referring significance level.
-#' @param filename 'character'. Optional output filename, see
-#' \code{\link{writeRaster}}. Needs to include an appropriate file format
-#' extension, see \code{\link{writeFormats}}.
+#' @param filename Character. Optional output filename. Needs to include an
+#' appropriate file format extension, see \code{\link{writeFormats}}.
 #' @param ... Further arguments passed on to \code{\link{zyp.trend.vector}}.
 #'
 #' @return If \code{df = FALSE} (default) and \code{p} was not exceeded, a
@@ -171,17 +170,16 @@ setMethod("significantTau",
 
 
 ################################################################################
-### function using 'RasterStack' input #########################################
-#' @aliases significantTau,RasterStack-method
+### function using 'RasterStack' or 'RasterBrick' input ########################
+#' @aliases significantTau,RasterStackBrick-method
 #' @rdname significantTau
 setMethod("significantTau",
           signature(x = "RasterStackBrick"),
-          function(x, p = 0.001, prewhitening = TRUE, df = FALSE,
-                   filename = "", ...) {
+          function(x, p = 0.001, prewhitening = TRUE, filename = "", ...) {
 
             rst_mk <- raster::overlay(x, fun = function(y, ...) {
               significantTau(y, p = p,
-                             prewhitening = prewhitening, df = df, ...)
+                             prewhitening = prewhitening, df = FALSE, ...)
             })
 
             ## write to file

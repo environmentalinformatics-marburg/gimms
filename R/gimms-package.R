@@ -13,7 +13,8 @@
 #' @title Download and Process GIMMS3g Data
 #' @author Florian Detsch
 #'
-#' @import methods raster
+#' @import methods raster parallel foreach
+#' @importFrom doParallel registerDoParallel
 #' @importFrom Kendall MannKendall
 #' @importFrom zyp zyp.trend.vector
 #' @importFrom utils download.file
