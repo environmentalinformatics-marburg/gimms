@@ -6,14 +6,7 @@ Date: 2016-01-11
 Authors@R:
     person("Florian", "Detsch", email = "admin@environmentalinformatics-marburg.de", role = c("cre", "aut"))
 Maintainer: Florian Detsch <admin@environmentalinformatics-marburg.de>
-Description: We provide a set of functions to retrieve information about GIMMS
-    NDVI3g files currently available online; download and re-arrange the bi-monthly
-    datasets according to creation time; import downloaded files from native binary
-    (ENVI) format directly into R based on the widely applied 'raster' package;
-    calculate monthly value composites (e.g. maximum value composites, MVC) from the
-    bi-monthly input data; and derive long-term monotonous trends from the
-    Mann-Kendall trend test, optionally featuring pre-whitening to
-    account for lag-1 autocorrelation.
+Description: We provide a set of functions to retrieve information about GIMMS NDVI3g files currently available online; download and re-arrange the bi-monthly datasets according to creation time; import downloaded files from native binary (ENVI) format directly into R based on the widely applied 'raster' package; extract accompanying quality flags and perform quality control; calculate monthly value composites (e.g. maximum value composites, MVC) from the bi-monthly input data; and derive long-term monotonous trends from the Mann-Kendall trend test, optionally featuring pre-whitening to account for lag-1 autocorrelation.
 Depends:
     raster,
     methods
