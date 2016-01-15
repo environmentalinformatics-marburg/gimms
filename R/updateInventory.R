@@ -1,21 +1,25 @@
 #' Update GIMMS 3G file inventory
 #'
 #' @description
-#' Download the latest version of the GIMMS 3G file inventory from NASA FTP
-#' server (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}) or, if
-#' server is not accessible (e.g. due to missing internet connection), load
-#' local version of file inventory.
+#' Download the latest version of the GIMMS 3G file inventory from the NASA Ames
+#' Ecological Forecasting Lab's FTP server
+#' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}, accessed on
+#' January 15, 2016) or, if the server is not accessible, load local version of
+#' the file inventory.
 #'
-#' @param sort 'logical'. If \code{TRUE}, the list of available files is sorted
-#' by date prior to return.
-#' @param quiet 'logical'. If \code{FALSE}, some details about the online file
-#' retrieval are printed to the console.
+#' @param sort 'logical'. Determines whether or not to sort the list of
+#' available GIMMS files in ascending order of time via
+#' \code{\link{rearrangeFiles}}.
+#' @param quiet 'logical'. If TRUE, information sent to the console is reduced.
 #'
 #' @return
-#' A 'character' vector of online filepaths.
+#' A vector of online filepaths.
 #'
 #' @author
 #' Florian Detsch
+#'
+#' @seealso
+#' \code{\link{rearrangeFiles}}.
 #'
 #' @examples
 #' updateInventory()

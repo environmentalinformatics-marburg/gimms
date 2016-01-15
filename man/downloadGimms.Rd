@@ -51,8 +51,10 @@ reduced.}
 A vector of filepaths.
 }
 \description{
-Download GIMMS 3G binary data for a given time span from NASA FTP server
-(\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}).
+Download GIMMS 3G binary data for a given time span from the NASA Ames
+Ecological Forecasting Lab's FTP server
+(\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}, accessed on
+January 15, 2016).
 }
 \examples{
 \dontrun{

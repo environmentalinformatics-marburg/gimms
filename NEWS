@@ -1,10 +1,8 @@
-gimms 0.4.0 (version 'develop', 2015-12-16)
+gimms 0.5.0 (2016-01-15)
 ==============
 
 Changes:
 
-* Created NEWS file.
-* Added multi-core support for the following functions: downloadGimms, rasterizeGimms, monthlyComposite. The related argument 'cores' defaults to 1 (i.e., parallel computing is disabled if not specified otherwise).
-* Created script gimmsControls which comprises non-exported helper functions, e.g. gimms:::downloader to download single files.
-* Disabled export of function createHeader and moved it to gimmsControls.
-* Cleared up various function examples.
+* Enabled quality flag retrieval from rasterizeGimms.
+* Added parallel support to downloadGimms, rasterizeGimms and monthlyComposite.
+* Revised package documentation.

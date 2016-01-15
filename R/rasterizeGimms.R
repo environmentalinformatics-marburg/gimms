@@ -6,21 +6,20 @@
 #'
 #' @param x Character. Vector of local filepaths.
 #' @param flag Logical. If \code{TRUE}, returns flag values instead of NDVI. See
-#' \url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
-#' for further reading. Note that this will be ignored if \code{scaling = FALSE}.
-#' @param header Character. Companion header files corresponding to the binary data
+#' 'References' for further reading. Note that this will be ignored if
+#' \code{scaling = FALSE}.
+#' @param header Character. Header file(s) corresponding to the binary data
 #' in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data
 #' will be used.
-#' @param water2na Logical. If \code{TRUE} (default), pixels with 'mask-water'
-#' value (-10000) will be discarded. See also
-#' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}.
-#' @param nodata2na Logical. If \code{TRUE} (default), pixels with 'mask-nodata'
-#' value (-5000) will be discarded.
+#' @param water2na Logical. Determines whether or not to discard pixels with
+#' 'mask-water' value (-10000; see 'References').
+#' @param nodata2na Logical. Determines whether or not to discard pixels with
+#' 'mask-nodata' value (-5000; see 'References').
 #' @param scaling Logical. If \code{TRUE} (default), scaling is enabled which
 #' allows to retrieve NDVI or flag values (depending on 'flag').
-#' @param remove_header Logical. If \code{FALSE} (default), the header file
-#' specified in 'header' or, if not specified, created internally via
-#' \code{gimms:::createHeader} will be removed after all operations have finished.
+#' @param remove_header Logical. If \code{TRUE}, the header file specified in
+#' 'header' or, if not specified, created internally via
+#' \code{gimms:::createHeader} is removed after all operations have finished.
 #' @param cores Integer. Number of cores for parallel computing. If 'filename'
 #' is not specified, the parallel option is automatically disabled.
 #' @param filename Character. Optional vector of output filenames with the same
@@ -40,7 +39,9 @@
 #'
 #' @references
 #' \url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
-#' (last accessed on 11 January, 2016).
+#' (accessed on January 15, 2016).
+#' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
+#' (accessed on January 15, 2016).
 #'
 #' @examples
 #' \dontrun{

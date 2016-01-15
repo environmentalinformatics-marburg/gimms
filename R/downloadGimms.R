@@ -5,8 +5,10 @@ if ( !isGeneric("downloadGimms") ) {
 #' Download GIMMS 3G data
 #'
 #' @description
-#' Download GIMMS 3G binary data for a given time span from NASA FTP server
-#' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}).
+#' Download GIMMS 3G binary data for a given time span from the NASA Ames
+#' Ecological Forecasting Lab's FTP server
+#' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}, accessed on
+#' January 15, 2016).
 #'
 #' @param x If 'Date', start date for download (e.g. "2000-01-01"). If
 #' 'numeric', start year for download (e.g. 2000). If 'character', a vector of

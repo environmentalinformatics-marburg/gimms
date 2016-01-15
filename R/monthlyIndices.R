@@ -6,14 +6,14 @@
 #'
 #' @param x Character. Vector of (local or online) filenames.
 #' @param pos1,pos2 Numeric. The first and last element of the date string in
-#' 'x', defaults to the GIMMS naming convention; see \code{\link{substr}}.
+#' 'x', defaults to the GIMMS naming convention.
 #' @param timestamp Logical. If \code{TRUE}, an actual timestamp (formatted
 #' according to \code{...}) is returned rather than a vector of indices.
 #' @param ... Further arguments passed on to \code{\link{strftime}}.
 #'
 #' @return
-#' A numeric vector with unique monthly indices or, if \code{timestamp = TRUE},
-#' a character vector with formatted timestamps.
+#' A 'numeric' vector with unique monthly indices or,
+#' if \code{timestamp = TRUE}, a 'character' vector with formatted timestamps.
 #'
 #' @author
 #' Florian Detsch

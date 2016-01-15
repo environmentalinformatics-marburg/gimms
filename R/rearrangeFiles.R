@@ -1,20 +1,17 @@
 #' Rearrange GIMMS files by date
 #'
 #' @description
-#' Rearrange a vector of GIMMS files in ascending order of time. If no file
-#' vector is supplied, the function will look for compatible files in the
-#' current working directory.
+#' Rearrange GIMMS-related files in ascending order of time.
 #'
 #' @param x Character. Vector of (local or online) filepaths. If \code{NULL},
 #' \code{dsn} will be searched for available files via pattern matching.
-#' @param dsn Character. Path to look for GIMMS data. If not supplied and
-#' \code{is.null(fls)}, this argument defaults to the current working directory.
+#' @param dsn Character. Path to look for GIMMS data. If not supplied and 'x' is
+#' missing, this defaults to the current working directory.
 #' @param pattern Character. A regular expression passed on to
 #' \code{\link{list.files}}.
 #' @param pos Integer. The start positions of year, month and period ('a' or
-#' 'b') in the desired GIMMS NDVI3g files. Unless modified, this usually
-#' defaults to \code{c(4, 6, 11)}
-#' (see also \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}).
+#' 'b') in the target GIMMS files. Unless modified, this usually defaults to
+#' \code{c(4, 6, 11)} (see 'References').
 #' @param ... Further arguments passed on to \code{\link{list.files}}.
 #'
 #' @return
@@ -22,6 +19,10 @@
 #'
 #' @author
 #' Florian Detsch
+#'
+#' @references
+#' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
+#' (accessed on January 15, 2016).
 #'
 #' @seealso
 #' \code{\link{list.files}}

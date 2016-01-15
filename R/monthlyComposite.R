@@ -8,23 +8,22 @@ if ( !isGeneric("monthlyComposite") ) {
 #' Based on a user-defined function, e.g. \code{max} for maximum value
 #' composites (MVC), aggregate bi-monthly GIMMS datasets to monthly composites.
 #'
-#' @param x RasterStack (requires 'indices') or character vector of filenames.
-#' If the latter applies and 'pos1', 'pos2' are not specified, the function will
-#' try to retrieve monthly indices from \code{\link{monthlyIndices}}. Note that
-#' the function does not work with binary data, but expects files that have
+#' @param x 'RasterStack' or 'character' vector of filenames. If the latter
+#' applies and 'pos1', 'pos2' are not specified, the function will try to
+#' retrieve monthly indices from \code{\link{monthlyIndices}}. Note that the
+#' function does not work with binary data, but expects files that have
 #' previously been created via \code{\link{rasterizeGimms}}.
-#' @param indices Numeric. Indices indicating RasterLayers or files from
-#' identical months; see \code{\link{stackApply}}.
+#' @param indices 'numeric'. Indices identifying layers or files from identical
+#' months.
 #' @param fun Function. Used to calculate monthly composite layers, defaults to
-#' \code{max}; see \code{\link{stackApply}}.
+#' \code{max}.
 #' @param cores Integer. Number of cores for parallel computing.
 #' @param filename Character. Optional output filename(s); see
 #' \code{\link{writeRaster}}. If \code{cores > 1}, the number of supplied
 #' filenames must match up with the number of unique monthly indices.
 #' @param pos1,pos2 Numeric. If 'x' is a vector of filenames, the first and last
 #' element of the date string to build monthly indices from. Defaults to the
-#' GIMMS naming convention; see \code{\link{monthlyIndices}} and
-#' \code{\link{substr}}.
+#' GIMMS naming convention, see \code{\link{monthlyIndices}}.
 #' @param ... Further arguments passed on to \code{\link{writeRaster}}.
 #'
 #' @return
@@ -34,7 +33,8 @@ if ( !isGeneric("monthlyComposite") ) {
 #' Florian Detsch
 #'
 #' @seealso
-#' \code{\link{stackApply}}, \code{\link{monthlyIndices}}.
+#' \code{\link{stackApply}}, \code{\link{monthlyIndices}},
+#' \code{\link{writeRaster}}.
 #'
 #' @examples
 #' \dontrun{
