@@ -16,6 +16,15 @@ This month      | In total
 
 #### What's new?
 
+##### 2016-01-15, **gimms** 0.5.0 is now on CRAN
+As of today, **gimms** 0.5.0 is available from [CRAN](https://cran.r-project.org/package=gimms) and has some new functionality:
+
+* enabled flag support in `rasterizeGimms`. In addition to the raw and scaled values of NDVI3g, the function now optionally returns flag layers which can subsequently be used for quality control. Please refer to the official [README](ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt) for further reading. 
+* improved performance of parallel processing.
+* revised package documentation.
+
+<hr>
+
 ##### 2015-12-16, added parallel support
 I decided to add optional multi-core support to `downloadGimms`, `rasterizeGimms` and `monthlyComposite`. The referring arument is called 'cores' and, if not specified otherwise, defaults to 1 (i.e., parallel computing is disabled). In the course of this, the **gimms** package version on branch 'develop' has been incremented to 0.4.0 and can be installed via `devtools::install_github` (see further below).
 
