@@ -93,7 +93,7 @@ rasterizeGimms <-   function(x,
       rst <- raster::t(rst)
 
       # set extent and projection
-      ext <- raster::extent(c(-180 + 1/24, 180 - 1/24, -90 + 1/24, 90 - 1/24))
+      ext <- raster::extent(c(-180, 180, -90, 90))
       rst <- raster::setExtent(rst, ext)
       raster::projection(rst) <- "+init=epsg:4326"
 
@@ -151,7 +151,7 @@ rasterizeGimms <-   function(x,
       rst <- raster::t(rst)
 
       # set extent and projection
-      ext <- raster::extent(c(-180 + 1/24, 180 - 1/24, -90 + 1/24, 90 - 1/24))
+      ext <- raster::extent(c(-180, 180, -90, 90))
       rst <- raster::setExtent(rst, ext)
       raster::projection(rst) <- "+init=epsg:4326"
 
