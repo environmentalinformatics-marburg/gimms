@@ -70,6 +70,7 @@ createHeader <- function(file, header) {
                     "data type = 2",
                     "header offset = 0",
                     "interleave = bsq",
+                    "sensor type = AVHRR",
                     "byte order = 1", sep = "\n")
 
   ## write and return file
