@@ -3,12 +3,16 @@
 \docType{methods}
 \name{qualityControl}
 \alias{qualityControl}
+\alias{qualityControl,RasterLayer-method}
 \alias{qualityControl,RasterStackBrick-method}
 \alias{qualityControl,character-method}
 \title{Perform quality control on GIMMS NDVI3g data}
 \usage{
 \S4method{qualityControl}{RasterStackBrick}(x, flag, keep = 1:2, cores = 1L,
   filename = "", ...)
+
+\S4method{qualityControl}{RasterLayer}(x, flag, keep = 1:2, filename = "",
+  ...)
 
 \S4method{qualityControl}{character}(x, flag, keep = 1:2, cores = 1L,
   filename = "", ...)

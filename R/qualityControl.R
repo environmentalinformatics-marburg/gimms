@@ -90,12 +90,10 @@ setMethod("qualityControl",
               lst_qc <- foreach::foreach(i = 1:(raster::nlayers(x)),
                                          .packages = c("raster", "rgdal")) %dopar% {
 
-                ## overlay raw ndvi and flags
-                raster::overlay(x[[i]], flag[[i]], fun = function(y, z) {
-                  y[!z[] %in% keep] <- NA
-                  return(y)
-                }, filename = ifelse(length(filename) == raster::nlayers(x),
-                                     filename[i], ""), ...)
+                ## overlay raw ndvi and flags ('RasterLayer'-method)
+                qualityControl(x[[i]], flag[[i]], keep = keep,
+                               filename = ifelse(length(filename) == raster::nlayers(x),
+                                                 filename[i], ""), ...)
               }
 
               rst_qc <- raster::stack(lst_qc)
@@ -106,6 +104,27 @@ setMethod("qualityControl",
 
             return(rst_qc)
           })
+
+
+################################################################################
+### function using 'RasterLayer' ###############################################
+#' @aliases qualityControl,RasterLayer-method
+#' @rdname qualityControl
+setMethod("qualityControl",
+          signature(x = "RasterLayer"),
+          function(x, flag, keep = 1:2, filename = "", ...) {
+
+            ## check number of layers
+            if (!identical(raster::nlayers(x), raster::nlayers(flag)))
+              stop("Number of layers in 'x' and 'flag' are not identical.\n")
+
+            ## overlay raw ndvi and flags
+            raster::overlay(x, flag, fun = function(y, z) {
+              y[!z[] %in% keep] <- NA
+              return(y)
+            }, filename = filename, ...)
+          })
+
 
 ################################################################################
 ### function using 'character' #################################################
