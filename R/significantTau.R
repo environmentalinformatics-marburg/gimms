@@ -21,10 +21,15 @@ if ( !isGeneric("significantTau") ) {
 #' appropriate file format extension, see \code{\link{writeFormats}}.
 #' @param ... Further arguments passed on to \code{\link{zyp.trend.vector}}.
 #'
-#' @return If \code{df = FALSE} (default) and \code{p} was not exceeded, a
-#' single 'numeric'; if \code{df = FALSE} and \code{p} was exceeded, a 'logical'
-#' (\code{NA}); else a 'data.frame' with Kendall's tau and the corresponding
-#' significance level.
+#' @return
+#' \itemize{
+#' \item{\code{numeric} input: }{If \code{df = FALSE} (default), a single
+#' \code{numeric} or \code{logical} depending on whether \code{p} was exceeded
+#' or not; else a \code{data.frame} with Kendall's tau and the corresponding
+#' significance level.}
+#' \item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
+#' Kendall's tau. Values exceeding the specified \code{p} are discarded.}
+#' }
 #'
 #' @author
 #' Florian Detsch
