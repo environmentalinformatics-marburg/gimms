@@ -15,6 +15,7 @@
 #'
 #' @import methods raster parallel foreach
 #' @importFrom doParallel registerDoParallel
+#' @importFrom RCurl getURL
 #' @importFrom Kendall MannKendall
 #' @importFrom zyp zyp.trend.vector
 #' @importFrom utils download.file

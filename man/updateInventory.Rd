@@ -2,29 +2,29 @@
 % Please edit documentation in R/updateInventory.R
 \name{updateInventory}
 \alias{updateInventory}
-\title{Update GIMMS 3G file inventory}
+\title{Update GIMMS NDVI3g file inventory}
 \usage{
-updateInventory(sort = TRUE, quiet = TRUE)
+updateInventory(server = c("ecocast", "nasanex"))
 }
 \arguments{
-\item{sort}{'logical'. Determines whether or not to sort the list of
-available GIMMS files in ascending order of time via
-\code{\link{rearrangeFiles}}.}
-
-\item{quiet}{'logical'. If TRUE, information sent to the console is reduced.}
+\item{server}{\code{character}. Specifies the remote server to use. Currently
+available options are \code{"ecocast"}
+(\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}) and
+\code{"nasanex"} (\url{https://aws.amazon.com/de/nasa/nex/}).}
 }
 \value{
 A vector of online filepaths.
 }
 \description{
-Download the latest version of the GIMMS 3G file inventory from the NASA Ames
-Ecological Forecasting Lab's FTP server
-(\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}, accessed on
-January 15, 2016) or, if the server is not accessible, load local version of
-the file inventory.
+Download the latest version of the GIMMS NDVI3g file inventory either from
+NASA Ames Ecological Forecasting Lab (ECOCAST) or, if not reachable, from
+NASA Earth Exchange (NEX) Amazon AWS. If none of the specified endpoints is
+reachable (e.g., if there is no active internet connection), the latest local
+version of the file inventory derived from ECOCAST is used.
 }
 \examples{
 updateInventory()
+updateInventory(server = "nasanex")
 
 }
 \author{
