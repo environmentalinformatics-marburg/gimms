@@ -1,7 +1,7 @@
-#' Rearrange GIMMS files by date
+#' Rearrange GIMMS NDVI3g files by date
 #'
 #' @description
-#' Rearrange GIMMS-related files in ascending order of time.
+#' Rearrange local GIMMS NDVI3g files in ascending order of time.
 #'
 #' @param x Character. Vector of (local or online) filepaths. If \code{NULL},
 #' \code{dsn} will be searched for available files via pattern matching.
@@ -26,15 +26,6 @@
 #'
 #' @seealso
 #' \code{\link{list.files}}
-#'
-#' @examples
-#' ## latest version of files inventory
-#' gimms_files <- updateInventory(sort = FALSE)
-#' head(gimms_files)
-#'
-#' ## re-arrange vector with available files according to date
-#' gimms_files_arr <- rearrangeFiles(gimms_files)
-#' head(gimms_files_arr)
 #'
 #' @export rearrangeFiles
 #' @name rearrangeFiles

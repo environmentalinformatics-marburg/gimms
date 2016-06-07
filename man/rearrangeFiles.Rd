@@ -2,7 +2,7 @@
 % Please edit documentation in R/rearrangeFiles.R
 \name{rearrangeFiles}
 \alias{rearrangeFiles}
-\title{Rearrange GIMMS files by date}
+\title{Rearrange GIMMS NDVI3g files by date}
 \usage{
 rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo.*.VI3g$",
   pos = c(4, 6, 11), ...)
@@ -27,17 +27,7 @@ missing, this defaults to the current working directory.}
 A vector of filepaths arranged in ascending order of time.
 }
 \description{
-Rearrange GIMMS-related files in ascending order of time.
-}
-\examples{
-## latest version of files inventory
-gimms_files <- updateInventory(sort = FALSE)
-head(gimms_files)
-
-## re-arrange vector with available files according to date
-gimms_files_arr <- rearrangeFiles(gimms_files)
-head(gimms_files_arr)
-
+Rearrange local GIMMS NDVI3g files in ascending order of time.
 }
 \author{
 Florian Detsch
