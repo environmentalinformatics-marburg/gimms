@@ -3,6 +3,14 @@ gimms 0.5.0 (2016-01-15)
 
 Changes:
 
-* Enabled quality flag retrieval from rasterizeGimms.
+* Enabled retrieval of quality flags from rasterizeGimms.
 * Added parallel support to downloadGimms, rasterizeGimms and monthlyComposite.
 * Revised package documentation.
+
+
+gimms 0.6.0 (2016-01-15)
+==============
+
+Changes:
+
+* Enabled optional creation of target folder during file download.
