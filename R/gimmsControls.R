@@ -94,3 +94,22 @@ checkCores <- function(cores) {
 
   return(cores)
 }
+
+
+### check existence of target folder -------------------------------------------
+
+checkDsn <- function(dsn) {
+
+  ## if 'dsn' doesn't exist, ask user if it should be created
+  if (!dir.exists(dsn))
+    answer <- readline(paste("Target folder", dsn, "doesn't exist.",
+                             "Do you wish to create it? (yes/no) \n"))
+
+  if (answer == "yes") {
+    dir.create(dsn)
+  } else {
+    stop(paste("Target folder", dsn, "doesn't exist. Aborting operation...\n"))
+  }
+
+  return(invisible())
+}

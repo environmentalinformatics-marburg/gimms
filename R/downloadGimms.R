@@ -72,6 +72,9 @@ setMethod("downloadGimms",
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
+            ## check if target folder exists
+            checkDsn(dsn)
+
             ## check 'cores'
             cores <- checkCores(cores)
 
@@ -116,6 +119,9 @@ setMethod("downloadGimms",
           function(x, y,
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
+
+            ## check if target folder exists
+            checkDsn(dsn)
 
             ## check 'cores'
             cores <- checkCores(cores)
@@ -165,6 +171,9 @@ setMethod("downloadGimms",
           function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
+            ## check if target folder exists
+            checkDsn(dsn)
+
             ## check 'cores'
             cores <- checkCores(cores)
 
@@ -185,6 +194,9 @@ setMethod("downloadGimms",
           signature(x = "missing"),
           function(dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
+
+            ## check if target folder exists
+            checkDsn(dsn)
 
             ## check 'cores'
             cores <- checkCores(cores)
