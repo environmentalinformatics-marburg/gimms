@@ -8,9 +8,17 @@ Changes:
 * Revised package documentation.
 
 
-gimms 0.6.0 (2016-01-15)
+gimms 0.6.0 (2016-10-27)
 ==============
 
 Changes:
 
 * Enabled optional creation of target folder during file download.
+* Added 'version' argument to updateInventory and downloadGimms in order to
+  support the recently updated GIMMS version 1 (until end 2015, .nc4 files).
+* Included local file inventories for all servers (ECOCAST, NASANEX) and product
+  versions (0 and 1) available
+
+To do:
+
+* validServer, validVersion
