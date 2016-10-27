@@ -4,13 +4,16 @@
 \alias{updateInventory}
 \title{Update GIMMS NDVI3g file inventory}
 \usage{
-updateInventory(server = c("ecocast", "nasanex"))
+updateInventory(server = c("ecocast", "nasanex"), version = 1)
 }
 \arguments{
 \item{server}{\code{character}. Specifies the remote server to use. Currently
-available options are \code{"ecocast"}
-(\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}) and
-\code{"nasanex"} (\url{https://aws.amazon.com/de/nasa/nex/}).}
+available options are \code{"ecocast"} (versions 0 and 1, see 'Details' and
+'References') and \code{"nasanex"} (version 0).}
+
+\item{version}{\code{integer} (or any other class convertible to
+\code{integer}). Specifies GIMMS NDVI3g product version, see 'Details'.
+Currently ignored if \code{server = "nasanex"}.}
 }
 \value{
 A vector of online filepaths.
@@ -22,13 +25,32 @@ NASA Earth Exchange (NEX) Amazon AWS. If none of the specified endpoints is
 reachable (e.g., if there is no active internet connection), the latest local
 version of the file inventory derived from ECOCAST is used.
 }
+\details{
+Only recently, GIMMS NDVI3g version 1 has been released which is currently
+available until end 2015 and comes in \code{.nc4} format (as apposed to raw
+binary associated with version 0 which is currently available until end 2013).
+}
 \examples{
 updateInventory()
-updateInventory(server = "nasanex")
 
 }
 \author{
 Florian Detsch
+}
+\references{
+ECOCAST (2016). Available online (accessed on 27 October 2016):
+\itemize{
+\item{Version 0 (raw binary, until end 2013)}
+{\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}}
+\item{Version 1 (\code{.nc4}, until end 2015)}
+{\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v1/}}
+}
+
+NASANEX (2016). Available online (accessed on 27 October 2016):
+\itemize{
+\item{Version 0 (raw binary, until end 2012)}
+\url{https://nasanex.s3.amazonaws.com/}
+}
 }
 \seealso{
 \code{\link{rearrangeFiles}}.

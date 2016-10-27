@@ -8,9 +8,11 @@
 #' version of the file inventory derived from ECOCAST is used.
 #'
 #' @param server \code{character}. Specifies the remote server to use. Currently
-#' available options are \code{"ecocast"}
-#' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}) and
-#' \code{"nasanex"} (\url{https://aws.amazon.com/de/nasa/nex/}).
+#' available options are \code{"ecocast"} (versions 0 and 1, see 'Details' and
+#' 'References') and \code{"nasanex"} (version 0).
+#' @param version \code{integer} (or any other class convertible to
+#' \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details'.
+#' Currently ignored if \code{server = "nasanex"}.
 #'
 #' @return
 #' A vector of online filepaths.
@@ -18,20 +20,39 @@
 #' @author
 #' Florian Detsch
 #'
+#' @details
+#' Only recently, GIMMS NDVI3g version 1 has been released which is currently
+#' available until end 2015 and comes in \code{.nc4} format (as apposed to raw
+#' binary associated with version 0 which is currently available until end 2013).
+#'
+#' @references
+#' ECOCAST (2016). Available online (accessed on 27 October 2016):
+#' \itemize{
+#' \item{Version 0 (raw binary, until end 2013)}
+#' {\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}}
+#' \item{Version 1 (\code{.nc4}, until end 2015)}
+#' {\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v1/}}
+#' }
+#'
+#' NASANEX (2016). Available online (accessed on 27 October 2016):
+#' \itemize{
+#' \item{Version 0 (raw binary, until end 2012)}
+#' \url{https://nasanex.s3.amazonaws.com/}
+#' }
+#'
 #' @seealso
 #' \code{\link{rearrangeFiles}}.
 #'
 #' @examples
 #' updateInventory()
-#' updateInventory(server = "nasanex")
 #'
 #' @export updateInventory
 #' @name updateInventory
-updateInventory <- function(server = c("ecocast", "nasanex")) {
+updateInventory <- function(server = c("ecocast", "nasanex"), version = 1) {
 
   ## available files (online)
   is_ecocast <- server[1] == "ecocast"
-  fls <- if (is_ecocast) updateEcocast() else updateNasanex()
+  fls <- if (is_ecocast) updateEcocast(version) else updateNasanex()
 
   ## if first-choice server is not available, try alternative server
   if (class(fls) == "try-error" & length(server) == 2) {
@@ -58,8 +79,16 @@ updateInventory <- function(server = c("ecocast", "nasanex")) {
 
 ### update from ecocast -----
 
-updateEcocast <- function() {
-  con <- "http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00FILE-LIST.txt"
+updateEcocast <- function(version = 1) {
+
+  version <- as.integer(version)
+  con <- if (version == 1) {
+    "https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v1/00FILE-LIST.txt"
+  } else if (version == 0) {
+    "https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00FILE-LIST.txt"
+  } else {
+    stop("Invalid product version specified.\n")
+  }
 
   suppressWarnings(
     try(readLines(con), silent = TRUE)
@@ -84,4 +113,24 @@ updateNasanex <- function() {
   }
 
   return(cnt)
+}
+
+
+### import local inventory -----
+
+readInventory <- function(server = c("ecocast", "nasanex"), version = 1) {
+  if (server[1] == "ecocast") {
+    version <- as.integer(version)
+    if (version == 1) {
+      readRDS(system.file("extdata", "inventory_ecv1.rds", package = "gimms"))
+    } else if (version == 0) {
+      readRDS(system.file("extdata", "inventory_ecv0.rds", package = "gimms"))
+    } else {
+      stop("Invalid product version specified.\n")
+    }
+  } else if (server[1] == "nasanex") {
+    readRDS(system.file("extdata", "inventory_nnv0.rds", package = "gimms"))
+  } else {
+    stop("Invalid product server specified.\n")
+  }
 }
