@@ -114,3 +114,59 @@ checkDsn <- function(dsn) {
 
   return(invisible())
 }
+
+
+### (re-)set system locale -----
+
+setLocale <- function(reset = FALSE, ...) {
+
+  ## switch current locale to us standard
+  if (!reset) {
+    if (Sys.info()[["sysname"]] == "Windows") {
+      invisible(Sys.setlocale(category = "LC_TIME", locale = "C"))
+    } else {
+      invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
+    }
+
+    ## reset locale
+  } else {
+    Sys.setlocale(category = "LC_TIME", ...)
+  }
+
+  return(invisible())
+}
+
+
+### get date strings from version-1 files -----
+
+getV1dates <- function(x, pos1 = 15L, pos2 = 23L, suffix = TRUE) {
+
+  fls <- substr(basename(x), pos1, pos2)
+
+  lst <- strsplit(fls, "_")
+  yrs <- sapply(lst, "[[", 1)
+  yrs <- substr(yrs, 3, 4)
+  mts <- sapply(lst, "[[", 2)
+
+  # back-up current locale and subsequently swith to us standard
+  locale <- Sys.getlocale(category = "LC_TIME")
+  setLocale()
+
+  lst <- lapply(seq(mts), function(i) {
+    mts <- if (mts[i] == "0106") {
+      rep(tolower(month.abb[1:6]), each = 2)
+    } else {
+      rep(tolower(month.abb[7:12]), each = 2)
+    }
+
+    if (suffix)
+      mts <- paste0(mts, rep(c("15a", "15b"), length(mts) / 2))
+
+    dts <- paste0(yrs[i], mts)
+    return(dts)
+  })
+
+  # revoke locale time adjustment and return date strings
+  setLocale(reset = TRUE, locale = locale)
+  return(unlist(lst))
+}
