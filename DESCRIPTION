@@ -15,6 +15,7 @@ Imports:
     doParallel,
     foreach,
     Kendall,
+    ncdf4,
     RCurl,
     zyp
 License: GPL (>= 3) | file LICENSE
