@@ -2,10 +2,10 @@ if ( !isGeneric("downloadGimms") ) {
   setGeneric("downloadGimms", function(x, ...)
     standardGeneric("downloadGimms"))
 }
-#' Download GIMMS 3G data
+#' Download GIMMS NDVI3g data
 #'
 #' @description
-#' Download GIMMS 3G binary data for a given time span from the NASA Ames
+#' Download GIMMS NDVI3g binary data for a given time span from the NASA Ames
 #' Ecological Forecasting Lab's FTP server
 #' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}, accessed on
 #' January 15, 2016).
@@ -17,6 +17,9 @@ if ( !isGeneric("downloadGimms") ) {
 #' oldest file available.
 #' @param y If 'Date', end date for download. If 'numeric', end year for
 #' download. If not supplied, download will stop with the latest file available.
+#' @param version \code{integer} (or any other class convertible to
+#' \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
+#' \code{\link{updateInventory}}.
 #' @param dsn 'character'. Destination folder for file download. If not supplied,
 #' all downloaded files will be stored in the current working directory.
 #' @param overwrite Logical. If \code{TRUE}, already downloaded files in 'dsn'
@@ -68,7 +71,7 @@ if ( !isGeneric("downloadGimms") ) {
 #' @rdname downloadGimms
 setMethod("downloadGimms",
           signature(x = "Date"),
-          function(x, y,
+          function(x, y, version = 1L,
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
@@ -80,11 +83,11 @@ setMethod("downloadGimms",
 
             ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
             if (missing(x) & missing(y))
-              downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet,
-                            mode = mode, cores = cores, ...)
+              downloadGimms(version = version, dsn = dsn, overwrite = overwrite,
+                            quiet = quiet, mode = mode, cores = cores, ...)
 
             ## available files
-            gimms_fls <- updateInventory()
+            gimms_fls <- updateInventory(version = version)
 
             ## extract timestamps
             gimms_dts_chr <- monthlyIndices(gimms_fls, timestamp = TRUE,
