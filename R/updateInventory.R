@@ -48,7 +48,7 @@
 #'
 #' @export updateInventory
 #' @name updateInventory
-updateInventory <- function(server = c("ecocast", "nasanex"), version = 1) {
+updateInventory <- function(server = c("ecocast", "nasanex"), version = 1L) {
 
   ## available files (online)
   is_ecocast <- server[1] == "ecocast"
