@@ -4,13 +4,19 @@
 \alias{monthlyIndices}
 \title{Monthly indices from GIMMS filenames}
 \usage{
-monthlyIndices(x, pos1 = 4L, pos2 = 8L, timestamp = FALSE, ...)
+monthlyIndices(x, version = 1L, pos1 = ifelse(version == 1, 15L, 4L),
+  pos2 = ifelse(version == 1, 23L, 8L), timestamp = FALSE, ...)
 }
 \arguments{
 \item{x}{Character. Vector of (local or online) filenames.}
 
+\item{version}{\code{integer} (or any other class convertible to
+\code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
+\code{\link{updateInventory}}.}
+
 \item{pos1, pos2}{Numeric. The first and last element of the date string in
-'x', defaults to the GIMMS naming convention.}
+'x', defaults to the GIMMS naming convention of the specified product
+\code{version}.}
 
 \item{timestamp}{Logical. If \code{TRUE}, an actual timestamp (formatted
 according to \code{...}) is returned rather than a vector of indices.}
