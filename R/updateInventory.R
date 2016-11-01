@@ -59,13 +59,20 @@ updateInventory <- function(server = c("ecocast", "nasanex"), version = 1L) {
     cat("Priority server ('", server[1],
         "') is not available. Contacting alternative server ('", server[2],
         "').\n", sep = "")
-    fls <- if (is_ecocast) updateNasanex() else updateEcocast()
+    fls <- if (is_ecocast) updateNasanex() else updateEcocast(version)
   }
 
   ## available files (offline)
   if (class(fls) == "try-error") {
     cat("Failed to retrieve online information. Using local file inventory...\n")
-    fls <- readRDS(system.file("extdata", "inventory.rds", package = "gimms"))
+
+    fls <- if (server == "nasanex") {
+      readRDS(system.file("extdata", "inventory_nnv0.rds", package = "gimms"))
+    } else {
+      readRDS(system.file("extdata", paste0("inventory_ec",
+                                            ifelse(version == 1, "v1", "v0"),
+                                            ".rds"), package = "gimms"))
+    }
   }
 
   ## remove duplicates and sort according to date
