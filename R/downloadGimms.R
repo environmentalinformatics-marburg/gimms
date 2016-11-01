@@ -86,30 +86,38 @@ setMethod("downloadGimms",
               downloadGimms(version = version, dsn = dsn, overwrite = overwrite,
                             quiet = quiet, mode = mode, cores = cores, ...)
 
-            ## available files
-            gimms_fls <- updateInventory(version = version)
-
-            ## extract timestamps
-            gimms_dts_chr <- monthlyIndices(gimms_fls, timestamp = TRUE,
-                                            format = "%Y-%m-%d")
-            gimms_dts <- as.Date(gimms_dts_chr)
+            ## available files and corresponding dates
+            fls <- updateInventory(version = version)
+            dts <- monthlyIndices(fls, timestamp = TRUE)
 
             ## start (finish) with the first (last) timestamp available if 'x'
             ## ('y') is not specified
-            if (missing(x)) x <- gimms_dts[1]
-            if (missing(y)) y <- gimms_dts[length(gimms_dts)]
+            if (missing(x)) x <- dts[1]
+            if (missing(y)) y <- dts[length(dts)]
 
-            ## create subset of available files covering user-defined temporal range
-            user_dts <- seq(x, y, 1)
-            user_dts <- user_dts[which(substr(user_dts, 9, 10) %in% c("01", "15"))]
-            gimms_fls <- gimms_fls[gimms_dts %in% user_dts]
+            ## select files covering user-defined temporal range...
+            usr_dts <- seq(x, y, 1)
+            usr_dts <- usr_dts[which(substr(usr_dts, 9, 10) %in% c("01", "15"))]
 
-            ## download
-            gimms_out <- downloader(gimms_fls, dsn = dsn, overwrite = overwrite,
-                                    quiet = quiet, mode = mode, cores = cores, ...)
+            ## ...from version 0
+            fls <- if (version == 0) {
+              fls[dts %in% usr_dts]
 
-            ## return local filenames
-            return(gimms_out)
+            ## ...from version 1
+            } else {
+              # identify .nc4 files with at least 1 required date
+              lst <- readRDS(system.file("extdata", "dates_ecv1.rds",
+                                         package = "gimms"))
+
+              mat <- sapply(usr_dts, function(i) {
+                sapply(lst, function(j) any(i == j))
+              })
+              rownames(mat)[rowSums(mat) > 0]
+            }
+
+            ## download files
+            downloader(fls, dsn = dsn, overwrite = overwrite,
+                       quiet = quiet, mode = mode, cores = cores, ...)
           })
 
 
@@ -119,7 +127,7 @@ setMethod("downloadGimms",
 #' @rdname downloadGimms
 setMethod("downloadGimms",
           signature(x = "numeric"),
-          function(x, y,
+          function(x, y, version = 1L,
                    dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
@@ -135,33 +143,34 @@ setMethod("downloadGimms",
                             mode = mode, cores = cores, ...)
 
             ## available files
-            gimms_fls <- updateInventory()
+            fls <- updateInventory(version = version)
 
             ## if specified, subset available files by time frame
-            gimms_bsn <- basename(gimms_fls)
-            gimms_yrs_chr <- substr(gimms_bsn, 4, 5)
-            gimms_yrs_num <- as.numeric(gimms_yrs_chr)
+            bsn <- basename(fls)
+            yrs <- substr(bsn, ifelse(version == 1, 15, 4),
+                          ifelse(version == 1, 18, 5))
+            yrs <- as.numeric(yrs)
 
-            id_old <- gimms_yrs_num >= 81
-            id_new <- gimms_yrs_num <= 80
-            gimms_yrs_chr[id_old] <- paste0("19", gimms_yrs_chr[id_old])
-            gimms_yrs_chr[id_new] <- paste0("20", gimms_yrs_chr[id_new])
-            gimms_yrs_num <- as.numeric(gimms_yrs_chr)
+            ## if version 0, add leading century
+            if (version == 0) {
+              id_old <- yrs >= 81
+              id_new <- yrs <= 80
+              yrs[id_old] <- paste0("19", yrs[id_old])
+              yrs[id_new] <- paste0("20", yrs[id_new])
+              yrs <- as.numeric(yrs)
+            }
 
-            ## start (finish) with the first (last) year available if 'x' ('y') is not
-            ## specified
-            if (missing(x)) x <- gimms_yrs_num[1]
-            if (missing(y)) y <- gimms_yrs_num[length(gimms_yrs_num)]
+            ## start (finish) with the first (last) year available if 'x' ('y')
+            ## is not specified
+            if (missing(x)) x <- yrs[1]
+            if (missing(y)) y <- yrs[length(yrs)]
 
             ## subset files
-            gimms_fls <- gimms_fls[gimms_yrs_chr %in% seq(x, y)]
+            fls <- fls[yrs %in% seq(x, y)]
 
             ## download
-            gimms_out <- downloader(gimms_fls, dsn = dsn, overwrite = overwrite,
-                                    quiet = quiet, mode = mode, cores = cores, ...)
-
-            ## return local filenames
-            return(gimms_out)
+            downloader(fls, dsn = dsn, overwrite = overwrite,
+                       quiet = quiet, mode = mode, cores = cores, ...)
           })
 
 
@@ -181,11 +190,8 @@ setMethod("downloadGimms",
             cores <- checkCores(cores)
 
             ## download
-            gimms_out <- downloader(x, dsn = dsn, overwrite = overwrite,
-                                    quiet = quiet, mode = mode, cores = cores, ...)
-
-            ## return vector with output files
-            return(gimms_out)
+            downloader(x, dsn = dsn, overwrite = overwrite,
+                       quiet = quiet, mode = mode, cores = cores, ...)
           })
 
 
@@ -195,7 +201,7 @@ setMethod("downloadGimms",
 #' @rdname downloadGimms
 setMethod("downloadGimms",
           signature(x = "missing"),
-          function(dsn = getwd(), overwrite = FALSE, quiet = TRUE,
+          function(version = 1L, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                    mode = "wb", cores = 1L, ...) {
 
             ## check if target folder exists
@@ -204,13 +210,8 @@ setMethod("downloadGimms",
             ## check 'cores'
             cores <- checkCores(cores)
 
-            ## available files
-            gimms_fls <- updateInventory()
-
-            ## download
-            gimms_out <- downloader(gimms_fls, dsn = dsn, overwrite = overwrite,
-                                    quiet = quiet, mode = mode, cores = cores, ...)
-
-            ## return local filenames
-            return(gimms_out)
+            ## download all available files
+            downloader(updateInventory(version = version), dsn = dsn,
+                       overwrite = overwrite, quiet = quiet, mode = mode,
+                       cores = cores, ...)
           })

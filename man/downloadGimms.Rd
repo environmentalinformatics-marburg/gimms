@@ -12,14 +12,14 @@
 \S4method{downloadGimms}{Date}(x, y, version = 1L, dsn = getwd(),
   overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
 
-\S4method{downloadGimms}{numeric}(x, y, dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, mode = "wb", cores = 1L, ...)
+\S4method{downloadGimms}{numeric}(x, y, version = 1L, dsn = getwd(),
+  overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
 
 \S4method{downloadGimms}{character}(x, dsn = getwd(), overwrite = FALSE,
   quiet = TRUE, mode = "wb", cores = 1L, ...)
 
-\S4method{downloadGimms}{missing}(dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, mode = "wb", cores = 1L, ...)
+\S4method{downloadGimms}{missing}(version = 1L, dsn = getwd(),
+  overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
 }
 \arguments{
 \item{x}{If 'Date', start date for download (e.g. "2000-01-01"). If
