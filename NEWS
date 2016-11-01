@@ -17,7 +17,9 @@ Changes:
 * Added 'version' argument to updateInventory and downloadGimms in order to
   support the recently updated GIMMS version 1 (until end 2015, .nc4 files).
 * Included local file inventories for all servers (ECOCAST, NASANEX) and product
-  versions (0 and 1) available
+  versions (0 and 1) available.
+* If 'timestamp = TRUE', monthlyIndices() returns a 'Date' object (i.e., '...'
+  is no longer available).
 
 To do:
 
