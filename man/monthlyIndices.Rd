@@ -21,7 +21,7 @@ monthlyIndices(x, version = 1L, pos1 = ifelse(version == 1, 15L, 4L),
 \item{timestamp}{Logical. If \code{TRUE}, an actual timestamp (formatted
 according to \code{...}) is returned rather than a vector of indices.}
 
-\item{...}{Further arguments passed on to \code{\link{strftime}}.}
+\item{...}{Currently not used.}
 }
 \value{
 A 'numeric' vector with unique monthly indices or,
@@ -38,8 +38,8 @@ gimms_files <- c("geo85aug15a.n09-VI3g", "geo85aug15b.n09-VI3g",
                  "geo85oct15a.n09-VI3g", "geo85oct15b.n09-VI3g")
 
 ## extract monthly indices
-monthlyIndices(gimms_files)
-monthlyIndices(gimms_files, timestamp = TRUE, format = "\%b \%y")
+monthlyIndices(gimms_files, version = 0)
+monthlyIndices(gimms_files, version = 0, timestamp = TRUE)
 
 }
 \author{

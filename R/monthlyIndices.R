@@ -13,7 +13,7 @@
 #' \code{version}.
 #' @param timestamp Logical. If \code{TRUE}, an actual timestamp (formatted
 #' according to \code{...}) is returned rather than a vector of indices.
-#' @param ... Further arguments passed on to \code{\link{strftime}}.
+#' @param ... Currently not used.
 #'
 #' @return
 #' A 'numeric' vector with unique monthly indices or,
@@ -32,8 +32,8 @@
 #'                  "geo85oct15a.n09-VI3g", "geo85oct15b.n09-VI3g")
 #'
 #' ## extract monthly indices
-#' monthlyIndices(gimms_files)
-#' monthlyIndices(gimms_files, timestamp = TRUE, format = "%b %y")
+#' monthlyIndices(gimms_files, version = 0)
+#' monthlyIndices(gimms_files, version = 0, timestamp = TRUE)
 #'
 #' @export monthlyIndices
 #' @name monthlyIndices
@@ -74,11 +74,10 @@ monthlyIndices <- function(x, version = 1L,
     # concatenate and reformat date string
     ch_date <- paste0(ch_day, ch_month, ch_year)
     dt_time <- as.Date(ch_date, format = "%d%b%y")
-    ch_time <- strftime(dt_time, ...)
 
     # revoke locale time adjustment
     setLocale(reset = TRUE, locale = locale)
-    return(ch_time)
+    return(dt_time)
 
   ## return numeric indices
   } else {
