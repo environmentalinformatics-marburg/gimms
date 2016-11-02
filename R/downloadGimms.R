@@ -7,7 +7,7 @@ if ( !isGeneric("downloadGimms") ) {
 #' @description
 #' Download GIMMS NDVI3g binary data for a given time span from the NASA Ames
 #' Ecological Forecasting Lab's FTP server
-#' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}, accessed on
+#' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/}, accessed on
 #' January 15, 2016).
 #'
 #' @param x If 'Date', start date for download (e.g. "2000-01-01"). If
@@ -24,8 +24,7 @@ if ( !isGeneric("downloadGimms") ) {
 #' all downloaded files will be stored in the current working directory.
 #' @param overwrite Logical. If \code{TRUE}, already downloaded files in 'dsn'
 #' will be overwritten.
-#' @param quiet Logical. If \code{TRUE}, information sent to the console is
-#' reduced.
+#' @param quiet Logical. If \code{TRUE}, console output is reduced.
 #' @param mode See \code{\link{download.file}}.
 #' @param cores Integer. Number of cores for parallel computing.
 #' @param ... Further arguments passed on to \code{\link{download.file}}, e.g.
@@ -54,7 +53,7 @@ if ( !isGeneric("downloadGimms") ) {
 #' gimms_files_year <- downloadGimms(x = 2000, y = 2002, dsn = gimms_dir)
 #'
 #' ## 'character' method, i.e. file names
-#' gimms_files <- updateInventory()
+#' gimms_files <- updateInventory(version = 0)
 #' gimms_files <- gimms_files[grep("geo00", gimms_files)]
 #' gimms_files_char <- downloadGimms(x = gimms_files, dsn = gimms_dir)
 #'
