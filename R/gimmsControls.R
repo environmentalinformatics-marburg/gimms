@@ -55,10 +55,7 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
 
 ### create gimms-specific envi header file -------------------------------------
 
-createHeader <- function(file, header) {
-
-  ## location of header file
-  file_hdr <- paste0(file, ".hdr")
+createHeader <- function(x, header) {
 
   ## default content of gimms ndvi3g-related header file
   if (missing(header))
@@ -73,9 +70,12 @@ createHeader <- function(file, header) {
                     "sensor type = AVHRR",
                     "byte order = 1", sep = "\n")
 
-  ## write and return file
-  writeLines(header, file_hdr)
-  return(file_hdr)
+  ## write .hdr for each input file to disk
+  sapply(x, function(i) {
+    fls <- paste0(i, ".hdr")
+    writeLines(header, fls)
+    return(fls)
+  })
 }
 
 
