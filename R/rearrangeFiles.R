@@ -45,14 +45,9 @@ rearrangeFiles <- function(x = NULL,
   ## vector to data.frame
   gimms_df <- data.frame(file = x, stringsAsFactors = FALSE)
 
-  ## switch current locale time to us standard
-  systime_locale <- Sys.getlocale(category = "LC_TIME")
-
-  if (Sys.info()[["sysname"]] == "Windows") {
-    invisible(Sys.setlocale(category = "LC_TIME", locale = "C"))
-  } else {
-    invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
-  }
+  ## backup current locale and switch to us standard
+  locale <- Sys.getlocale(category = "LC_TIME")
+  setLocale()
 
   ## create columns 'year', 'month' and 'day'
   gimms_df <- transform(gimms_df,
@@ -68,7 +63,7 @@ rearrangeFiles <- function(x = NULL,
   gimms_df <- gimms_df[order(gimms_df$date), ]
 
   ## revoke locale time adjustment
-  Sys.setlocale(category = "LC_TIME", locale = systime_locale)
+  setLocale(TRUE, locale = locale)
 
   ## return rearranged files
   gimms_fls <- gimms_df$file
