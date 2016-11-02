@@ -86,16 +86,10 @@ updateInventory <- function(server = c("ecocast", "nasanex"), version = 1L) {
 
 ### update from ecocast -----
 
-updateEcocast <- function(version = 1) {
+updateEcocast <- function(version = 1L) {
 
   version <- as.integer(version)
-  con <- if (version == 1) {
-    "https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v1/00FILE-LIST.txt"
-  } else if (version == 0) {
-    "https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00FILE-LIST.txt"
-  } else {
-    stop("Invalid product version specified.\n")
-  }
+  con <- paste0(serverPath(version = version), "/00FILE-LIST.txt")
 
   suppressWarnings(
     try(readLines(con), silent = TRUE)
@@ -106,7 +100,7 @@ updateEcocast <- function(version = 1) {
 ### update from nasanex -----
 
 updateNasanex <- function() {
-  con <- "https://nasanex.s3.amazonaws.com/"
+  con <- serverPath("nasanex")
 
   cnt <- try(RCurl::getURL(con, dirlistonly = TRUE), silent = TRUE)
 
@@ -125,7 +119,7 @@ updateNasanex <- function() {
 
 ### import local inventory -----
 
-readInventory <- function(server = c("ecocast", "nasanex"), version = 1) {
+readInventory <- function(server = c("ecocast", "nasanex"), version = 1L) {
   if (server[1] == "ecocast") {
     version <- as.integer(version)
     if (version == 1) {
@@ -139,5 +133,17 @@ readInventory <- function(server = c("ecocast", "nasanex"), version = 1) {
     readRDS(system.file("extdata", "inventory_nnv0.rds", package = "gimms"))
   } else {
     stop("Invalid product server specified.\n")
+  }
+}
+
+
+### server paths -----
+
+serverPath <- function(server = c("ecocast", "nasanex"), version = 1L) {
+  if (server[1] == "ecocast") {
+    paste0("https://ecocast.arc.nasa.gov/data/pub/gimms/3g.",
+           ifelse(as.integer(version) == 1, "v1", "v0"))
+  } else {
+    "https://nasanex.s3.amazonaws.com"
   }
 }
