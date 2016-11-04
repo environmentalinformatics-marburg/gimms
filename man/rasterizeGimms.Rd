@@ -2,65 +2,57 @@
 % Please edit documentation in R/rasterizeGimms.R
 \name{rasterizeGimms}
 \alias{rasterizeGimms}
-\title{Rasterize GIMMS NDVI3g binary data}
+\title{Rasterize GIMMS NDVI3g data}
 \usage{
-rasterizeGimms(x, flag = FALSE, header = NULL, water2na = TRUE,
-  nodata2na = TRUE, scaling = TRUE, remove_header = FALSE, cores = 1L,
-  filename = "", ...)
+rasterizeGimms(x, dsn = dirname(x), water2na = TRUE, nodata2na = TRUE,
+  scaling = TRUE, cores = 1L, format = "GTiff", overwrite = FALSE)
 }
 \arguments{
-\item{x}{Character. Vector of local filepaths.}
+\item{x}{\code{character}. Vector of local filepaths.}
 
-\item{flag}{Logical. If \code{TRUE}, returns flag values instead of NDVI. See
-'References' for further reading. Note that this will be ignored if
-\code{scaling = FALSE}.}
+\item{dsn}{\code{character}. Destination folder for rasterized files.
+Defaults to \code{dirname(x)} if not further specified.}
 
-\item{header}{Character. Header file(s) corresponding to the binary data
-in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data
-will be used.}
+\item{water2na}{\code{logical}. Determines whether or not to discard pixels
+with 'mask-water' value (see 'References').}
 
-\item{water2na}{Logical. Determines whether or not to discard pixels with
-'mask-water' value (-10000; see 'References').}
+\item{nodata2na}{\code{logical}. Determines whether or not to discard pixels
+with 'mask-nodata' value (see 'References').}
 
-\item{nodata2na}{Logical. Determines whether or not to discard pixels with
-'mask-nodata' value (-5000; see 'References').}
+\item{scaling}{\code{logical}. If \code{TRUE} (default), scaling is enabled
+and both the NDVI and flag layer per file in 'x' are returned.}
 
-\item{scaling}{Logical. If \code{TRUE} (default), scaling is enabled which
-allows to retrieve NDVI or flag values (depending on 'flag').}
+\item{cores}{\code{integer}. Number of cores for parallel computing.}
 
-\item{remove_header}{Logical. If \code{TRUE}, the header file specified in
-'header' or, if not specified, created internally via
-\code{gimms:::createHeader} is removed after all operations have finished.}
+\item{format}{\code{character}. Output file type, see
+\code{\link{writeRaster}}.}
 
-\item{cores}{Integer. Number of cores for parallel computing. If 'filename'
-is not specified, the parallel option is automatically disabled.}
-
-\item{filename}{Character. Optional vector of output filenames with the same
-length as 'x'; see \code{\link{writeRaster}}.}
-
-\item{...}{Further arguments passed on to \code{\link{writeRaster}} (except
-for 'bylayer' and 'suffix').}
+\item{overwrite}{\code{logical}. If \code{TRUE}, existing output files will
+be overwritten, see \code{\link{writeRaster}}.}
 }
 \value{
-If 'x' is a single filename, an object of class 'RasterLayer';
-if 'x' is a vector of filenames, an object of class 'RasterStack'.
+If \code{scaling = TRUE} and \code{length(x) > 1}, a \code{list} of
+\code{length(x)} consisting of 2-layered \code{RasterStack} objects (NDVI and
+flags);
+
+Else if \code{scaling = TRUE} and \code{length(x) == 1}, a 2-layered
+\code{RasterStack} objects (NDVI and flags);
+
+Else if \code{scaling = FALSE}, a \code{list} of \code{length(x)} consisting
+of \code{RasterLayer} objects with raw GIMMS NDVI3g values.
 }
 \description{
-Import GIMMS NDVI3g binary data into R as 'Raster*' objects based on a
-companion header file.
+Import GIMMS NDVI3g (binary or NetCDF) data into R as \code{Raster*} objects.
 }
 \examples{
 \dontrun{
 ## Download sample data
-gimms_dir <- paste0(getwd(), "/data")
-
 gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-                             y = as.Date("2000-06-30"), dsn = gimms_dir)
+                             y = as.Date("2000-06-30"))
 
 ## Rasterize files
-gimms_raster <- rasterizeGimms(x = gimms_files, remove_header = TRUE)
-
-plot(gimms_raster)
+gimms_raster <- rasterizeGimms(x = gimms_files)
+gimms_raster
 }
 
 }
@@ -69,11 +61,11 @@ Florian Detsch
 }
 \references{
 \url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
-(accessed on January 15, 2016).
+(accessed on 11/04/2016).
 \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-(accessed on January 15, 2016).
+(accessed on 11/04/2016).
 }
 \seealso{
-\code{gimms:::createHeader}, \code{\link{raster}}, \code{\link{writeRaster}}.
+\code{\link{writeRaster}}.
 }
 
