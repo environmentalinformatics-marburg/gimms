@@ -24,3 +24,5 @@ Changes:
 To do:
 
 * validServer, validVersion
+* valid list passed to qualityControl()
+* qualityControl(), character-method
