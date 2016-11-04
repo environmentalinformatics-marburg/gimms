@@ -8,23 +8,23 @@ if ( !isGeneric("qualityControl") ) {
 #' Perform quality control on GIMMS NDVI3g data based on the companion flag
 #' information.
 #'
-#' @param x 'RasterStack' with NDVI values or 'character' vector of ENVI binary
-#' files. If the latter applies, \code{flag} is created internally via
-#' \code{\link{rasterizeGimms}}, but note that this comes at a high memory cost
-#' since the rasterized images cannot be written to disk at the moment.
-#' @param flag 'RasterStack' with flag values. Ignored if \code{x} is a
-#' 'character' vector.
+#' @param x Typically a \code{list} of 2-layered \code{RasterStack} objects
+#' (NDVI and flags) or a single 2-layered \code{RasterStack} object created from
+#' \code{\link{rasterizeGimms}}. If a \code{character} vector of filenames is
+#' supplied, it is assumed that these represent NDVI layers, and hence, flag
+#' layers must be supplied to 'y'.
+#' @param y \code{character} vector of filenames, only considered if 'x' is a
+#' \code{character} object as well. See 'Details'
 #' @param keep Integer. Accepted flag values, defaults to \code{1:2}
 #' (\emph{i.e.}, 'good' values; see 'References'.)
 #' @param cores Integer. Number of cores for parallel computing.
-#' @param filename Character. Optional output filename(s); see
-#' \code{\link{writeRaster}}. If \code{cores > 1}, the number of supplied
-#' filenames must match up with the number of layers in \code{x}.
-#' @param ... Further arguments passed on to \code{\link{writeRaster}} (except
-#' for 'bylayer' and 'suffix').
+#' @param ... Arguments passed on to \code{\link{writeRaster}}.
 #'
 #' @return
 #' A quality-controlled 'RasterStack'.
+#'
+#' @details
+#' (to be continued...)
 #'
 #' @author
 #' Florian Detsch
@@ -58,89 +58,60 @@ if ( !isGeneric("qualityControl") ) {
 #' @rdname qualityControl
 setMethod("qualityControl",
           signature(x = "RasterStackBrick"),
-          function(x, flag, keep = 1:2, cores = 1L, filename = "", ...) {
+          function(x, keep = 0:2, ...) {
 
-            ## check 'cores'
-            cores <- checkCores(cores)
-
-            ## check number of layers
-            if (!identical(raster::nlayers(x), raster::nlayers(flag)))
-              stop("Number of layers in 'x' and 'flag' are not identical.\n")
-
-            ### single core --------------------------------------------------------------
-
-            if (cores == 1L) {
-
-              ## overlay raw ndvi and flags
-              rst_qc <- raster::overlay(x, flag, fun = function(y, z) {
-                y[!z[] %in% keep] <- NA
-                return(y)
-              }, filename = filename, ...)
-
-              ### multi-core -------------------------------------------------------------
-
-            } else {
-
-              ## initialize cluster
-              cl <- parallel::makePSOCKcluster(cores)
-              doParallel::registerDoParallel(cl)
-
-              ## loop over layers
-              i <- 1
-              lst_qc <- foreach::foreach(i = 1:(raster::nlayers(x)),
-                                         .packages = c("raster", "rgdal")) %dopar% {
-
-                ## overlay raw ndvi and flags ('RasterLayer'-method)
-                qualityControl(x[[i]], flag[[i]], keep = keep,
-                               filename = ifelse(length(filename) == raster::nlayers(x),
-                                                 filename[i], ""), ...)
-              }
-
-              rst_qc <- raster::stack(lst_qc)
-
-              ## deregister parallel backend
-              parallel::stopCluster(cl)
-            }
-
-            return(rst_qc)
-          })
-
-
-################################################################################
-### function using 'RasterLayer' ###############################################
-#' @aliases qualityControl,RasterLayer-method
-#' @rdname qualityControl
-setMethod("qualityControl",
-          signature(x = "RasterLayer"),
-          function(x, flag, keep = 1:2, filename = "", ...) {
-
-            ## check number of layers
-            if (!identical(raster::nlayers(x), raster::nlayers(flag)))
-              stop("Number of layers in 'x' and 'flag' are not identical.\n")
-
-            ## overlay raw ndvi and flags
-            raster::overlay(x, flag, fun = function(y, z) {
+            ## overlay ndvi and flag layer
+            raster::overlay(x[[1]], x[[2]], fun = function(y, z) {
               y[!z[] %in% keep] <- NA
               return(y)
-            }, filename = filename, ...)
+            }, ...)
           })
 
 
+# ################################################################################
+# ### function using 'character' -----
+# #' @aliases qualityControl,character-method
+# #' @rdname qualityControl
+# setMethod("qualityControl",
+#           signature(x = "character"),
+#           function(x, y, keep = 0:2, cores = 1L, ...) {
+#
+#             ## check 'cores'
+#             cores <- checkCores(cores)
+#
+#             ## rasterize binary data
+#             x <- raster::stack(x)
+#             y <- raster::stack(y)
+#
+#             qualityControl(x = x, flag = flag, keep = keep, cores = cores, ...)
+#           })
+
+
 ################################################################################
-### function using 'character' #################################################
-#' @aliases qualityControl,character-method
+### function using 'list' -----
+#' @aliases qualityControl,list-method
 #' @rdname qualityControl
 setMethod("qualityControl",
-          signature(x = "character"),
-          function(x, flag, keep = 1:2, cores = 1L, filename = "", ...) {
+          signature(x = "list"),
+          function(x, keep = 0:2, cores = 1L, ...) {
 
             ## check 'cores'
             cores <- checkCores(cores)
 
-            ## rasterize binary data
-            flag <- rasterizeGimms(x, flag = TRUE, cores = cores)
-            x <- rasterizeGimms(x, cores = cores)
+            ## initialize cluster
+            cl <- parallel::makePSOCKcluster(cores)
 
-            qualityControl(x = x, flag = flag, keep = keep, cores = cores,
-                           filename = filename, ...)
+            ## export relevant objects to cluster
+            parallel::clusterExport(cl, c("x", "keep"), envir = environment())
+
+            ## perform quality control
+            rst <- parallel::parLapply(cl, 1:length(x), function(i) {
+              qualityControl(x[[i]], keep = keep, ...)
+            })
+
+            ## deregister parallel backend
+            parallel::stopCluster(cl)
+
+            ## return quality-controlled raster layer
+            return(rst)
           })

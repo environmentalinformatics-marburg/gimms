@@ -3,40 +3,30 @@
 \docType{methods}
 \name{qualityControl}
 \alias{qualityControl}
-\alias{qualityControl,RasterLayer-method}
 \alias{qualityControl,RasterStackBrick-method}
-\alias{qualityControl,character-method}
+\alias{qualityControl,list-method}
 \title{Perform quality control on GIMMS NDVI3g data}
 \usage{
-\S4method{qualityControl}{RasterStackBrick}(x, flag, keep = 1:2, cores = 1L,
-  filename = "", ...)
+\S4method{qualityControl}{RasterStackBrick}(x, keep = 0:2, ...)
 
-\S4method{qualityControl}{RasterLayer}(x, flag, keep = 1:2, filename = "",
-  ...)
-
-\S4method{qualityControl}{character}(x, flag, keep = 1:2, cores = 1L,
-  filename = "", ...)
+\S4method{qualityControl}{list}(x, keep = 0:2, cores = 1L, ...)
 }
 \arguments{
-\item{x}{'RasterStack' with NDVI values or 'character' vector of ENVI binary
-files. If the latter applies, \code{flag} is created internally via
-\code{\link{rasterizeGimms}}, but note that this comes at a high memory cost
-since the rasterized images cannot be written to disk at the moment.}
-
-\item{flag}{'RasterStack' with flag values. Ignored if \code{x} is a
-'character' vector.}
+\item{x}{Typically a \code{list} of 2-layered \code{RasterStack} objects
+(NDVI and flags) or a single 2-layered \code{RasterStack} object created from
+\code{\link{rasterizeGimms}}. If a \code{character} vector of filenames is
+supplied, it is assumed that these represent NDVI layers, and hence, flag
+layers must be supplied to 'y'.}
 
 \item{keep}{Integer. Accepted flag values, defaults to \code{1:2}
 (\emph{i.e.}, 'good' values; see 'References'.)}
 
+\item{...}{Arguments passed on to \code{\link{writeRaster}}.}
+
 \item{cores}{Integer. Number of cores for parallel computing.}
 
-\item{filename}{Character. Optional output filename(s); see
-\code{\link{writeRaster}}. If \code{cores > 1}, the number of supplied
-filenames must match up with the number of layers in \code{x}.}
-
-\item{...}{Further arguments passed on to \code{\link{writeRaster}} (except
-for 'bylayer' and 'suffix').}
+\item{y}{\code{character} vector of filenames, only considered if 'x' is a
+\code{character} object as well. See 'Details'}
 }
 \value{
 A quality-controlled 'RasterStack'.
@@ -44,6 +34,9 @@ A quality-controlled 'RasterStack'.
 \description{
 Perform quality control on GIMMS NDVI3g data based on the companion flag
 information.
+}
+\details{
+(to be continued...)
 }
 \examples{
 \dontrun{
