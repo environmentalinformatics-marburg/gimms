@@ -10,13 +10,18 @@ if ( !isGeneric("qualityControl") ) {
 #'
 #' @param x Typically a \code{list} of 2-layered \code{RasterStack} objects
 #' (NDVI and flags) or a single 2-layered \code{RasterStack} object created from
-#' \code{\link{rasterizeGimms}}. If a \code{character} vector of filenames is
-#' supplied, it is assumed that these represent NDVI layers, and hence, flag
-#' layers must be supplied to 'y'.
-#' @param y \code{character} vector of filenames, only considered if 'x' is a
-#' \code{character} object as well. See 'Details'
+#' \code{\link{rasterizeGimms}}. Alternatively, a \code{character} vector of raw
+#' GIMMS NDVI3g filenames (see 'Details').
 #' @param keep Integer. Accepted flag values, defaults to \code{1:2}
 #' (\emph{i.e.}, 'good' values; see 'References'.)
+#' @param dsn \code{character}. Destination folder for rasterized files.
+#' Defaults to \code{dirname(x)} if not further specified.
+#' @param water2na \code{logical}. Determines whether or not to discard pixels
+#' with 'mask-water' value (see 'References').
+#' @param nodata2na \code{logical}. Determines whether or not to discard pixels
+#' with 'mask-nodata' value (see 'References').
+#' @param scaling \code{logical}. If \code{TRUE} (default), scaling is enabled
+#' and both the NDVI and flag layer per file in 'x' are returned.
 #' @param cores Integer. Number of cores for parallel computing.
 #' @param ... Arguments passed on to \code{\link{writeRaster}}.
 #'
@@ -24,7 +29,13 @@ if ( !isGeneric("qualityControl") ) {
 #' A quality-controlled 'RasterStack'.
 #'
 #' @details
-#' (to be continued...)
+#' If 'x' is a \code{character} vector of raw GIMMS NDVI3g filenames,
+#' \code{\link{rasterizeGimms}} is automatically invoked prior to performing
+#' quality control. Note, however, that in such a case, arguments 'format' and
+#' 'overwrite' are not passed on to \code{\link{rasterizeGimms}}. Instead, the
+#' default values (\code{format = "GTiff"} and \code{overwrite = FALSE}) are
+#' used. For a finer control, run \code{rasterizeGimms(x, ...)} manually prior
+#' to quality control.
 #'
 #' @author
 #' Florian Detsch
@@ -39,14 +50,12 @@ if ( !isGeneric("qualityControl") ) {
 #' @examples
 #' \dontrun{
 #' ## Download sample data
-#' gimms_dir <- paste0(getwd(), "/data")
-#'
 #' gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-#'                              y = as.Date("2000-06-30"), dsn = gimms_dir)
+#'                              y = as.Date("2000-06-30"))
 #'
 #' ## Rasterize files
 #' gimms_qc <- qualityControl(gimms_files)
-#' plot(gimms_qc[[1:4]])
+#' gimms_qc
 #' }
 #'
 #' @export qualityControl
@@ -68,23 +77,23 @@ setMethod("qualityControl",
           })
 
 
-# ################################################################################
-# ### function using 'character' -----
-# #' @aliases qualityControl,character-method
-# #' @rdname qualityControl
-# setMethod("qualityControl",
-#           signature(x = "character"),
-#           function(x, y, keep = 0:2, cores = 1L, ...) {
-#
-#             ## check 'cores'
-#             cores <- checkCores(cores)
-#
-#             ## rasterize binary data
-#             x <- raster::stack(x)
-#             y <- raster::stack(y)
-#
-#             qualityControl(x = x, flag = flag, keep = keep, cores = cores, ...)
-#           })
+################################################################################
+### function using 'character' -----
+#' @aliases qualityControl,character-method
+#' @rdname qualityControl
+setMethod("qualityControl",
+          signature(x = "character"),
+          function(x, keep = 0:2, dsn = dirname(x), water2na = TRUE,
+                   nodata2na = TRUE, scaling = TRUE, cores = 1L, ...) {
+
+            ## check 'cores'
+            cores <- checkCores(cores)
+
+            ## rasterize input files, then apply quality control
+            x <- rasterizeGimms(x, dsn, water2na, nodata2na, scaling, cores)
+
+            qualityControl(x = x, keep = keep, cores = cores, ...)
+          })
 
 
 ################################################################################
@@ -105,9 +114,11 @@ setMethod("qualityControl",
             parallel::clusterExport(cl, c("x", "keep"), envir = environment())
 
             ## perform quality control
-            rst <- parallel::parLapply(cl, 1:length(x), function(i) {
+            lst <- parallel::parLapply(cl, 1:length(x), function(i) {
               qualityControl(x[[i]], keep = keep, ...)
             })
+
+            rst <- raster::stack(lst); rm(lst)
 
             ## deregister parallel backend
             parallel::stopCluster(cl)
