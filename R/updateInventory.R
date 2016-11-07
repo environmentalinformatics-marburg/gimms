@@ -66,7 +66,7 @@ updateInventory <- function(server = c("ecocast", "nasanex"), version = 1L) {
   if (class(fls) == "try-error") {
     cat("Failed to retrieve online information. Using local file inventory...\n")
 
-    fls <- if (server == "nasanex") {
+    fls <- if (server[1] == "nasanex") {
       readRDS(system.file("extdata", "inventory_nnv0.rds", package = "gimms"))
     } else {
       readRDS(system.file("extdata", paste0("inventory_ec",
