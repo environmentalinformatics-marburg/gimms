@@ -1,18 +1,21 @@
-#' Rearrange GIMMS NDVI3g files by date
+#' Rearrange GIMMS NDVI3g.v0 files by date
 #'
 #' @description
-#' Rearrange local GIMMS NDVI3g files in ascending order of time.
+#' Rearrange local GIMMS NDVI3g.v0 files in ascending order of time. Since the
+#' naming convention has significantly changed towards version 1, such an
+#' operation should only be relevant for files originating from version 0.
 #'
-#' @param x Character. Vector of (local or online) filepaths. If \code{NULL},
-#' \code{dsn} will be searched for available files via pattern matching.
-#' @param dsn Character. Path to look for GIMMS data. If not supplied and 'x' is
-#' missing, this defaults to the current working directory.
-#' @param pattern Character. A regular expression passed on to
-#' \code{\link{list.files}}.
-#' @param pos Integer. The start positions of year, month and period ('a' or
-#' 'b') in the target GIMMS files. Unless modified, this usually defaults to
-#' \code{c(4, 6, 11)} (see 'References').
-#' @param ... Further arguments passed on to \code{\link{list.files}}.
+#' @param x \code{character}. Vector of local filepaths. If missing, 'dsn' will
+#' be searched for available files via pattern matching.
+#' @param dsn \code{character}, defaults to the current working directory. Path
+#' to look for GIMMS-related data if 'x' is missing.
+#' @param pattern \code{character}, defaults to \code{"^geo.*.VI3g$"} for
+#' standard NDVI3g.v0 files (see \code{\link{updateInventory}}). A regular
+#' expression passed on to \code{\link{list.files}}.
+#' @param pos \code{integer}, defaults to \code{c(4, 6, 11)} for standard
+#' NDVI3g.v0 files (see 'References'). The start positions of year, month and
+#' part of the month ('a' or 'b') in the target GIMMS files.
+#' @param ... Further arguments passed to \code{\link{list.files}}.
 #'
 #' @return
 #' A vector of filepaths arranged in ascending order of time.
@@ -29,7 +32,7 @@
 #'
 #' @export rearrangeFiles
 #' @name rearrangeFiles
-rearrangeFiles <- function(x = NULL,
+rearrangeFiles <- function(x,
                            dsn = getwd(),
                            pattern = "^geo.*.VI3g$",
                            pos = c(4, 6, 11),
@@ -39,7 +42,7 @@ rearrangeFiles <- function(x = NULL,
     stop("'pos' must be a vector of length 3 (i.e., start position of year, month and day); see ?rearrangeFiles. \n")
 
   ## if `is.null(fls)`, apply pattern matching in 'dsn'
-  if (is.null(x))
+  if (missing(x))
     x <- list.files(dsn, pattern = pattern, ...)
 
   ## vector to data.frame
