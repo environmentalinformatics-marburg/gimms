@@ -14,11 +14,14 @@
 #' @author
 #' Florian Detsch
 #'
-#'
+#' @export getNDVILayers
+#' @name getNDVILayers
 getNDVILayers <- function(x) {
   raster::stack(lapply(x, "[[", 1))
 }
 
+#' @export getFlagLayers
+#' @name getNDVILayers
 getFlagLayers <- function(x) {
   raster::stack(lapply(x, "[[", 2))
 }
