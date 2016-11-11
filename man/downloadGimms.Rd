@@ -22,63 +22,61 @@
   overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
 }
 \arguments{
-\item{x}{If 'Date', start date for download (e.g. "2000-01-01"). If
-'numeric', start year for download (e.g. 2000). If 'character', a vector of
-full online filepath(s) to download, typically returned from
-\code{\link{updateInventory}}. If not supplied, download will start from the
-oldest file available.}
+\item{x}{If \code{Date}, start date for download (e.g., "2000-01-01"). Else
+if \code{numeric}, start year for download (e.g., 2000). Else if
+\code{character}, a vector of online filepaths to download, typically
+returned from \code{\link{updateInventory}}. Else if missing, all available
+files are downloaded.}
 
-\item{y}{If 'Date', end date for download. If 'numeric', end year for
-download. If not supplied, download will stop with the latest file available.}
+\item{y}{If \code{Date}, end date for download. Else if \code{numeric}, end
+year for download. Ignored if 'x' is a \code{character} object or missing.}
 
-\item{version}{\code{integer} (or any other class convertible to
-\code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
-\code{\link{updateInventory}}.}
+\item{version}{\code{integer} (or any other convertible class), defaults to
+\code{1L}. Specifies desired GIMMS NDVI3g product version, see 'Details' in
+\code{\link{updateInventory}}. Ignored if 'x' is a \code{character} object.}
 
-\item{dsn}{'character'. Destination folder for file download. If not supplied,
-all downloaded files will be stored in the current working directory.}
+\item{dsn}{\code{character}, defaults to the current working directory.
+Target folder for file download.}
 
-\item{overwrite}{Logical. If \code{TRUE}, already downloaded files in 'dsn'
-will be overwritten.}
+\item{overwrite}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE},
+identically named files in 'dsn' will be overwritten.}
 
-\item{quiet}{Logical. If \code{TRUE}, console output is reduced.}
+\item{quiet}{\code{logical}. If \code{TRUE} (default), console output is
+reduced.}
 
-\item{mode}{See \code{\link{download.file}}.}
+\item{mode}{\code{character}. See \code{\link{download.file}}.}
 
-\item{cores}{Integer. Number of cores for parallel computing.}
+\item{cores}{\code{integer}, defaults to \code{1L}. Number of cores used for
+parallel processing.}
 
-\item{...}{Further arguments passed on to \code{\link{download.file}}, e.g.
+\item{...}{Further arguments passed to \code{\link{download.file}}, e.g.
 'method'.}
 }
 \value{
-A vector of filepaths.
+A vector of local filepaths.
 }
 \description{
-Download GIMMS NDVI3g binary data for a given time span from the NASA Ames
-Ecological Forecasting Lab's FTP server
-(\url{http://ecocast.arc.nasa.gov/data/pub/gimms/}, accessed on
-January 15, 2016).
+Download GIMMS NDVI3g data from the NASA Ames Ecological Forecasting Lab
+(\url{http://ecocast.arc.nasa.gov/data/pub/gimms/}), optionally for a given
+period of time. Both NDVI3g.v1 (NetCDF, until end 2015) and NDVI3g.v0 (ENVI
+raw binary, until end 2013) are available.
 }
 \examples{
 \dontrun{
-## Destination folder for data download
-gimms_dir <- paste0(getwd(), "/data")
-
 ## 'Date' method
 gimms_files_date <- downloadGimms(x = as.Date("2000-01-01"),
-                                  y = as.Date("2000-06-30"),
-                                  dsn = gimms_dir)
+                                  y = as.Date("2000-06-30"))
 
-## 'numeric' method, i.e. full years
-gimms_files_year <- downloadGimms(x = 2000, y = 2002, dsn = gimms_dir)
+## 'numeric' method (i.e., particular years)
+gimms_files_year <- downloadGimms(x = 2000,
+                                  y = 2002)
 
-## 'character' method, i.e. file names
-gimms_files <- updateInventory(version = 0)
-gimms_files <- gimms_files[grep("geo00", gimms_files)]
-gimms_files_char <- downloadGimms(x = gimms_files, dsn = gimms_dir)
+## 'character' method (i.e., particular files)
+gimms_files_char <- updateInventory()
+gimms_files_char <- downloadGimms(x = gimms_files[1:6])
 
-## 'missing' method, i.e. entire collection
-gimms_files_full <- downloadGimms(dsn = gimms_dir)
+## 'missing' method (i.e., entire collection)
+gimms_files_full <- downloadGimms()
 }
 
 }
@@ -86,6 +84,6 @@ gimms_files_full <- downloadGimms(dsn = gimms_dir)
 Florian Detsch
 }
 \seealso{
-\code{\link{download.file}}
+\code{\link{updateInventory}}, \code{\link{download.file}}.
 }
 
