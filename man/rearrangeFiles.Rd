@@ -2,7 +2,7 @@
 % Please edit documentation in R/rearrangeFiles.R
 \name{rearrangeFiles}
 \alias{rearrangeFiles}
-\title{Rearrange GIMMS NDVI3g.v0 files by date}
+\title{Rearrange GIMMS NDVI3g.v0 files}
 \usage{
 rearrangeFiles(x, dsn = getwd(), pattern = "^geo.*.VI3g$", pos = c(4, 6,
   11), ...)
@@ -15,8 +15,7 @@ be searched for available files via pattern matching.}
 to look for GIMMS-related data if 'x' is missing.}
 
 \item{pattern}{\code{character}, defaults to \code{"^geo.*.VI3g$"} for
-standard NDVI3g.v0 files (see \code{\link{updateInventory}}). A regular
-expression passed on to \code{\link{list.files}}.}
+standard NDVI3g.v0 files. A regular expression passed to \code{\link{list.files}}.}
 
 \item{pos}{\code{integer}, defaults to \code{c(4, 6, 11)} for standard
 NDVI3g.v0 files (see 'References'). The start positions of year, month and
@@ -25,15 +24,12 @@ part of the month ('a' or 'b') in the target GIMMS files.}
 \item{...}{Further arguments passed to \code{\link{list.files}}.}
 }
 \value{
-A vector of filepaths arranged in ascending order of time.
+A \code{character} vector of filepaths arranged in ascending order of time.
 }
 \description{
 Rearrange local GIMMS NDVI3g.v0 files in ascending order of time. Since the
-naming convention has significantly changed towards version 1, such an
-operation should only be relevant for files originating from version 0.
-}
-\author{
-Florian Detsch
+naming convention has significantly changed towards NDVI3g.v1, such a measure
+should only be relevant for older file formats.
 }
 \references{
 \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
