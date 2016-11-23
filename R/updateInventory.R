@@ -14,16 +14,13 @@
 #' 'References'. Currently ignored if \code{server = "nasanex"}.
 #'
 #' @return
-#' A vector of online filepaths.
-#'
-#' @author
-#' Florian Detsch
+#' A \code{character} vector of online filepaths.
 #'
 #' @details
-#' Only recently, GIMMS NDVI3g.v1 has been released which is currently available
-#' from ECOCAST until end 2015 and comes in NetCDF (\code{.nc4}) format. In
-#' contrast, NDVI3g.v0 comes in ENVI raw binary format is currently available
-#' from ECOCAST (NASANEX) until end 2013 (2012).
+#' GIMMS NDVI3g.v1 is currently available from ECOCAST until end 2015 and comes
+#' in NetCDF (\code{.nc4}) format. In contrast, NDVI3g.v0 is available as ENVI
+#' raw binary imagery and available from ECOCAST (NASANEX) until end 2013 (2012)
+#' only.
 #'
 #' @references
 #' ECOCAST (2016). Available online (accessed on 27 October 2016):
@@ -44,7 +41,8 @@
 #' \code{\link{rearrangeFiles}}.
 #'
 #' @examples
-#' updateInventory()
+#' updateInventory()            # NDVI3g.v1
+#' updateInventory(version = 0) # NDVI3g.v0
 #'
 #' @export updateInventory
 #' @name updateInventory

@@ -15,7 +15,7 @@ available options are \code{"ecocast"} (default) and \code{"nasanex"}.}
 'References'. Currently ignored if \code{server = "nasanex"}.}
 }
 \value{
-A vector of online filepaths.
+A \code{character} vector of online filepaths.
 }
 \description{
 Download the latest version of the GIMMS NDVI3g file inventory from the NASA
@@ -25,17 +25,15 @@ active internet connection), the latest local version of the file inventory
 is used.
 }
 \details{
-Only recently, GIMMS NDVI3g.v1 has been released which is currently available
-from ECOCAST until end 2015 and comes in NetCDF (\code{.nc4}) format. In
-contrast, NDVI3g.v0 comes in ENVI raw binary format is currently available
-from ECOCAST (NASANEX) until end 2013 (2012).
+GIMMS NDVI3g.v1 is currently available from ECOCAST until end 2015 and comes
+in NetCDF (\code{.nc4}) format. In contrast, NDVI3g.v0 is available as ENVI
+raw binary imagery and available from ECOCAST (NASANEX) until end 2013 (2012)
+only.
 }
 \examples{
-updateInventory()
+updateInventory()            # NDVI3g.v1
+updateInventory(version = 0) # NDVI3g.v0
 
-}
-\author{
-Florian Detsch
 }
 \references{
 ECOCAST (2016). Available online (accessed on 27 October 2016):
