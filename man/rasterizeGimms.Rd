@@ -4,55 +4,61 @@
 \alias{rasterizeGimms}
 \title{Rasterize GIMMS NDVI3g data}
 \usage{
-rasterizeGimms(x, dsn = dirname(x), water2na = TRUE, nodata2na = TRUE,
-  scaling = TRUE, cores = 1L, format = "GTiff", overwrite = FALSE)
+rasterizeGimms(x, ext = NULL, snap = "out", keep = NULL, split = FALSE,
+  cores = 1L, filename = "", ...)
 }
 \arguments{
 \item{x}{\code{character}. Vector of local filepaths.}
 
-\item{dsn}{\code{character}. Destination folder for rasterized files.
-Defaults to \code{dirname(x)} if not further specified.}
+\item{ext}{\code{Extent}, or any object from which an \code{Extent} can be
+extracted, see \code{\link[raster]{crop}}.}
 
-\item{water2na}{\code{logical}. Determines whether or not to discard pixels
-with 'mask-water' value (see 'References').}
+\item{snap}{\code{character}, defaults to "out". Other available options are
+"in" and "near", see \code{\link[raster]{crop}}.}
 
-\item{nodata2na}{\code{logical}. Determines whether or not to discard pixels
-with 'mask-nodata' value (see 'References').}
+\item{keep}{\code{integer}. Flag values of NDVI3g pixels to spare during
+quality control. Pixels with non-included flag values are set to \code{NA}.
+If not specified (i.e., \code{NULL}; default), quality control is skipped.}
 
-\item{scaling}{\code{logical}. If \code{TRUE} (default), scaling is enabled
-and both the NDVI and flag layer per file in 'x' are returned.}
+\item{split}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
+\code{list} of \code{RasterStack} objects (of \code{length(x)}) is returned
+rather than a single \code{RasterStack}.}
 
 \item{cores}{\code{integer}. Number of cores for parallel computing.}
 
-\item{format}{\code{character}. Output file type, see
-\code{\link{writeRaster}}.}
+\item{filename}{\code{character}.}
 
-\item{overwrite}{\code{logical}. If \code{TRUE}, existing output files will
-be overwritten, see \code{\link{writeRaster}}.}
+\item{...}{Arguments passed to \code{\link{writeRaster}}.}
 }
 \value{
-If \code{scaling = TRUE} and \code{length(x) > 1}, a \code{list} of
-\code{length(x)} consisting of 2-layered \code{RasterStack} objects (NDVI and
-flags);
-
-Else if \code{scaling = TRUE} and \code{length(x) == 1}, a 2-layered
-\code{RasterStack} objects (NDVI and flags);
-
-Else if \code{scaling = FALSE}, a \code{list} of \code{length(x)} consisting
-of \code{RasterLayer} objects with raw GIMMS NDVI3g values.
+If \code{split = TRUE}, a list of NDVI3g \code{RasterStack} objects
+corresponding to the files specified in 'x'; else a single NDVI3g
+\code{RasterStack} object.
 }
 \description{
 Import GIMMS NDVI3g (binary or NetCDF) data into R as \code{Raster*} objects.
 }
 \examples{
 \dontrun{
-## Download sample data
+## Download NDVI3g.v1 sample data
 gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-                             y = as.Date("2000-06-30"))
+                             y = as.Date("2000-12-31"))
 
-## Rasterize files
-gimms_raster <- rasterizeGimms(x = gimms_files)
-gimms_raster
+## Extent for clipping
+shp <- getData("GADM", country = "DEU", level = 0, path = tmpDir())
+
+## Rasterize without quality control
+gimms_raster <- rasterizeGimms(x = gimms_files,
+                               ext = shp) # clipping
+plot(gimms_raster[[1]])
+lines(shp)
+
+## Rasterize with quality control
+gimms_rasterq <- rasterizeGimms(x = gimms_files,
+                                ext = shp, # clipping
+                                keep = 0)  # quality control
+plot(gimms_rasterq[[1]])
+lines(shp)
 }
 
 }
@@ -66,6 +72,6 @@ Florian Detsch
 (accessed on 11/04/2016).
 }
 \seealso{
-\code{\link{writeRaster}}.
+\code{\link[raster]{crop}}, \code{\link{writeRaster}}.
 }
 

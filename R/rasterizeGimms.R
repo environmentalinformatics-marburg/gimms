@@ -4,36 +4,30 @@
 #' Import GIMMS NDVI3g (binary or NetCDF) data into R as \code{Raster*} objects.
 #'
 #' @param x \code{character}. Vector of local filepaths.
-#' @param dsn \code{character}. Destination folder for rasterized files.
-#' Defaults to \code{dirname(x)} if not further specified.
-#' @param water2na \code{logical}. Determines whether or not to discard pixels
-#' with 'mask-water' value (see 'References').
-#' @param nodata2na \code{logical}. Determines whether or not to discard pixels
-#' with 'mask-nodata' value (see 'References').
-#' @param scaling \code{logical}. If \code{TRUE} (default), scaling is enabled
-#' and both the NDVI and flag layer per file in 'x' are returned.
+#' @param ext \code{Extent}, or any object from which an \code{Extent} can be
+#' extracted, see \code{\link[raster]{crop}}.
+#' @param snap \code{character}, defaults to "out". Other available options are
+#' "in" and "near", see \code{\link[raster]{crop}}.
+#' @param keep \code{integer}. Flag values of NDVI3g pixels to spare during
+#' quality control. Pixels with non-included flag values are set to \code{NA}.
+#' If not specified (i.e., \code{NULL}; default), quality control is skipped.
+#' @param split \code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
+#' \code{list} of \code{RasterStack} objects (of \code{length(x)}) is returned
+#' rather than a single \code{RasterStack}.
 #' @param cores \code{integer}. Number of cores for parallel computing.
-#' @param format \code{character}. Output file type, see
-#' \code{\link{writeRaster}}.
-#' @param overwrite \code{logical}. If \code{TRUE}, existing output files will
-#' be overwritten, see \code{\link{writeRaster}}.
+#' @param filename \code{character}.
+#' @param ... Arguments passed to \code{\link{writeRaster}}.
 #'
 #' @return
-#' If \code{scaling = TRUE} and \code{length(x) > 1}, a \code{list} of
-#' \code{length(x)} consisting of 2-layered \code{RasterStack} objects (NDVI and
-#' flags);
-#'
-#' Else if \code{scaling = TRUE} and \code{length(x) == 1}, a 2-layered
-#' \code{RasterStack} objects (NDVI and flags);
-#'
-#' Else if \code{scaling = FALSE}, a \code{list} of \code{length(x)} consisting
-#' of \code{RasterLayer} objects with raw GIMMS NDVI3g values.
+#' If \code{split = TRUE}, a list of NDVI3g \code{RasterStack} objects
+#' corresponding to the files specified in 'x'; else a single NDVI3g
+#' \code{RasterStack} object.
 #'
 #' @author
 #' Florian Detsch
 #'
 #' @seealso
-#' \code{\link{writeRaster}}.
+#' \code{\link[raster]{crop}}, \code{\link{writeRaster}}.
 #'
 #' @references
 #' \url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
@@ -43,38 +37,51 @@
 #'
 #' @examples
 #' \dontrun{
-#' ## Download sample data
+#' ## Download NDVI3g.v1 sample data
 #' gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-#'                              y = as.Date("2000-06-30"))
+#'                              y = as.Date("2000-12-31"))
 #'
-#' ## Rasterize files
-#' gimms_raster <- rasterizeGimms(x = gimms_files)
-#' gimms_raster
+#' ## Extent for clipping
+#' shp <- getData("GADM", country = "DEU", level = 0, path = tmpDir())
+#'
+#' ## Rasterize without quality control
+#' gimms_raster <- rasterizeGimms(x = gimms_files,
+#'                                ext = shp) # clipping
+#' plot(gimms_raster[[1]])
+#' lines(shp)
+#'
+#' ## Rasterize with quality control
+#' gimms_rasterq <- rasterizeGimms(x = gimms_files,
+#'                                 ext = shp, # clipping
+#'                                 keep = 0)  # quality control
+#' plot(gimms_rasterq[[1]])
+#' lines(shp)
 #' }
 #'
 #' @export rasterizeGimms
 #' @name rasterizeGimms
 rasterizeGimms <- function(x,
-                           dsn = dirname(x),
-                           water2na = TRUE,
-                           nodata2na = TRUE,
-                           scaling = TRUE,
+                           ext = NULL,
+                           snap = "out",
+                           keep = NULL,
+                           split = FALSE,
                            cores = 1L,
-                           format = "GTiff",
-                           overwrite = FALSE) {
+                           filename = "",
+                           ...) {
 
   ## check 'cores'
   cores <- checkCores(cores)
 
-  ## determine product version
-  version <- if (unique(substr(x[1], 1, 3)) == "geo") 0 else 1
+  ## check 'filename'
+  filename <- checkFls(x, filename)
 
-  if (version == 0) {
-    rasterizeGimmsV0(x, dsn, water2na, nodata2na, scaling, cores, format,
-                     overwrite)
+  ## determine product version
+  version <- productVersion(x, uniform = TRUE)
+
+  if (all(version == 0)) {
+    rasterizeGimmsV0(x, ext, snap, keep, split, cores, filename, ...)
   } else {
-    rasterizeGimmsV1(x, dsn, water2na, nodata2na, scaling, cores, format,
-                     overwrite)
+    rasterizeGimmsV1(x, ext, snap, keep, split, cores, filename, ...)
   }
 }
 
@@ -82,20 +89,13 @@ rasterizeGimms <- function(x,
 ################################################################################
 ### rasterize function for version 0 -----
 rasterizeGimmsV0 <- function(x,
-                             dsn = dirname(x),
-                             water2na = TRUE,
-                             nodata2na = TRUE,
-                             scaling = TRUE,
+                             ext = NULL,
+                             snap = "out",
+                             keep = NULL,
+                             split = FALSE,
                              cores = 1L,
-                             format = "GTiff",
-                             overwrite = FALSE) {
-
-  ## stop if 'x' and 'filename' are of unequal length
-  if (length(x) != length(filename) & all(nchar(filename)) > 0)
-    stop("Parameters 'x' and 'filename' are of unequal length.")
-
-  ## check 'cores'
-  cores <- checkCores(cores)
+                             filename = "",
+                             ...) {
 
   ## initialize cluster
   cl <- parallel::makePSOCKcluster(cores)
@@ -103,12 +103,9 @@ rasterizeGimmsV0 <- function(x,
   ## create header files
   headers <- createHeader(x)
 
-  fls <- paste(dsn, basename(x), sep = "/")
-  fls_ext <- raster:::.getExtension(fls, format)
-
   ## export relevant objects to cluster
-  parallel::clusterExport(cl, c("x", "water2na", "nodata2na", "scaling",
-                                "fls", "fls_ext", "format", "overwrite"),
+  dots <- list(...)
+  parallel::clusterExport(cl, c("x", "ext", "snap", "keep", "filename", "dots"),
                           envir = environment())
 
   ## loop over files in 'x'
@@ -119,62 +116,52 @@ rasterizeGimmsV0 <- function(x,
     rst <- raster::t(rst)
 
     # set extent and projection
-    ext <- raster::extent(c(-180, 180, -90, 90))
-    rst <- raster::setExtent(rst, ext)
+    ref <- raster::extent(c(-180, 180, -90, 90))
+    rst <- raster::setExtent(rst, ref)
     raster::projection(rst) <- "+init=epsg:4326"
 
-    # discard 'water-mask' pixels (optional)
-    if (water2na) {
+    # clip images (optional)
+    if (!is.null(ext))
+      rst <- raster::crop(rst, ext, snap = snap)
+
+    # discard 'water-mask' (-10000) and 'nodata-mask' pixels (-5000)
+    for (z in c(-10000, -5000)) {
       val <- raster::getValues(rst)
-      ids <- which(val == -10000)
+      ids <- which(val == z)
       val[ids] <- NA
       rst <- raster::setValues(rst, val)
     }
 
-    # discard 'nodata-mask' pixels (optional)
-    if (nodata2na) {
-      val <- raster::getValues(rst)
-      ids <- which(val == -5000)
-      val[ids] <- NA
-      rst <- raster::setValues(rst, val)
-    }
+    # retrieve ndvi and flags
+    ndvi <- floor(rst/10) / 1000
+    flag <- rst - floor(rst/10) * 10 + 1
 
-    # scale values (optional)
-    if (scaling) {
-      rst <- floor(rst/10) / 1000          ## ndvi
-      rst <- raster::stack(rst, floor(rst/10) * 10 + 1)  ## flags
-      names(rst) <- c("ndvi", "flag")
+    rst <- raster::stack(ndvi, flag)
+    names(rst) <- c("ndvi", "flag")
 
-      rst <- try(raster::writeRaster(rst, filename = fls_ext[i], format = format,
-                                     overwrite = overwrite, bylayer = TRUE,
-                                     suffix = "names"), silent = TRUE)
-
-      if (class(rst) == "try-error")
-        rst <- raster::stack(
-          raster:::.getExtension(paste0(fls[i], c("_ndvi", "_flag")), format)
-        )
-
+    # carry out quality control (optional)
+    rst <- if (!is.null(keep)) {
+      qualityControl(rst, keep = keep)
     } else {
-      rst <- try(raster::writeRaster(rst, filename = fls_ext[i], format = format,
-                                     overwrite = overwrite), silent = TRUE)
-
-      if (class(rst) == "try-error")
-        rst <- raster::stack(raster:::.getExtension(fls[i], format))
+      rst[[1]]
     }
 
-    # return raster
-    return(rst)
+    # write to file
+    dots_sub <- list(x = rst, filename = filename[i])
+    dots_sub <- append(dots, dots_sub)
+
+    do.call(raster::writeRaster, args = dots_sub)
   })
 
-  # remove temporary header file
+  ## remove header files
   file.remove(headers)
 
   ## deregister parallel backend
   parallel::stopCluster(cl)
 
-  ## return list with ndvi/flag raster stacks
-  if (length(lst) == 1) {
-    return(lst[[1]])
+  ## return (list of) ndvi raster stack(s)
+  if (!split) {
+    return(raster::stack(lst))
   } else {
     return(lst)
   }
@@ -184,29 +171,21 @@ rasterizeGimmsV0 <- function(x,
 ################################################################################
 ### rasterize function for version 1 -----
 rasterizeGimmsV1 <- function(x,
-                             dsn = gsub(".nc4$", "", x),
-                             water2na = TRUE,
-                             nodata2na = TRUE,
-                             scaling = TRUE,
+                             ext = NULL,
+                             snap = "out",
+                             keep = NULL,
+                             split = FALSE,
                              cores = 1L,
-                             format = "GTiff",
-                             overwrite = FALSE) {
-
-  ## import version 1 dates
-  dates <- readRDS(system.file("extdata", "dates_ecv1.rds", package = "gimms"))
-
-  if (length(dsn) == 1)
-    dsn <- rep(dsn, length(x))
-
-  ## check 'cores'
-  cores <- checkCores(cores)
+                             filename = "",
+                             ...) {
 
   ## initialize cluster
   cl <- parallel::makePSOCKcluster(cores)
 
   ## export relevant objects to cluster
-  parallel::clusterExport(cl, c("water2na", "nodata2na", "scaling", "format",
-                                "overwrite"), envir = environment())
+  dots <- list(...)
+  parallel::clusterExport(cl, c("ext", "snap", "keep", "filename", "dots"),
+                          envir = environment())
 
   ## loop over files in 'x'
   lst <- lapply(1:length(x), function(i) {
@@ -214,69 +193,60 @@ rasterizeGimmsV1 <- function(x,
     ndvi <- raster::stack(x[i], varname = "ndvi")
     flag <- raster::stack(x[i], varname = "percentile")
 
-    if (!dir.exists(dsn[i]))
-      dir.create(dsn[i])
-
-    dts <- dates[[grep(basename(x[i]), names(dates))]]
-    fls <- format(dts, "%m%d")
-    fls <- paste0(dsn[i], "/", paste(strsplit(basename(x[i]), "_")[[1]][1:4],
-                                     collapse = "_"), fls)
-
     ## export relevant sub-objects to cluster
-    parallel::clusterExport(cl, c("ndvi", "flag", "fls"), envir = environment())
+    parallel::clusterExport(cl, c("ndvi", "flag"), envir = environment())
 
     ## loop over half-monthly layers
-    parallel::parLapply(cl, 1:(raster::nlayers(ndvi)), function(j) {
+    nc4 <- parallel::parLapply(cl, 1:(raster::nlayers(ndvi)), function(j) {
 
-      # discard 'water-mask' pixels (optional)
-      if (water2na) {
-        val <- raster::getValues(ndvi[[j]])
-        ids <- which(val == -32768)
-        val[ids] <- NA; rm(ids)
-        rst <- raster::setValues(ndvi[[j]], val); rm(val)
+      # clip images (optional)
+      rst_ndvi <- ndvi[[j]]
+      rst_flag <- flag[[j]]
+
+      if (!is.null(ext)) {
+        rst_ndvi <- raster::crop(rst_ndvi, ext, snap = snap)
+        rst_flag <- raster::crop(rst_flag, ext, snap = snap)
       }
 
-      # discard 'nodata-mask' pixels (optional)
-      if (nodata2na) {
-        val <- raster::getValues(if (water2na) rst else ndvi[[j]])
-        ids <- which(val == -3000)
-        val[ids] <- NA; rm(ids)
-        rst <- raster::setValues(if (water2na) rst else ndvi[[j]], val); rm(val)
+      # discard 'water-mask' (-32768) and 'nodata-mask' pixels (-3000)
+      for (z in c(-32768, -3000)) {
+        val <- raster::getValues(rst_ndvi)
+        ids <- which(val == z)
+        val[ids] <- NA
+        rst_ndvi <- raster::setValues(rst_ndvi, val)
       }
 
-      # if scaling, apply scale factor and add 'flag' layer to raster stack
-      if (scaling) {
-        rst <- (if (any(water2na, nodata2na)) rst else ndvi[[j]]) / 10000
-        rst <- raster::stack(rst, floor(flag[[j]] / 2000))
-        names(rst) <- c("ndvi", "flag")
+      # apply scale factor and add 'flag' layer to raster stack
+      rst_ndvi <- rst_ndvi / 10000
+      rst_flag <- floor(rst_flag / 2000)
 
-        rst <- try(raster::writeRaster(rst, filename = fls[j], format = format,
-                                       overwrite = overwrite, bylayer = TRUE,
-                                       suffix = "names"), silent = TRUE)
+      rst <- raster::stack(rst_ndvi, rst_flag)
+      names(rst) <- c("ndvi", "flag")
 
-        if (class(rst) == "try-error")
-          rst <- raster::stack(
-            raster:::.getExtension(paste0(fls[j], c("_ndvi", "_flag")), format)
-          )
-
-        # else proceed with raw values
+      # carry out quality control (optional)
+      if (!is.null(keep)) {
+        qualityControl(rst, keep = keep)
       } else {
-        rst <- if (any(water2na, nodata2na)) rst else ndvi[[j]]
-
-        rst <- try(raster::writeRaster(rst, filename = fls[j], format = format,
-                                       overwrite = overwrite), silent = TRUE)
-
-        if (class(rst) == "try-error")
-          rst <- raster::stack(raster:::.getExtension(fls[j], format))
+        rst[[1]]
       }
-
-      return(rst)
     })
+
+    nc4 <- raster::stack(nc4)
+
+    ## write to file
+    if (nchar(filename[i]) > 0)
+      nc4 <- writeRaster(nc4, filename[i], ...)
+
+    return(nc4)
   })
 
   ## deregister parallel backend
   parallel::stopCluster(cl)
 
-  ## return list with ndvi/flag raster stacks
-  return(unlist(lst))
+  ## return (list of) ndvi raster stack(s)
+  if (!split) {
+    return(raster::stack(lst))
+  } else {
+    return(lst)
+  }
 }
