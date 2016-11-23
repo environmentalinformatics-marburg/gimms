@@ -18,32 +18,30 @@ monthlyIndices(x, version = 1L, pos1 = ifelse(version == 1, 15L, 4L),
 'x', defaults to the GIMMS naming convention of the specified product
 \code{version}.}
 
-\item{timestamp}{Logical. If \code{TRUE}, an actual timestamp (formatted
-according to \code{...}) is returned rather than a vector of indices.}
+\item{timestamp}{Logical. If \code{TRUE}, an actual \code{Date} object is
+returned rather than a \code{numeric} vector of indices.}
 
 \item{...}{Currently not used.}
 }
 \value{
-A 'numeric' vector with unique monthly indices or,
-if \code{timestamp = TRUE}, a 'character' vector with formatted timestamps.
+A 'numeric' vector with unique monthly indices or, if
+\code{timestamp = TRUE}, a 'Date' vector with timestamps.
 }
 \description{
 Create numeric monthly indices from (local or online) GIMMS filenames as
 input for the \code{\link{monthlyComposite}} function.
 }
 \examples{
-## vector of filenames
-gimms_files <- c("geo85aug15a.n09-VI3g", "geo85aug15b.n09-VI3g",
-                 "geo85sep15a.n09-VI3g", "geo85sep15b.n09-VI3g",
-                 "geo85oct15a.n09-VI3g", "geo85oct15b.n09-VI3g")
+## NDVI3g.v1
+gimms_files_v1 <- updateInventory()
+monthlyIndices(gimms_files_v1[1], version = 1)                   # indices
+monthlyIndices(gimms_files_v1[1], version = 1, timestamp = TRUE) # dates
 
-## extract monthly indices
-monthlyIndices(gimms_files, version = 0)
-monthlyIndices(gimms_files, version = 0, timestamp = TRUE)
+## Similarly, NDVI3g.v0
+gimms_files_v0 <- updateInventory(version = 0)
+monthlyIndices(gimms_files_v0[1:12], version = 0)
+monthlyIndices(gimms_files_v0[1:12], version = 0, timestamp = TRUE)
 
-}
-\author{
-Florian Detsch
 }
 \seealso{
 \code{\link{monthlyComposite}}.
