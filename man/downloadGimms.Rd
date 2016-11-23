@@ -22,14 +22,14 @@
   overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
 }
 \arguments{
-\item{x}{If \code{Date}, start date for download (e.g., "2000-01-01"). Else
-if \code{numeric}, start year for download (e.g., 2000). Else if
-\code{character}, a vector of online filepaths to download, typically
-returned from \code{\link{updateInventory}}. Else if missing, all available
-files are downloaded.}
+\item{x}{Start time for data download as either \code{Date} object (e.g.,
+\code{as.Date("2000-01-01")}) or \code{numeric} year (e.g., \code{2000}).
+Alternatively, a \code{character} vector of online filepaths to download
+created from \code{\link{updateInventory}}. If \code{missing}, all files
+available only are being downloaded.}
 
-\item{y}{If \code{Date}, end date for download. Else if \code{numeric}, end
-year for download. Ignored if 'x' is a \code{character} object or missing.}
+\item{y}{End time for data download as either \code{Date} object or
+\code{numeric} year. Ignored if 'x' is a \code{character} object or missing.}
 
 \item{version}{\code{integer} (or any other convertible class), defaults to
 \code{1L}. Specifies desired GIMMS NDVI3g product version, see 'Details' in
@@ -47,13 +47,14 @@ reduced.}
 \item{mode}{\code{character}. See \code{\link{download.file}}.}
 
 \item{cores}{\code{integer}, defaults to \code{1L}. Number of cores used for
-parallel processing.}
+parallel processing. Note that a fast internet connection is required in
+order for parallelization to take effect.}
 
 \item{...}{Further arguments passed to \code{\link{download.file}}, e.g.
 'method'.}
 }
 \value{
-A vector of local filepaths.
+A \code{character} vector of local filepaths.
 }
 \description{
 Download GIMMS NDVI3g data from the NASA Ames Ecological Forecasting Lab
@@ -65,7 +66,7 @@ raw binary, until end 2013) are available.
 \dontrun{
 ## 'Date' method
 gimms_files_date <- downloadGimms(x = as.Date("2000-01-01"),
-                                  y = as.Date("2000-06-30"))
+                                  y = as.Date("2000-12-31"))
 
 ## 'numeric' method (i.e., particular years)
 gimms_files_year <- downloadGimms(x = 2000,
@@ -79,9 +80,6 @@ gimms_files_char <- downloadGimms(x = gimms_files[1:6])
 gimms_files_full <- downloadGimms()
 }
 
-}
-\author{
-Florian Detsch
 }
 \seealso{
 \code{\link{updateInventory}}, \code{\link{download.file}}.

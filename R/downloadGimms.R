@@ -10,13 +10,13 @@ if ( !isGeneric("downloadGimms") ) {
 #' period of time. Both NDVI3g.v1 (NetCDF, until end 2015) and NDVI3g.v0 (ENVI
 #' raw binary, until end 2013) are available.
 #'
-#' @param x If \code{Date}, start date for download (e.g., "2000-01-01"). Else
-#' if \code{numeric}, start year for download (e.g., 2000). Else if
-#' \code{character}, a vector of online filepaths to download, typically
-#' returned from \code{\link{updateInventory}}. Else if missing, all available
-#' files are downloaded.
-#' @param y If \code{Date}, end date for download. Else if \code{numeric}, end
-#' year for download. Ignored if 'x' is a \code{character} object or missing.
+#' @param x Start time for data download as either \code{Date} object (e.g.,
+#' \code{as.Date("2000-01-01")}) or \code{numeric} year (e.g., \code{2000}).
+#' Alternatively, a \code{character} vector of online filepaths to download
+#' created from \code{\link{updateInventory}}. If \code{missing}, all files
+#' available only are being downloaded.
+#' @param y End time for data download as either \code{Date} object or
+#' \code{numeric} year. Ignored if 'x' is a \code{character} object or missing.
 #' @param version \code{integer} (or any other convertible class), defaults to
 #' \code{1L}. Specifies desired GIMMS NDVI3g product version, see 'Details' in
 #' \code{\link{updateInventory}}. Ignored if 'x' is a \code{character} object.
@@ -28,15 +28,13 @@ if ( !isGeneric("downloadGimms") ) {
 #' reduced.
 #' @param mode \code{character}. See \code{\link{download.file}}.
 #' @param cores \code{integer}, defaults to \code{1L}. Number of cores used for
-#' parallel processing.
+#' parallel processing. Note that a fast internet connection is required in
+#' order for parallelization to take effect.
 #' @param ... Further arguments passed to \code{\link{download.file}}, e.g.
 #' 'method'.
 #'
 #' @return
-#' A vector of local filepaths.
-#'
-#' @author
-#' Florian Detsch
+#' A \code{character} vector of local filepaths.
 #'
 #' @seealso
 #' \code{\link{updateInventory}}, \code{\link{download.file}}.
@@ -45,7 +43,7 @@ if ( !isGeneric("downloadGimms") ) {
 #' \dontrun{
 #' ## 'Date' method
 #' gimms_files_date <- downloadGimms(x = as.Date("2000-01-01"),
-#'                                   y = as.Date("2000-06-30"))
+#'                                   y = as.Date("2000-12-31"))
 #'
 #' ## 'numeric' method (i.e., particular years)
 #' gimms_files_year <- downloadGimms(x = 2000,
@@ -153,7 +151,8 @@ setMethod("downloadGimms",
               id_old <- yrs >= 81
               id_new <- yrs <= 80
               yrs[id_old] <- paste0("19", yrs[id_old])
-              yrs[id_new] <- paste0("20", yrs[id_new])
+              yrs[id_new] <- paste0("20", formatC(as.integer(yrs[id_new]),
+                                                  width = 2, flag = "0"))
               yrs <- as.numeric(yrs)
             }
 
