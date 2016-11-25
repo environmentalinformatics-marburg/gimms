@@ -23,6 +23,10 @@ Florian Detsch
 Pinzon, JE & Tucker, CJ (2014). A Non-Stationary 1981-2012 AVHRR
 NDVI3g Time Series. Remote Sensing, 6(8), 6929-6960. Available online at
 \url{http://www.mdpi.com/2072-4292/6/8/6929/htm}.
+
+Pinzon, JE & Tucker, CJ (2016). A Non-Stationary 1981-2015 AVHRR
+NDVI3g.v1 Time Series: an update. In preparation for submission to Remote
+Sensing.
 }
 \keyword{package}
 

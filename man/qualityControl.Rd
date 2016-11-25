@@ -4,16 +4,10 @@
 \name{qualityControl}
 \alias{qualityControl}
 \alias{qualityControl,RasterStackBrick-method}
-\alias{qualityControl,character-method}
-\alias{qualityControl,list-method}
 \title{Perform quality control on GIMMS NDVI3g data}
 \usage{
-\S4method{qualityControl}{RasterStackBrick}(x, keep = 0:2, ...)
-
-\S4method{qualityControl}{character}(x, keep = 0:2, dsn = dirname(x),
-  water2na = TRUE, nodata2na = TRUE, scaling = TRUE, cores = 1L, ...)
-
-\S4method{qualityControl}{list}(x, keep = 0:2, cores = 1L, ...)
+\S4method{qualityControl}{RasterStackBrick}(x, keep = NULL, filename = "",
+  ...)
 }
 \arguments{
 \item{x}{Typically a \code{list} of 2-layered \code{RasterStack} objects
@@ -21,24 +15,13 @@
 \code{\link{rasterizeGimms}}. Alternatively, a \code{character} vector of raw
 GIMMS NDVI3g filenames (see 'Details').}
 
-\item{keep}{Integer. Accepted flag values, defaults to \code{1:2}
-(\emph{i.e.}, 'good' values; see 'References'.)}
+\item{keep}{\code{integer}. Accepted flag values (see 'Details').}
 
-\item{...}{Arguments passed on to \code{\link{writeRaster}}.}
+\item{filename}{\code{character}. Optional output filename(s), see
+\code{\link{writeRaster}}. If specified, this must be of the same length as
+'x'.}
 
-\item{dsn}{\code{character}. Destination folder for rasterized files.
-Defaults to \code{dirname(x)} if not further specified.}
-
-\item{water2na}{\code{logical}. Determines whether or not to discard pixels
-with 'mask-water' value (see 'References').}
-
-\item{nodata2na}{\code{logical}. Determines whether or not to discard pixels
-with 'mask-nodata' value (see 'References').}
-
-\item{scaling}{\code{logical}. If \code{TRUE} (default), scaling is enabled
-and both the NDVI and flag layer per file in 'x' are returned.}
-
-\item{cores}{Integer. Number of cores for parallel computing.}
+\item{...}{Arguments passed to \code{\link{writeRaster}}.}
 }
 \value{
 A quality-controlled 'RasterStack'.
@@ -48,28 +31,17 @@ Perform quality control on GIMMS NDVI3g data based on the companion flag
 information.
 }
 \details{
+If 'keep' is missing, the function will try to determine the GIMMS product
+version from which 'x' is derived. In such a case, 'keep' automatically
+defaults to \code{1:2} (NDVI3g.v0) or \code{0} (NDVI3g.v1; see 'References').
+
 If 'x' is a \code{character} vector of raw GIMMS NDVI3g filenames,
 \code{\link{rasterizeGimms}} is automatically invoked prior to performing
-quality control. Note, however, that in such a case, arguments 'format' and
-'overwrite' are not passed on to \code{\link{rasterizeGimms}}. Instead, the
-default values (\code{format = "GTiff"} and \code{overwrite = FALSE}) are
-used. For a finer control, run \code{rasterizeGimms(x, ...)} manually prior
-to quality control.
-}
-\examples{
-\dontrun{
-## Download sample data
-gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-                             y = as.Date("2000-06-30"))
-
-## Rasterize files
-gimms_qc <- qualityControl(gimms_files)
-gimms_qc
-}
-
-}
-\author{
-Florian Detsch
+quality control. Note, however, that in such a case, user-specified arguments
+'format' and 'overwrite' are not passed to \code{\link{rasterizeGimms}}, but
+instead take on default values (\code{format = "GTiff"} and
+\code{overwrite = FALSE}). For a finer control, it is hence recommended to
+manually run \code{rasterizeGimms(x, ...)} prior to quality control.
 }
 \references{
 \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}

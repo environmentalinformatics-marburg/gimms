@@ -8,7 +8,7 @@ Changes:
 * Revised package documentation.
 
 
-gimms 0.6.0 (2016-10-27)
+gimms 1.0.0 (2016-11-11)
 ==============
 
 Changes:
@@ -20,9 +20,17 @@ Changes:
   versions (0 and 1) available.
 * If 'timestamp = TRUE', monthlyIndices() returns a 'Date' object (i.e., '...'
   is no longer available).
+* rasterizeGimms() now includes an extent argument ('ext') to enable clipping
+  based on raster::crop().
 
 To do:
 
 * validServer, validVersion
 * valid list passed to qualityControl()
-* qualityControl(), character-method
+* qualityControl(), flexibly adjust 'keep' according to 'version'; names() of
+  resultant 'RasterStack'
+* counter function for getNDVILayers()
+* rearrangeFiles for version 0 only
+* getProduct() in monthlyIndices()?
+* GitHub Readme header similar to mapview
+* checkFilename (e.g., qualityControl, length 1 or length(x) allowed)

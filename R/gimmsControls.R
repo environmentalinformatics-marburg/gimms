@@ -169,3 +169,51 @@ getV1dates <- function(x, pos1 = 15L, pos2 = 23L, suffix = TRUE) {
   setLocale(reset = TRUE, locale = locale)
   return(unlist(lst))
 }
+
+
+### extract product version -----
+
+productVersion <- function(x, uniform = FALSE) {
+
+  v0 <- substr(basename(x), 1, 3) == "geo"
+  v1 <- substr(basename(x), 1, 6) == "ndvi3g"
+
+  ## if substrings do not match any naming convention, return NA;
+  ## else return corresponding product version
+  ids <- apply(cbind(v0, v1), 1, FUN = function(y) {
+    tmp <- which(y)
+    if (length(tmp) == 0) NA else tmp - 1
+  })
+
+  ## optionally stop if different or non-classifiable product versions are found
+  if (uniform) {
+    if (length(unique(ids)) > 1)
+      stop("Different or non-classifiable product versions found. Please make
+       sure to supply files from the same NDVI3g version only that follow the
+       rules of GIMMS standard naming.\n")
+  }
+
+  return(ids)
+}
+
+
+### check filenames -----
+
+checkFls <- function(x, filename) {
+
+  len <- length(filename)
+
+  if (len == 1) {
+    if (nchar(filename) == 0) {
+      rep(filename, length(x))
+    } else {
+      stop("If specified, 'filename' must be of the same length as 'x'.\n")
+    }
+
+  } else if ((len > 1) & (len != length(x))) {
+    stop("If specified, 'filename' must be of the same length as 'x'.\n")
+
+  } else {
+    filename
+  }
+}

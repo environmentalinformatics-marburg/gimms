@@ -6,28 +6,31 @@ if ( !isGeneric("monthlyComposite") ) {
 #'
 #' @description
 #' Based on a user-defined function, e.g. \code{max} for maximum value
-#' composites (MVC), aggregate bi-monthly GIMMS datasets to monthly composites.
+#' composites (MVC), aggregate half-monthly GIMMS datasets to monthly composites.
 #'
 #' @param x 'RasterStack' or 'character' vector of filenames. If the latter
 #' applies and 'pos1', 'pos2' are not specified, the function will try to
 #' retrieve monthly indices from \code{\link{monthlyIndices}}. Note that the
 #' function does not work with binary data, but expects files that have
-#' previously been created via \code{\link{rasterizeGimms}}.
-#' @param indices 'numeric'. Indices identifying layers or files from identical
+#' previously been created via either \code{\link{rasterizeGimms}} or
+#' \code{\link{qualityControl}}.
+#' @param indices 'numeric'. Indices to denote layers or files from identical
 #' months.
-#' @param fun Function. Used to calculate monthly composite layers, defaults to
-#' \code{max}.
-#' @param cores Integer. Number of cores for parallel computing.
-#' @param filename Character. Optional output filename(s); see
-#' \code{\link{writeRaster}}. If \code{cores > 1}, the number of supplied
-#' filenames must match up with the number of unique monthly indices.
-#' @param pos1,pos2 Numeric. If 'x' is a vector of filenames, the first and last
+#' @param fun 'function'. Used to calculate monthly composite layers, defaults
+#' to \code{max}. Note that a separate 'na.rm' argument is passed down to
+#' \code{\link{stackApply}} via '...' and hence should not be included here.
+#' @param cores 'integer'. Number of cores for parallel computing.
+#' @param filename 'character'. Optional output filename(s), see
+#' \code{\link{writeRaster}}. If specified, this must be of the same length as
+#' the unique monthly indices.
+#' @param pos1,pos2 'numeric'. If 'x' is a vector of filenames, the first and last
 #' element of the date string to build monthly indices from. Defaults to the
 #' GIMMS naming convention, see \code{\link{monthlyIndices}}.
 #' @param ... Further arguments passed on to \code{\link{writeRaster}}.
 #'
 #' @return
-#' A 'RasterStack' object with monthly composite layers.
+#' If \code{length(x) == 2}, a single 'RasterLayer' object, else a 'RasterStack'
+#' object with monthly composite layers.
 #'
 #' @author
 #' Florian Detsch
@@ -68,45 +71,52 @@ setMethod("monthlyComposite",
           signature(x = "RasterStackBrick"),
           function(x, indices, fun = max, cores = 1L, filename = "", ...) {
 
-            ## stop if 'indices' is missing
-            if (missing(indices))
-              stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
+  ## stop if 'indices' is missing
+  if (missing(indices))
+    stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
 
-            ## check 'cores'
-            cores <- checkCores(cores)
+  ## check 'cores'
+  cores <- checkCores(cores)
 
-            ## immediately run 'stackApply'
-            if (cores == 1L) {
+  ## initialize cluster
+  cl <- parallel::makePSOCKcluster(cores)
 
-              raster::stackApply(x, indices = indices, fun = fun,
-                                 filename = filename, ...)
+  ## export relevant objects to cluster
+  dots <- list(...)
+  parallel::clusterExport(cl, c("x", "indices", "fun", "filename", "dots"),
+                          envir = environment())
 
-            ## or run it in parallel
-            } else {
+  # loop over unique layer indices and apply 'fun'
+  lst_out <- parallel::parLapply(cl, unique(indices), function(i) {
+    x_sub <- raster::subset(x, which(indices == i))
 
-              # initialize cluster
-              cl <- parallel::makePSOCKcluster(cores)
-              doParallel::registerDoParallel(cl)
+    dots_sub <- list(x = raster::subset(x, which(indices == i)),
+                     fun = fun,
+                     indices = rep(1, length(which(indices == i))),
+                     filename = ifelse(length(filename) == length(unique(indices)),
+                                       filename[which(unique(indices) == i)], ""))
+    dots_sub <- append(dots, dots_sub)
 
-              # loop over unique layer indices and apply 'fun'
-              i <- 1; j <- 1
-              lst_out <- foreach::foreach(i = unique(indices)) %dopar% {
-                x_sub <- raster::subset(x, which(indices == i))
-                raster::stackApply(raster::subset(x, which(indices == i)),
-                                   fun = fun,
-                                   indices = rep(1, length(which(indices == i))),
-                                   filename = ifelse(length(filename) == length(unique(indices)),
-                                                     filename[which(unique(indices) == i)], ""),
-                                   ...)
-              }
+    do.call(raster::stackApply, args = dots_sub)
 
-              # deregister parallel backend
-              parallel::stopCluster(cl)
+    # raster::stackApply(raster::subset(x, which(indices == i)),
+    #                    fun = fun,
+    #                    indices = rep(1, length(which(indices == i))),
+    #                    filename = ifelse(length(filename) == length(unique(indices)),
+    #                                      filename[which(unique(indices) == i)], ""),
+    #                    ...)
+  })
 
-              # stack layers
-              raster::stack(lst_out)
-            }
-          })
+  # deregister parallel backend
+  parallel::stopCluster(cl)
+
+  # stack layers
+  if (length(lst_out) == 1) {
+    lst_out[[1]]
+  } else {
+    raster::stack(lst_out)
+  }
+})
 
 
 ################################################################################
