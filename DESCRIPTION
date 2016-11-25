@@ -12,10 +12,7 @@ Depends:
     methods
 Imports:
     parallel,
-    doParallel,
-    foreach,
     Kendall,
-    ncdf4,
     RCurl,
     zyp
 License: GPL (>= 3) | file LICENSE
