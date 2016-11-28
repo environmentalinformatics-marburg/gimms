@@ -33,10 +33,19 @@
 NULL
 #'
 #' @docType data
-#' @name baleNDVI3g
+#' @name bale3g.v1
 #' @title Bale Mountains NDVI3g.v1
 #' @description Bale Mountains NDVI3g.v1
 #' @details This dataset contains NDVI3g.v1 observations for the Bale Mountains
 #' National Park, southern Ethiopia (Jul 1981 to Dec 2015).
+#' @format \code{raster::RasterStack}
+NULL
+#'
+#' @docType data
+#' @name kili3g.v0
+#' @title Kilimanjaro NDVI3g.v0
+#' @description Kilimanjaro NDVI3g.v0
+#' @details This dataset contains NDVI3g.v0 observations for the Kilimanjaro
+#' region, northern Tanzania (Jul 1981 to Dec 2013).
 #' @format \code{raster::RasterStack}
 NULL
