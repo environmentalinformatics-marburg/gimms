@@ -62,9 +62,6 @@ lines(shp)
 }
 
 }
-\author{
-Florian Detsch
-}
 \references{
 \url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
 (accessed on 11/04/2016).

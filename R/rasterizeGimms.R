@@ -23,9 +23,6 @@
 #' corresponding to the files specified in 'x'; else a single NDVI3g
 #' \code{RasterStack} object.
 #'
-#' @author
-#' Florian Detsch
-#'
 #' @seealso
 #' \code{\link[raster]{crop}}, \code{\link{writeRaster}}.
 #'

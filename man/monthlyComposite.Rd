@@ -10,68 +10,61 @@
 \S4method{monthlyComposite}{RasterStackBrick}(x, indices, fun = max,
   cores = 1L, filename = "", ...)
 
-\S4method{monthlyComposite}{character}(x, pos1 = 4L, pos2 = 8L, fun = max,
-  cores = 1L, filename = "", ...)
+\S4method{monthlyComposite}{character}(x, version = 1L,
+  pos1 = ifelse(version == 1, 15L, 4L), pos2 = ifelse(version == 1, 23L,
+  8L), fun = max, cores = 1L, filename = "", ...)
 }
 \arguments{
-\item{x}{'RasterStack' or 'character' vector of filenames. If the latter
-applies and 'pos1', 'pos2' are not specified, the function will try to
-retrieve monthly indices from \code{\link{monthlyIndices}}. Note that the
-function does not work with binary data, but expects files that have
-previously been created via either \code{\link{rasterizeGimms}} or
-\code{\link{qualityControl}}.}
+\item{x}{Multi-layered \code{Raster*} object or \code{character} vector of
+filenames. If the latter applies and 'pos1', 'pos2' are not specified, the
+function will try to retrieve monthly indices from
+\code{\link{monthlyIndices}}. Note that the specification of NDVI3g.v0 raw
+binary files is hereby not allowed and in such a case,
+\code{\link{rasterizeGimms}} should be run beforehand.}
 
-\item{indices}{'numeric'. Indices to denote layers or files from identical
-months.}
+\item{indices}{\code{numeric}. Indices to denote layers or files from
+identical months.}
 
-\item{fun}{'function'. Used to calculate monthly composite layers, defaults
-to \code{max}. Note that a separate 'na.rm' argument is passed down to
-\code{\link{stackApply}} via '...' and hence should not be included here.}
+\item{fun}{\code{function}. Used to calculate monthly composite layers,
+defaults to \code{\link{max}}. Note that a separate 'na.rm' argument is
+passed down to \code{\link{stackApply}} via '...' and hence should not be
+included here.}
 
-\item{cores}{'integer'. Number of cores for parallel computing.}
+\item{cores}{\code{integer}. Number of cores for parallel computing.}
 
-\item{filename}{'character'. Optional output filename(s), see
+\item{filename}{\code{character}. Optional output filename(s), see
 \code{\link{writeRaster}}. If specified, this must be of the same length as
 the unique monthly indices.}
 
-\item{...}{Further arguments passed on to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
 
-\item{pos1, pos2}{'numeric'. If 'x' is a vector of filenames, the first and last
-element of the date string to build monthly indices from. Defaults to the
-GIMMS naming convention, see \code{\link{monthlyIndices}}.}
+\item{version}{\code{integer} (or any other class convertible to
+\code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
+\code{\link{updateInventory}}.}
+
+\item{pos1, pos2}{\code{integer}. If 'x' is a vector of filenames, the first
+and last element of the date string to build monthly indices from. Defaults
+to the 'version'-specific NDVI3g naming convention, see
+\code{\link{monthlyIndices}}.}
 }
 \value{
-If \code{length(x) == 2}, a single 'RasterLayer' object, else a 'RasterStack'
-object with monthly composite layers.
+If \code{length(x) == 2}, a single \code{RasterLayer} object, else a
+\code{RasterStack} object with monthly composite layers.
 }
 \description{
 Based on a user-defined function, e.g. \code{max} for maximum value
 composites (MVC), aggregate half-monthly GIMMS datasets to monthly composites.
 }
 \examples{
-\dontrun{
-## Download sample data
-gimms_dir <- paste0(getwd(), "/data")
+data("bale3g.v1")
 
-gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-                             y = as.Date("2000-12-31"), dsn = gimms_dir)
+## select layers from 1981 only
+fls <- updateInventory()[1]
+rst <- bale3g.v1[[1:12]]
 
-## Rasterize files
-gimms_raster <- rasterizeGimms(x = gimms_files, remove_header = TRUE)
+## aggregate to monthly mvc layers
+mvc <- monthlyComposite(rst, indices = monthlyIndices(fls))
 
-## Create monthly maximum value composites
-indices <- monthlyIndices(gimms_files)
-gimms_raster_mvc <- monthlyComposite(gimms_raster, indices = indices)
-
-## Visualize data
-library(sp)
-names(gimms_raster_mvc) <- paste(month.abb, 2000)
-spplot(gimms_raster_mvc)
-}
-
-}
-\author{
-Florian Detsch
 }
 \seealso{
 \code{\link{stackApply}}, \code{\link{monthlyIndices}},

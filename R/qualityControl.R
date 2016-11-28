@@ -8,41 +8,30 @@ if ( !isGeneric("qualityControl") ) {
 #' Perform quality control on GIMMS NDVI3g data based on the companion flag
 #' information.
 #'
-#' @param x Typically a \code{list} of 2-layered \code{RasterStack} objects
-#' (NDVI and flags) or a single 2-layered \code{RasterStack} object created from
-#' \code{\link{rasterizeGimms}}. Alternatively, a \code{character} vector of raw
-#' GIMMS NDVI3g filenames (see 'Details').
+#' @param x A single 2-layered \code{RasterStack} object (NDVI and flags).
 #' @param keep \code{integer}. Accepted flag values (see 'Details').
-# #' @param dsn \code{character}. Destination folder for rasterized files.
-# #' Defaults to \code{dirname(x)} if not further specified.
-# #' @param cores \code{integer}. Number of cores for parallel computing.
 #' @param filename \code{character}. Optional output filename(s), see
 #' \code{\link{writeRaster}}. If specified, this must be of the same length as
 #' 'x'.
 #' @param ... Arguments passed to \code{\link{writeRaster}}.
 #'
 #' @return
-#' A quality-controlled 'RasterStack'.
+#' A quality-controlled 'RasterLayer' object.
 #'
 #' @details
-#' If 'keep' is missing, the function will try to determine the GIMMS product
-#' version from which 'x' is derived. In such a case, 'keep' automatically
-#' defaults to \code{1:2} (NDVI3g.v0) or \code{0} (NDVI3g.v1; see 'References').
-#'
-#' If 'x' is a \code{character} vector of raw GIMMS NDVI3g filenames,
-#' \code{\link{rasterizeGimms}} is automatically invoked prior to performing
-#' quality control. Note, however, that in such a case, user-specified arguments
-#' 'format' and 'overwrite' are not passed to \code{\link{rasterizeGimms}}, but
-#' instead take on default values (\code{format = "GTiff"} and
-#' \code{overwrite = FALSE}). For a finer control, it is hence recommended to
-#' manually run \code{rasterizeGimms(x, ...)} prior to quality control.
+#' If 'keep' is missing, the function will automatically skip quality control
+#' and return the input object. See the 'References' section for more
+#' information about product-specific flag values.
 #'
 #' @seealso
-#' \code{\link{rasterizeGimms}}, \code{\link{writeRaster}}.
+#' \code{\link{overlay}}.
 #'
 #' @references
 #' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
 #' (accessed on January 15, 2016).
+#'
+#' @examples
+#' ## see 'Examples' section in ?rasterizeGimms
 #'
 #' @export qualityControl
 #' @name qualityControl

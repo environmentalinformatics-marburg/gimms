@@ -24,8 +24,8 @@ returned rather than a \code{numeric} vector of indices.}
 \item{...}{Currently not used.}
 }
 \value{
-A 'numeric' vector with unique monthly indices or, if
-\code{timestamp = TRUE}, a 'Date' vector with timestamps.
+A \code{numeric} vector with unique monthly indices or, if
+\code{timestamp = TRUE}, the actual timestamps as \code{Date} objects.
 }
 \description{
 Create numeric monthly indices from (local or online) GIMMS filenames as

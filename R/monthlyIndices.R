@@ -16,8 +16,8 @@
 #' @param ... Currently not used.
 #'
 #' @return
-#' A 'numeric' vector with unique monthly indices or, if
-#' \code{timestamp = TRUE}, a 'Date' vector with timestamps.
+#' A \code{numeric} vector with unique monthly indices or, if
+#' \code{timestamp = TRUE}, the actual timestamps as \code{Date} objects.
 #'
 #' @seealso
 #' \code{\link{monthlyComposite}}.
