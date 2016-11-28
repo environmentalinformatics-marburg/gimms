@@ -146,11 +146,15 @@ rasterizeGimmsV0 <- function(x,
       rst[[1]]
     }
 
-    # write to file
-    dots_sub <- list(x = rst, filename = filename[i])
-    dots_sub <- append(dots, dots_sub)
+    # write to file (optional)
+    if (nchar(filename[i]) > 0) {
+      dots_sub <- list(x = rst, filename = filename[i])
+      dots_sub <- append(dots, dots_sub)
 
-    do.call(raster::writeRaster, args = dots_sub)
+      do.call(raster::writeRaster, args = dots_sub)
+    }
+
+    return(rst)
   })
 
   ## remove header files
