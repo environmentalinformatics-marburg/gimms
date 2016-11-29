@@ -64,12 +64,6 @@ lines(shp)
 }
 
 }
-\references{
-\url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
-(accessed on 11/04/2016).
-\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-(accessed on 11/04/2016).
-}
 \seealso{
 \code{\link[raster]{crop}}, \code{\link{writeRaster}}.
 }

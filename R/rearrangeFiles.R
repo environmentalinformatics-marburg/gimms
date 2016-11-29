@@ -12,16 +12,12 @@
 #' @param pattern \code{character}, defaults to \code{"^geo.*.VI3g$"} for
 #' standard NDVI3g.v0 files. A regular expression passed to \code{\link{list.files}}.
 #' @param pos \code{integer}, defaults to \code{c(4, 6, 11)} for standard
-#' NDVI3g.v0 files (see 'References'). The start positions of year, month and
-#' part of the month ('a' or 'b') in the target GIMMS files.
+#' NDVI3g.v0 files. The start positions of year, month and part of the month
+#' ('a' or 'b') in the target GIMMS files.
 #' @param ... Further arguments passed to \code{\link{list.files}}.
 #'
 #' @return
 #' A \code{character} vector of filepaths arranged in ascending order of time.
-#'
-#' @references
-#' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-#' (accessed on January 15, 2016).
 #'
 #' @seealso
 #' \code{\link{list.files}}

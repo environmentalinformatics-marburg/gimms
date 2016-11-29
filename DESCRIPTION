@@ -6,7 +6,7 @@ Date: 2016-11-29
 Authors@R:
     person("Florian", "Detsch", email = "florian.detsch@staff.uni-marburg.de", role = c("cre", "aut"))
 Maintainer: Florian Detsch <florian.detsch@staff.uni-marburg.de>
-Description: We provide a set of functions to retrieve information about GIMMS NDVI3g files currently available online; download (and re-arrange, in the case of NDVI3g.v0) the half-monthly datasets; import downloaded files from ENVI binary (NDVI3g.v0) or NetCDF format (NDVI3g.v1) directly into R based on the widespread \strong{raster} package; conduct quality control; and generate monthly composites (e.g., maximum values) from the half-monthly input data. As a special gimmick, a method is included to conveniently apply the Mann-Kendall trend test upon \code{Raster*} images, optionally featuring trend-free pre-whitening to account for lag-1 autocorrelation.
+Description: We provide a set of functions to retrieve information about GIMMS NDVI3g files currently available online; download (and re-arrange, in the case of NDVI3g.v0) the half-monthly data sets; import downloaded files from ENVI binary (NDVI3g.v0) or NetCDF format (NDVI3g.v1) directly into R based on the widespread 'raster' package; conduct quality control; and generate monthly composites (e.g., maximum values) from the half-monthly input data. As a special gimmick, a method is included to conveniently apply the Mann-Kendall trend test upon \code{Raster*} images, optionally featuring trend-free pre-whitening to account for lag-1 autocorrelation.
 Depends:
     raster,
     methods

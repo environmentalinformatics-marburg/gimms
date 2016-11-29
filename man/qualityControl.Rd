@@ -30,16 +30,11 @@ is strongly recommended to use the latter function for this purpose.
 }
 \details{
 If 'keep' is missing, the function will automatically skip quality control
-and return the input object. See the 'References' section for more
-information about product-specific flag values.
+and return the input object.
 }
 \examples{
 ## see 'Examples' section in ?rasterizeGimms
 
-}
-\references{
-\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-(accessed on January 15, 2016).
 }
 \seealso{
 \code{\link{overlay}}.

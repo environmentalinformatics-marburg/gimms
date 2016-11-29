@@ -11,7 +11,7 @@ Download and Process GIMMS NDVI3g Data
 \details{
 We provide a set of functions to retrieve information about GIMMS NDVI3g
 files currently available online; download (and re-arrange, in the case of
-NDVI3g.v0) the half-monthly datasets; import downloaded files from ENVI
+NDVI3g.v0) the half-monthly data sets; import downloaded files from ENVI
 binary (NDVI3g.v0) or NetCDF format (NDVI3g.v1) directly into R based on the
 widespread \strong{raster} package; conduct quality control; and generate
 monthly composites (e.g., maximum values) from the half-monthly input data.

@@ -54,7 +54,7 @@ If \code{length(x) == 2}, a single \code{RasterLayer} object, else a
 }
 \description{
 Based on a user-defined function, e.g. \code{max} for maximum value
-composites (MVC), aggregate half-monthly GIMMS datasets to monthly composites.
+composites (MVC), aggregate half-monthly GIMMS data sets to monthly composites.
 }
 \examples{
 data("bale3g.v1")

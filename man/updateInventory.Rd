@@ -11,8 +11,8 @@ updateInventory(server = c("ecocast", "nasanex"), version = 1L)
 available options are \code{"ecocast"} (default) and \code{"nasanex"}.}
 
 \item{version}{\code{integer} (or any other convertible class), defaults to
-\code{1L}. Specifies desired GIMMS NDVI3g product version, see 'Details' and
-'References'. Currently ignored if \code{server = "nasanex"}.}
+\code{1L}. Specifies desired GIMMS NDVI3g product version, see 'Details'.
+Currently ignored if \code{server = "nasanex"}.}
 }
 \value{
 A \code{character} vector of online filepaths.
@@ -34,21 +34,6 @@ only.
 updateInventory()            # NDVI3g.v1
 updateInventory(version = 0) # NDVI3g.v0
 
-}
-\references{
-ECOCAST (2016). Available online (accessed on 27 October 2016):
-\itemize{
-\item{NDVI3g.v1 (\code{.nc4}, until end 2015)}
-{\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v1/}}
-\item{NDVI3g.v0 (ENVI binary, until end 2013)}
-{\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}}
-}
-
-NASANEX (2016). Available online (accessed on 27 October 2016):
-\itemize{
-\item{NDVI3g.v0 (ENVI binary, until end 2012)}
-\url{https://nasanex.s3.amazonaws.com/}
-}
 }
 \seealso{
 \code{\link{rearrangeFiles}}.

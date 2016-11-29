@@ -6,7 +6,7 @@ if ( !isGeneric("monthlyComposite") ) {
 #'
 #' @description
 #' Based on a user-defined function, e.g. \code{max} for maximum value
-#' composites (MVC), aggregate half-monthly GIMMS datasets to monthly composites.
+#' composites (MVC), aggregate half-monthly GIMMS data sets to monthly composites.
 #'
 #' @param x Multi-layered \code{Raster*} object or \code{character} vector of
 #' filenames. If the latter applies and 'pos1', 'pos2' are not specified, the

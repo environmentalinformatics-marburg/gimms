@@ -21,15 +21,10 @@ if ( !isGeneric("qualityControl") ) {
 #'
 #' @details
 #' If 'keep' is missing, the function will automatically skip quality control
-#' and return the input object. See the 'References' section for more
-#' information about product-specific flag values.
+#' and return the input object.
 #'
 #' @seealso
 #' \code{\link{overlay}}.
-#'
-#' @references
-#' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-#' (accessed on January 15, 2016).
 #'
 #' @examples
 #' ## see 'Examples' section in ?rasterizeGimms

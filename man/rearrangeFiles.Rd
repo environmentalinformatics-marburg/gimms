@@ -18,8 +18,8 @@ to look for GIMMS-related data if 'x' is missing.}
 standard NDVI3g.v0 files. A regular expression passed to \code{\link{list.files}}.}
 
 \item{pos}{\code{integer}, defaults to \code{c(4, 6, 11)} for standard
-NDVI3g.v0 files (see 'References'). The start positions of year, month and
-part of the month ('a' or 'b') in the target GIMMS files.}
+NDVI3g.v0 files. The start positions of year, month and part of the month
+('a' or 'b') in the target GIMMS files.}
 
 \item{...}{Further arguments passed to \code{\link{list.files}}.}
 }
@@ -30,10 +30,6 @@ A \code{character} vector of filepaths arranged in ascending order of time.
 Rearrange local GIMMS NDVI3g.v0 files in ascending order of time. Since the
 naming convention has significantly changed towards NDVI3g.v1, such a measure
 should only be relevant for older file formats.
-}
-\references{
-\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-(accessed on January 15, 2016).
 }
 \seealso{
 \code{\link{list.files}}
