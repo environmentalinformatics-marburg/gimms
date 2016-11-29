@@ -60,7 +60,8 @@ composites (MVC), aggregate half-monthly GIMMS datasets to monthly composites.
 data("bale3g.v1")
 
 ## select layers from 1981 only
-fls <- updateInventory()[1]
+fls <- system.file("extdata/inventory_ecv1.rds", package = "gimms")
+fls <- readRDS(fls)[1]
 rst <- bale3g.v1[[1:12]]
 
 ## aggregate to monthly mvc layers
