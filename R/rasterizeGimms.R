@@ -1,9 +1,11 @@
-#' Rasterize GIMMS NDVI3g data
+#' Rasterize GIMMS NDVI3g Data
 #'
 #' @description
 #' Import GIMMS NDVI3g (binary or NetCDF) data into R as \code{Raster*} objects.
 #'
-#' @param x \code{character}. Vector of local filepaths.
+#' @param x \code{character}. Vector of local filepaths. Note that product
+#' versions must not be mixed, i.e. 'x' should represent files originating from
+#' either NDVI3g.v1 or NDVI3g.v0 only.
 #' @param ext \code{Extent}, or any object from which an \code{Extent} can be
 #' extracted, see \code{\link[raster]{crop}}.
 #' @param snap \code{character}, defaults to "out". Other available options are

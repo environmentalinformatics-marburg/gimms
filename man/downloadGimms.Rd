@@ -7,7 +7,7 @@
 \alias{downloadGimms,character-method}
 \alias{downloadGimms,missing-method}
 \alias{downloadGimms,numeric-method}
-\title{Download GIMMS NDVI3g data}
+\title{Download GIMMS NDVI3g Data}
 \usage{
 \S4method{downloadGimms}{Date}(x, y, version = 1L, dsn = getwd(),
   overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
@@ -60,7 +60,7 @@ A \code{character} vector of local filepaths.
 Download GIMMS NDVI3g data from the NASA Ames Ecological Forecasting Lab
 (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/}), optionally for a given
 period of time. Both NDVI3g.v1 (NetCDF, until end 2015) and NDVI3g.v0 (ENVI
-raw binary, until end 2013) are available.
+binary, until end 2013) are available.
 }
 \examples{
 \dontrun{

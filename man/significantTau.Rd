@@ -5,7 +5,7 @@
 \alias{significantTau}
 \alias{significantTau,RasterStackBrick-method}
 \alias{significantTau,numeric-method}
-\title{Compute (pre-whitened) Kendall's tau}
+\title{Compute (Pre-Whitened) Kendall's \eqn{\tau}}
 \usage{
 \S4method{significantTau}{numeric}(x, p = 0.001, prewhitening = TRUE,
   method = c("yuepilon", "zhang"), df = FALSE)
@@ -17,16 +17,18 @@
 \arguments{
 \item{x}{Either a \code{Raster*} object or a \code{numeric} vector.}
 
-\item{p}{\code{numeric}. Significance level to be tested.}
+\item{p}{\code{numeric}, defaults to \code{0.001}. Significance level to be
+tested.}
 
-\item{prewhitening}{\code{logical}. If \code{TRUE}, pre-whitening is applied
-prior to the Mann-Kendall trend test.}
+\item{prewhitening}{\code{logical}. If \code{TRUE} (default), pre-whitening
+is applied prior to the Mann-Kendall trend test.}
 
 \item{method}{\code{character}. The prewhitening method to apply, see
 \code{\link{zyp.trend.vector}}.}
 
-\item{df}{\code{logical}. If \code{TRUE}, a \code{data.frame} holding the
-value of Kendall's tau and the referring significance level.}
+\item{df}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
+\code{data.frame} holding the value of Kendall's \eqn{\tau} and the referring
+significance level.}
 
 \item{filename}{\code{character}. Optional output filename, see
 \code{\link{writeRaster}}.}
@@ -37,18 +39,18 @@ value of Kendall's tau and the referring significance level.}
 \itemize{
 \item{\code{numeric} input: }{If \code{df = FALSE} (default), a single
 \code{numeric} or \code{logical} (i.e., \code{NA}) depending on whether or
-not 'p' was exceeded; else a \code{data.frame} with Kendall's tau and the
-corresponding significance level.}
+not 'p' was exceeded; else a \code{data.frame} with Kendall's \eqn{\tau} and
+the corresponding significance level.}
 \item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
-Kendall's tau. Values exceeding the specified 'p' are discarded.}
+Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
 }
 }
 \description{
 Apply the Mann-Kendall trend test (Mann, 1945) to a series of observations
-and return Kendall's tau (Kendall, 1938) based on a predefined significance
-level. In contrast to other readily available implementations, it is left to
-the user to decide whether or not to apply pre-whitening as described in the
-\strong{zyp} package vignette (Bronaugh and Werner, 2013).
+and return Kendall's \eqn{\tau} (Kendall, 1938) based on a predefined
+significance level. In contrast to other readily available implementations,
+it is left to the user to decide whether or not to apply pre-whitening as
+described in the \strong{zyp} package vignette (Bronaugh and Werner, 2013).
 }
 \examples{
 ## Example taken from ?Kendall::MannKendall

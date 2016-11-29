@@ -8,29 +8,22 @@ Changes:
 * Revised package documentation.
 
 
-gimms 1.0.0 (2016-11-11)
+gimms 1.0.0 (2016-11-28)
 ==============
 
 Changes:
 
+* Added support for the recently released NDVI3g.v1 to all package functions.
 * Enabled optional creation of target folder during file download.
-* Added 'version' argument to updateInventory and downloadGimms in order to
-  support the recently updated GIMMS version 1 (until end 2015, .nc4 files).
-* Included local file inventories for all servers (ECOCAST, NASANEX) and product
-  versions (0 and 1) available.
-* If 'timestamp = TRUE', monthlyIndices() returns a 'Date' object (i.e., '...'
-  is no longer available).
+* Included local file inventories for all available GIMMS products (NDVI3g.v0
+  and NDVI3g.v1) and their respective servers (ECOCAST, NASANEX).
+* If 'timestamp = TRUE', monthlyIndices() now returns an object of class 'Date'
+  (instead of 'character') and '...' is no longer available.
 * rasterizeGimms() now includes an extent argument ('ext') to enable clipping
   based on raster::crop().
-
-To do:
-
-* validServer, validVersion
-* valid list passed to qualityControl()
-* qualityControl(), flexibly adjust 'keep' according to 'version'; names() of
-  resultant 'RasterStack'
-* counter function for getNDVILayers()
-* rearrangeFiles for version 0 only
-* getProduct() in monthlyIndices()?
-* GitHub Readme header similar to mapview
-* checkFilename (e.g., qualityControl, length 1 or length(x) allowed)
+* Scaling and the rejection of water and nodata-mask values are no longer
+  optional.
+* Quality control has been added to rasterizeGimms() through specifying
+  permitted flag values ('keep'), rendering the subsequent application of a
+  separate function unnecessary. For reasons of convenience, however,
+  qualityControl() is still available.

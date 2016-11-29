@@ -2,13 +2,15 @@
 % Please edit documentation in R/rasterizeGimms.R
 \name{rasterizeGimms}
 \alias{rasterizeGimms}
-\title{Rasterize GIMMS NDVI3g data}
+\title{Rasterize GIMMS NDVI3g Data}
 \usage{
 rasterizeGimms(x, ext = NULL, snap = "out", keep = NULL, split = FALSE,
   cores = 1L, filename = "", ...)
 }
 \arguments{
-\item{x}{\code{character}. Vector of local filepaths.}
+\item{x}{\code{character}. Vector of local filepaths. Note that product
+versions must not be mixed, i.e. 'x' should represent files originating from
+either NDVI3g.v1 or NDVI3g.v0 only.}
 
 \item{ext}{\code{Extent}, or any object from which an \code{Extent} can be
 extracted, see \code{\link[raster]{crop}}.}

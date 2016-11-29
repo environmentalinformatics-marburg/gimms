@@ -5,7 +5,7 @@
 \alias{monthlyComposite}
 \alias{monthlyComposite,RasterStackBrick-method}
 \alias{monthlyComposite,character-method}
-\title{Calculate monthly composite images}
+\title{Calculate Monthly Composite Images}
 \usage{
 \S4method{monthlyComposite}{RasterStackBrick}(x, indices, fun = max,
   cores = 1L, filename = "", ...)
@@ -18,7 +18,7 @@
 \item{x}{Multi-layered \code{Raster*} object or \code{character} vector of
 filenames. If the latter applies and 'pos1', 'pos2' are not specified, the
 function will try to retrieve monthly indices from
-\code{\link{monthlyIndices}}. Note that the specification of NDVI3g.v0 raw
+\code{\link{monthlyIndices}}. Note that the specification of NDVI3g.v0 ENVI
 binary files is hereby not allowed and in such a case,
 \code{\link{rasterizeGimms}} should be run beforehand.}
 
@@ -36,7 +36,8 @@ included here.}
 \code{\link{writeRaster}}. If specified, this must be of the same length as
 the unique monthly indices.}
 
-\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed to \code{\link{stackApply}} (i.e.,
+'na.rm') and \code{\link{writeRaster}}.}
 
 \item{version}{\code{integer} (or any other class convertible to
 \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in

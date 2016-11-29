@@ -2,24 +2,25 @@
 % Please edit documentation in R/monthlyIndices.R
 \name{monthlyIndices}
 \alias{monthlyIndices}
-\title{Monthly indices from GIMMS filenames}
+\title{Create Monthly Indices from NDVI3g Files}
 \usage{
 monthlyIndices(x, version = 1L, pos1 = ifelse(version == 1, 15L, 4L),
   pos2 = ifelse(version == 1, 23L, 8L), timestamp = FALSE, ...)
 }
 \arguments{
-\item{x}{Character. Vector of (local or online) filenames.}
+\item{x}{\code{character}. Vector of (local or online) filenames.}
 
 \item{version}{\code{integer} (or any other class convertible to
 \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
 \code{\link{updateInventory}}.}
 
-\item{pos1, pos2}{Numeric. The first and last element of the date string in
-'x', defaults to the GIMMS naming convention of the specified product
-\code{version}.}
+\item{pos1, pos2}{\code{numeric}. The first and last element of the date
+string in 'x', defaults to the GIMMS naming convention of the specified
+product version.}
 
-\item{timestamp}{Logical. If \code{TRUE}, an actual \code{Date} object is
-returned rather than a \code{numeric} vector of indices.}
+\item{timestamp}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE}, an
+actual \code{Date} object is returned rather than a \code{numeric} vector of
+indices.}
 
 \item{...}{Currently not used.}
 }
@@ -28,8 +29,8 @@ A \code{numeric} vector with unique monthly indices or, if
 \code{timestamp = TRUE}, the actual timestamps as \code{Date} objects.
 }
 \description{
-Create numeric monthly indices from (local or online) GIMMS filenames as
-input for the \code{\link{monthlyComposite}} function.
+Create numeric monthly indices from (local or online) GIMMS NDVI3g filenames
+as input for the \code{\link{monthlyComposite}} function.
 }
 \examples{
 ## NDVI3g.v1

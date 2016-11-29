@@ -2,13 +2,13 @@ if ( !isGeneric("downloadGimms") ) {
   setGeneric("downloadGimms", function(x, ...)
     standardGeneric("downloadGimms"))
 }
-#' Download GIMMS NDVI3g data
+#' Download GIMMS NDVI3g Data
 #'
 #' @description
 #' Download GIMMS NDVI3g data from the NASA Ames Ecological Forecasting Lab
 #' (\url{http://ecocast.arc.nasa.gov/data/pub/gimms/}), optionally for a given
 #' period of time. Both NDVI3g.v1 (NetCDF, until end 2015) and NDVI3g.v0 (ENVI
-#' raw binary, until end 2013) are available.
+#' binary, until end 2013) are available.
 #'
 #' @param x Start time for data download as either \code{Date} object (e.g.,
 #' \code{as.Date("2000-01-01")}) or \code{numeric} year (e.g., \code{2000}).

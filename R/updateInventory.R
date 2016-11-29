@@ -1,4 +1,4 @@
-#' Update GIMMS NDVI3g file inventory
+#' Update GIMMS NDVI3g File Inventory
 #'
 #' @description
 #' Download the latest version of the GIMMS NDVI3g file inventory from the NASA
@@ -19,7 +19,7 @@
 #' @details
 #' GIMMS NDVI3g.v1 is currently available from ECOCAST until end 2015 and comes
 #' in NetCDF (\code{.nc4}) format. In contrast, NDVI3g.v0 is available as ENVI
-#' raw binary imagery and available from ECOCAST (NASANEX) until end 2013 (2012)
+#' binary imagery and available from ECOCAST (NASANEX) until end 2013 (2012)
 #' only.
 #'
 #' @references
@@ -27,13 +27,13 @@
 #' \itemize{
 #' \item{NDVI3g.v1 (\code{.nc4}, until end 2015)}
 #' {\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v1/}}
-#' \item{NDVI3g.v0 (raw binary, until end 2013)}
+#' \item{NDVI3g.v0 (ENVI binary, until end 2013)}
 #' {\url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/}}
 #' }
 #'
 #' NASANEX (2016). Available online (accessed on 27 October 2016):
 #' \itemize{
-#' \item{NDVI3g.v0 (raw binary, until end 2012)}
+#' \item{NDVI3g.v0 (ENVI binary, until end 2012)}
 #' \url{https://nasanex.s3.amazonaws.com/}
 #' }
 #'

@@ -1,16 +1,19 @@
-#' Download and Process GIMMS3g Data
+#' Download and Process GIMMS NDVI3g Data
 #'
 #' We provide a set of functions to retrieve information about GIMMS NDVI3g
-#' files currently available online; download and re-arrange the bi-monthly
-#' datasets according to creation time; import downloaded files from native
-#' binary (ENVI) format directly into R based on the widely applied 'raster'
-#' package; and calculate monthly value composites (e.g. maximum value
-#' composites, MVC) from the bi-monthly input data.
+#' files currently available online; download (and re-arrange, in the case of
+#' NDVI3g.v0) the half-monthly datasets; import downloaded files from ENVI
+#' binary (NDVI3g.v0) or NetCDF format (NDVI3g.v1) directly into R based on the
+#' widespread \strong{raster} package; conduct quality control; and generate
+#' monthly composites (e.g., maximum values) from the half-monthly input data.
+#' As a special gimmick, a method is included to conveniently apply the
+#' Mann-Kendall trend test upon \code{Raster*} images, optionally featuring
+#' trend-free pre-whitening.
 #'
 #' @name gimms-package
 #' @aliases gimmspackage
 #' @docType package
-#' @title Download and Process GIMMS3g Data
+#' @title Download and Process GIMMS NDVI3g Data
 #' @author Florian Detsch
 #'
 #' @import methods raster parallel

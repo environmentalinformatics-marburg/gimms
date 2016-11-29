@@ -1,18 +1,19 @@
-#' Monthly indices from GIMMS filenames
+#' Create Monthly Indices from NDVI3g Files
 #'
 #' @description
-#' Create numeric monthly indices from (local or online) GIMMS filenames as
-#' input for the \code{\link{monthlyComposite}} function.
+#' Create numeric monthly indices from (local or online) GIMMS NDVI3g filenames
+#' as input for the \code{\link{monthlyComposite}} function.
 #'
-#' @param x Character. Vector of (local or online) filenames.
+#' @param x \code{character}. Vector of (local or online) filenames.
 #' @param version \code{integer} (or any other class convertible to
 #' \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
 #' \code{\link{updateInventory}}.
-#' @param pos1,pos2 Numeric. The first and last element of the date string in
-#' 'x', defaults to the GIMMS naming convention of the specified product
-#' \code{version}.
-#' @param timestamp Logical. If \code{TRUE}, an actual \code{Date} object is
-#' returned rather than a \code{numeric} vector of indices.
+#' @param pos1,pos2 \code{numeric}. The first and last element of the date
+#' string in 'x', defaults to the GIMMS naming convention of the specified
+#' product version.
+#' @param timestamp \code{logical}, defaults to \code{FALSE}. If \code{TRUE}, an
+#' actual \code{Date} object is returned rather than a \code{numeric} vector of
+#' indices.
 #' @param ... Currently not used.
 #'
 #' @return

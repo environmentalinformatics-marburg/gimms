@@ -2,7 +2,7 @@ if ( !isGeneric("monthlyComposite") ) {
   setGeneric("monthlyComposite", function(x, ...)
     standardGeneric("monthlyComposite"))
 }
-#' Calculate monthly composite images
+#' Calculate Monthly Composite Images
 #'
 #' @description
 #' Based on a user-defined function, e.g. \code{max} for maximum value
@@ -11,7 +11,7 @@ if ( !isGeneric("monthlyComposite") ) {
 #' @param x Multi-layered \code{Raster*} object or \code{character} vector of
 #' filenames. If the latter applies and 'pos1', 'pos2' are not specified, the
 #' function will try to retrieve monthly indices from
-#' \code{\link{monthlyIndices}}. Note that the specification of NDVI3g.v0 raw
+#' \code{\link{monthlyIndices}}. Note that the specification of NDVI3g.v0 ENVI
 #' binary files is hereby not allowed and in such a case,
 #' \code{\link{rasterizeGimms}} should be run beforehand.
 #' @param indices \code{numeric}. Indices to denote layers or files from
@@ -31,7 +31,8 @@ if ( !isGeneric("monthlyComposite") ) {
 #' and last element of the date string to build monthly indices from. Defaults
 #' to the 'version'-specific NDVI3g naming convention, see
 #' \code{\link{monthlyIndices}}.
-#' @param ... Further arguments passed to \code{\link{writeRaster}}.
+#' @param ... Further arguments passed to \code{\link{stackApply}} (i.e.,
+#' 'na.rm') and \code{\link{writeRaster}}.
 #'
 #' @return
 #' If \code{length(x) == 2}, a single \code{RasterLayer} object, else a

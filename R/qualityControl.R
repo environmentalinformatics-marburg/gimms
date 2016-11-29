@@ -2,17 +2,18 @@ if ( !isGeneric("qualityControl") ) {
   setGeneric("qualityControl", function(x, ...)
     standardGeneric("qualityControl"))
 }
-#' Perform quality control on GIMMS NDVI3g data
+#' Perform Quality Control on GIMMS NDVI3g Data
 #'
 #' @description
 #' Perform quality control on GIMMS NDVI3g data based on the companion flag
-#' information.
+#' information. This is merely a wrapper around \code{\link{overlay}} and, since
+#' quality control is readily available through \code{\link{rasterizeGimms}}, it
+#' is strongly recommended to use the latter function for this purpose.
 #'
 #' @param x A single 2-layered \code{RasterStack} object (NDVI and flags).
 #' @param keep \code{integer}. Accepted flag values (see 'Details').
 #' @param filename \code{character}. Optional output filename(s), see
-#' \code{\link{writeRaster}}. If specified, this must be of the same length as
-#' 'x'.
+#' \code{\link{writeRaster}}.
 #' @param ... Arguments passed to \code{\link{writeRaster}}.
 #'
 #' @return

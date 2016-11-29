@@ -2,7 +2,7 @@
 % Please edit documentation in R/rearrangeFiles.R
 \name{rearrangeFiles}
 \alias{rearrangeFiles}
-\title{Rearrange GIMMS NDVI3g.v0 files}
+\title{Rearrange GIMMS NDVI3g.v0 Files}
 \usage{
 rearrangeFiles(x, dsn = getwd(), pattern = "^geo.*.VI3g$", pos = c(4, 6,
   11), ...)

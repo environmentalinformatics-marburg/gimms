@@ -2,23 +2,25 @@ if ( !isGeneric("significantTau") ) {
   setGeneric("significantTau", function(x, ...)
     standardGeneric("significantTau"))
 }
-#' Compute (pre-whitened) Kendall's tau
+#' Compute (Pre-Whitened) Kendall's \eqn{\tau}
 #'
 #' @description
 #' Apply the Mann-Kendall trend test (Mann, 1945) to a series of observations
-#' and return Kendall's tau (Kendall, 1938) based on a predefined significance
-#' level. In contrast to other readily available implementations, it is left to
-#' the user to decide whether or not to apply pre-whitening as described in the
-#' \strong{zyp} package vignette (Bronaugh and Werner, 2013).
+#' and return Kendall's \eqn{\tau} (Kendall, 1938) based on a predefined
+#' significance level. In contrast to other readily available implementations,
+#' it is left to the user to decide whether or not to apply pre-whitening as
+#' described in the \strong{zyp} package vignette (Bronaugh and Werner, 2013).
 #'
 #' @param x Either a \code{Raster*} object or a \code{numeric} vector.
-#' @param p \code{numeric}. Significance level to be tested.
-#' @param prewhitening \code{logical}. If \code{TRUE}, pre-whitening is applied
-#' prior to the Mann-Kendall trend test.
+#' @param p \code{numeric}, defaults to \code{0.001}. Significance level to be
+#' tested.
+#' @param prewhitening \code{logical}. If \code{TRUE} (default), pre-whitening
+#' is applied prior to the Mann-Kendall trend test.
 #' @param method \code{character}. The prewhitening method to apply, see
 #' \code{\link{zyp.trend.vector}}.
-#' @param df \code{logical}. If \code{TRUE}, a \code{data.frame} holding the
-#' value of Kendall's tau and the referring significance level.
+#' @param df \code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
+#' \code{data.frame} holding the value of Kendall's \eqn{\tau} and the referring
+#' significance level.
 #' @param filename \code{character}. Optional output filename, see
 #' \code{\link{writeRaster}}.
 #' @param ... Further arguments passed to \code{\link{writeRaster}}.
@@ -27,10 +29,10 @@ if ( !isGeneric("significantTau") ) {
 #' \itemize{
 #' \item{\code{numeric} input: }{If \code{df = FALSE} (default), a single
 #' \code{numeric} or \code{logical} (i.e., \code{NA}) depending on whether or
-#' not 'p' was exceeded; else a \code{data.frame} with Kendall's tau and the
-#' corresponding significance level.}
+#' not 'p' was exceeded; else a \code{data.frame} with Kendall's \eqn{\tau} and
+#' the corresponding significance level.}
 #' \item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
-#' Kendall's tau. Values exceeding the specified 'p' are discarded.}
+#' Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
 #' }
 #'
 #' @seealso

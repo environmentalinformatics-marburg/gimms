@@ -4,7 +4,7 @@
 \name{qualityControl}
 \alias{qualityControl}
 \alias{qualityControl,RasterStackBrick-method}
-\title{Perform quality control on GIMMS NDVI3g data}
+\title{Perform Quality Control on GIMMS NDVI3g Data}
 \usage{
 \S4method{qualityControl}{RasterStackBrick}(x, keep = NULL, filename = "",
   ...)
@@ -15,8 +15,7 @@
 \item{keep}{\code{integer}. Accepted flag values (see 'Details').}
 
 \item{filename}{\code{character}. Optional output filename(s), see
-\code{\link{writeRaster}}. If specified, this must be of the same length as
-'x'.}
+\code{\link{writeRaster}}.}
 
 \item{...}{Arguments passed to \code{\link{writeRaster}}.}
 }
@@ -25,7 +24,9 @@ A quality-controlled 'RasterLayer' object.
 }
 \description{
 Perform quality control on GIMMS NDVI3g data based on the companion flag
-information.
+information. This is merely a wrapper around \code{\link{overlay}} and, since
+quality control is readily available through \code{\link{rasterizeGimms}}, it
+is strongly recommended to use the latter function for this purpose.
 }
 \details{
 If 'keep' is missing, the function will automatically skip quality control

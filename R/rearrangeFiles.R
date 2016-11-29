@@ -1,4 +1,4 @@
-#' Rearrange GIMMS NDVI3g.v0 files
+#' Rearrange GIMMS NDVI3g.v0 Files
 #'
 #' @description
 #' Rearrange local GIMMS NDVI3g.v0 files in ascending order of time. Since the
