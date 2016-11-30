@@ -24,6 +24,7 @@
 #' \code{\link{monthlyComposite}}.
 #'
 #' @examples
+#' \dontrun{
 #' ## NDVI3g.v1
 #' gimms_files_v1 <- updateInventory()
 #' monthlyIndices(gimms_files_v1[1], version = 1)                   # indices
@@ -33,6 +34,7 @@
 #' gimms_files_v0 <- updateInventory(version = 0)
 #' monthlyIndices(gimms_files_v0[1:12], version = 0)
 #' monthlyIndices(gimms_files_v0[1:12], version = 0, timestamp = TRUE)
+#' }
 #'
 #' @export monthlyIndices
 #' @name monthlyIndices

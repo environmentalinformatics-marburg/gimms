@@ -31,8 +31,10 @@ binary imagery and available from ECOCAST (NASANEX) until end 2013 (2012)
 only.
 }
 \examples{
+\dontrun{
 updateInventory()            # NDVI3g.v1
 updateInventory(version = 0) # NDVI3g.v0
+}
 
 }
 \seealso{

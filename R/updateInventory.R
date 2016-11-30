@@ -26,8 +26,10 @@
 #' \code{\link{rearrangeFiles}}.
 #'
 #' @examples
+#' \dontrun{
 #' updateInventory()            # NDVI3g.v1
 #' updateInventory(version = 0) # NDVI3g.v0
+#' }
 #'
 #' @export updateInventory
 #' @name updateInventory

@@ -33,6 +33,7 @@ Create numeric monthly indices from (local or online) GIMMS NDVI3g filenames
 as input for the \code{\link{monthlyComposite}} function.
 }
 \examples{
+\dontrun{
 ## NDVI3g.v1
 gimms_files_v1 <- updateInventory()
 monthlyIndices(gimms_files_v1[1], version = 1)                   # indices
@@ -42,6 +43,7 @@ monthlyIndices(gimms_files_v1[1], version = 1, timestamp = TRUE) # dates
 gimms_files_v0 <- updateInventory(version = 0)
 monthlyIndices(gimms_files_v0[1:12], version = 0)
 monthlyIndices(gimms_files_v0[1:12], version = 0, timestamp = TRUE)
+}
 
 }
 \seealso{
