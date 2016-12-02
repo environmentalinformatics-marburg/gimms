@@ -12,9 +12,8 @@ if ( !isGeneric("qualityControl") ) {
 #'
 #' @param x A single 2-layered \code{RasterStack} object (NDVI and flags).
 #' @param keep \code{integer}. Accepted flag values (see 'Details').
-#' @param filename \code{character}. Optional output filename(s), see
-#' \code{\link{writeRaster}}.
-#' @param ... Arguments passed to \code{\link{writeRaster}}.
+#' @param filename \code{character}. Optional output filename.
+#' @param ... Further arguments passed to \code{\link{writeRaster}}.
 #'
 #' @return
 #' A quality-controlled 'RasterLayer' object.
@@ -24,7 +23,7 @@ if ( !isGeneric("qualityControl") ) {
 #' and return the input object.
 #'
 #' @seealso
-#' \code{\link{overlay}}.
+#' \code{\link{rasterizeGimms}}, \code{\link{overlay}}.
 #'
 #' @examples
 #' ## see 'Examples' section in ?rasterizeGimms

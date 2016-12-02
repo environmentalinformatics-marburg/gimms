@@ -21,8 +21,7 @@ if ( !isGeneric("significantTau") ) {
 #' @param df \code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
 #' \code{data.frame} holding the value of Kendall's \eqn{\tau} and the referring
 #' significance level.
-#' @param filename \code{character}. Optional output filename, see
-#' \code{\link{writeRaster}}.
+#' @param filename \code{character}. Optional output filename.
 #' @param ... Further arguments passed to \code{\link{writeRaster}}.
 #'
 #' @return

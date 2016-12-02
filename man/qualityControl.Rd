@@ -14,10 +14,9 @@
 
 \item{keep}{\code{integer}. Accepted flag values (see 'Details').}
 
-\item{filename}{\code{character}. Optional output filename(s), see
-\code{\link{writeRaster}}.}
+\item{filename}{\code{character}. Optional output filename.}
 
-\item{...}{Arguments passed to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
 }
 \value{
 A quality-controlled 'RasterLayer' object.
@@ -37,6 +36,6 @@ and return the input object.
 
 }
 \seealso{
-\code{\link{overlay}}.
+\code{\link{rasterizeGimms}}, \code{\link{overlay}}.
 }
 

@@ -17,8 +17,9 @@
 #' \code{list} of \code{RasterStack} objects (of \code{length(x)}) is returned
 #' rather than a single \code{RasterStack}.
 #' @param cores \code{integer}. Number of cores for parallel computing.
-#' @param filename \code{character}.
-#' @param ... Arguments passed to \code{\link{writeRaster}}.
+#' @param filename \code{character}. Optional output filename. If specified,
+#' this must be of the same length as 'x'.
+#' @param ... Further arguments passed to \code{\link{writeRaster}}.
 #'
 #' @return
 #' If \code{split = TRUE}, a list of NDVI3g \code{RasterStack} objects
@@ -26,7 +27,8 @@
 #' \code{RasterStack} object.
 #'
 #' @seealso
-#' \code{\link[raster]{crop}}, \code{\link{writeRaster}}.
+#' \code{\link[raster]{crop}}, \code{\link{qualityControl}},
+#' \code{\link{writeRaster}}.
 #'
 #' @examples
 #' \dontrun{

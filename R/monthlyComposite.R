@@ -21,9 +21,8 @@ if ( !isGeneric("monthlyComposite") ) {
 #' passed down to \code{\link{stackApply}} via '...' and hence should not be
 #' included here.
 #' @param cores \code{integer}. Number of cores for parallel computing.
-#' @param filename \code{character}. Optional output filename(s), see
-#' \code{\link{writeRaster}}. If specified, this must be of the same length as
-#' the unique monthly indices.
+#' @param filename \code{character}. Optional output filename passed to
+#' \code{\link{stackApply}}.
 #' @param version \code{integer} (or any other class convertible to
 #' \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
 #' \code{\link{updateInventory}}.
@@ -32,7 +31,7 @@ if ( !isGeneric("monthlyComposite") ) {
 #' to the 'version'-specific NDVI3g naming convention, see
 #' \code{\link{monthlyIndices}}.
 #' @param ... Further arguments passed to \code{\link{stackApply}} (i.e.,
-#' 'na.rm') and \code{\link{writeRaster}}.
+#' 'na.rm') and its underlying \code{\link{writeRaster}} call.
 #'
 #' @return
 #' If \code{length(x) == 2}, a single \code{RasterLayer} object, else a
@@ -86,8 +85,7 @@ setMethod("monthlyComposite",
     dots_sub <- list(x = raster::subset(x, which(indices == i)),
                      fun = fun,
                      indices = rep(1, length(which(indices == i))),
-                     filename = ifelse(length(filename) == length(unique(indices)),
-                                       filename[which(unique(indices) == i)], ""))
+                     filename = filename)
     dots_sub <- append(dots, dots_sub)
 
     do.call(raster::stackApply, args = dots_sub)

@@ -32,12 +32,11 @@ included here.}
 
 \item{cores}{\code{integer}. Number of cores for parallel computing.}
 
-\item{filename}{\code{character}. Optional output filename(s), see
-\code{\link{writeRaster}}. If specified, this must be of the same length as
-the unique monthly indices.}
+\item{filename}{\code{character}. Optional output filename passed to
+\code{\link{stackApply}}.}
 
 \item{...}{Further arguments passed to \code{\link{stackApply}} (i.e.,
-'na.rm') and \code{\link{writeRaster}}.}
+'na.rm') and its underlying \code{\link{writeRaster}} call.}
 
 \item{version}{\code{integer} (or any other class convertible to
 \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in

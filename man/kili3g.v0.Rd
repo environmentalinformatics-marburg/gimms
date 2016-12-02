@@ -6,7 +6,7 @@
 \title{Kilimanjaro NDVI3g.v0}
 \format{\code{raster::RasterStack}}
 \description{
-Kilimanjaro NDVI3g.v0
+Kilimanjaro NDVI3g.v0.
 }
 \details{
 This dataset contains NDVI3g.v0 observations for the Kilimanjaro

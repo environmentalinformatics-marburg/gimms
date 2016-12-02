@@ -17,7 +17,7 @@ widespread \strong{raster} package; conduct quality control; and generate
 monthly composites (e.g., maximum values) from the half-monthly input data.
 As a special gimmick, a method is included to conveniently apply the
 Mann-Kendall trend test upon \code{Raster*} images, optionally featuring
-trend-free pre-whitening.
+trend-free pre-whitening to account for lag-1 autocorrelation.
 }
 \author{
 Florian Detsch

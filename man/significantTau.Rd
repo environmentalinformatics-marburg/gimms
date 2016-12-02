@@ -30,8 +30,7 @@ is applied prior to the Mann-Kendall trend test.}
 \code{data.frame} holding the value of Kendall's \eqn{\tau} and the referring
 significance level.}
 
-\item{filename}{\code{character}. Optional output filename, see
-\code{\link{writeRaster}}.}
+\item{filename}{\code{character}. Optional output filename.}
 
 \item{...}{Further arguments passed to \code{\link{writeRaster}}.}
 }

@@ -8,7 +8,7 @@
 #' monthly composites (e.g., maximum values) from the half-monthly input data.
 #' As a special gimmick, a method is included to conveniently apply the
 #' Mann-Kendall trend test upon \code{Raster*} images, optionally featuring
-#' trend-free pre-whitening.
+#' trend-free pre-whitening to account for lag-1 autocorrelation.
 #'
 #' @name gimms-package
 #' @aliases gimmspackage
@@ -38,7 +38,7 @@ NULL
 #' @docType data
 #' @name bale3g.v1
 #' @title Bale Mountains NDVI3g.v1
-#' @description Bale Mountains NDVI3g.v1
+#' @description Bale Mountains NDVI3g.v1.
 #' @details This dataset contains NDVI3g.v1 observations for the Bale Mountains
 #' National Park, southern Ethiopia (Jul 1981 to Dec 2015).
 #' @format \code{raster::RasterStack}
@@ -47,7 +47,7 @@ NULL
 #' @docType data
 #' @name kili3g.v0
 #' @title Kilimanjaro NDVI3g.v0
-#' @description Kilimanjaro NDVI3g.v0
+#' @description Kilimanjaro NDVI3g.v0.
 #' @details This dataset contains NDVI3g.v0 observations for the Kilimanjaro
 #' region, northern Tanzania (Jul 1981 to Dec 2013).
 #' @format \code{raster::RasterStack}

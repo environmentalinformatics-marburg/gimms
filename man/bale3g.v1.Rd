@@ -6,7 +6,7 @@
 \title{Bale Mountains NDVI3g.v1}
 \format{\code{raster::RasterStack}}
 \description{
-Bale Mountains NDVI3g.v1
+Bale Mountains NDVI3g.v1.
 }
 \details{
 This dataset contains NDVI3g.v1 observations for the Bale Mountains
