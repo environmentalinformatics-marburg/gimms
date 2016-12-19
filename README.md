@@ -23,6 +23,8 @@ I am happy to announce that the brand-new package update (v1.0.0) has successful
 * parallel processing is no longer realized through **foreach** (alongside with **doParallel**), but instead relies on the built-in **parallel** package only. Therefore, the former two are no longer part of the package Imports section.
 * et cetera
 
+<hr>
+
 ##### 2016-01-15, **gimms** 0.5.0 is now on CRAN
 As of today, **gimms** 0.5.0 is available from [CRAN](https://cran.r-project.org/package=gimms) and has some new functionality:
 
