@@ -4,17 +4,20 @@
 \name{gimms-package}
 \alias{gimms-package}
 \alias{gimmspackage}
-\title{Download and Process GIMMS3g Data}
+\title{Download and Process GIMMS NDVI3g Data}
 \description{
-Download and Process GIMMS3g Data
+Download and Process GIMMS NDVI3g Data
 }
 \details{
 We provide a set of functions to retrieve information about GIMMS NDVI3g
-files currently available online; download and re-arrange the bi-monthly
-datasets according to creation time; import downloaded files from native
-binary (ENVI) format directly into R based on the widely applied 'raster'
-package; and calculate monthly value composites (e.g. maximum value
-composites, MVC) from the bi-monthly input data.
+files currently available online; download (and re-arrange, in the case of
+NDVI3g.v0) the half-monthly data sets; import downloaded files from ENVI
+binary (NDVI3g.v0) or NetCDF format (NDVI3g.v1) directly into R based on the
+widespread \strong{raster} package; conduct quality control; and generate
+monthly composites (e.g., maximum values) from the half-monthly input data.
+As a special gimmick, a method is included to conveniently apply the
+Mann-Kendall trend test upon \code{Raster*} images, optionally featuring
+trend-free pre-whitening to account for lag-1 autocorrelation.
 }
 \author{
 Florian Detsch
@@ -23,6 +26,10 @@ Florian Detsch
 Pinzon, JE & Tucker, CJ (2014). A Non-Stationary 1981-2012 AVHRR
 NDVI3g Time Series. Remote Sensing, 6(8), 6929-6960. Available online at
 \url{http://www.mdpi.com/2072-4292/6/8/6929/htm}.
+
+Pinzon, JE & Tucker, CJ (2016). A Non-Stationary 1981-2015 AVHRR
+NDVI3g.v1 Time Series: an update. In preparation for submission to Remote
+Sensing.
 }
 \keyword{package}
 

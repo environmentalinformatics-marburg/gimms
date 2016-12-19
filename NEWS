@@ -3,6 +3,27 @@ gimms 0.5.0 (2016-01-15)
 
 Changes:
 
-* Enabled quality flag retrieval from rasterizeGimms.
+* Enabled retrieval of quality flags from rasterizeGimms.
 * Added parallel support to downloadGimms, rasterizeGimms and monthlyComposite.
 * Revised package documentation.
+
+
+gimms 1.0.0 (2016-11-28)
+==============
+
+Changes:
+
+* Added support for the recently released NDVI3g.v1 to all package functions.
+* Included local file inventories for all available GIMMS products (NDVI3g.v0
+  and NDVI3g.v1) and their respective servers (ECOCAST, NASANEX).
+* Quality control has been added to rasterizeGimms() through specifying
+  permitted flag values ('keep'), rendering the subsequent application of a
+  separate function unnecessary. For reasons of convenience, however,
+  qualityControl() is still available.
+* rasterizeGimms() now includes an extent argument ('ext') to enable clipping
+  based on raster::crop().
+* Scaling and the rejection of water and nodata-mask values are no longer
+  optional.
+* If 'timestamp = TRUE', monthlyIndices() now returns an object of class 'Date'
+  (instead of 'character') and '...' is no longer available.
+

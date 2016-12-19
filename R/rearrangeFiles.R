@@ -1,44 +1,30 @@
-#' Rearrange GIMMS files by date
+#' Rearrange GIMMS NDVI3g.v0 Files
 #'
 #' @description
-#' Rearrange GIMMS-related files in ascending order of time.
+#' Rearrange local GIMMS NDVI3g.v0 files in ascending order of time. Since the
+#' naming convention has significantly changed towards NDVI3g.v1, such a measure
+#' should only be relevant for older file formats.
 #'
-#' @param x Character. Vector of (local or online) filepaths. If \code{NULL},
-#' \code{dsn} will be searched for available files via pattern matching.
-#' @param dsn Character. Path to look for GIMMS data. If not supplied and 'x' is
-#' missing, this defaults to the current working directory.
-#' @param pattern Character. A regular expression passed on to
-#' \code{\link{list.files}}.
-#' @param pos Integer. The start positions of year, month and period ('a' or
-#' 'b') in the target GIMMS files. Unless modified, this usually defaults to
-#' \code{c(4, 6, 11)} (see 'References').
-#' @param ... Further arguments passed on to \code{\link{list.files}}.
+#' @param x \code{character}. Vector of local filepaths. If missing, 'dsn' will
+#' be searched for available files via pattern matching.
+#' @param dsn \code{character}, defaults to the current working directory. Path
+#' to look for GIMMS-related data if 'x' is missing.
+#' @param pattern \code{character}, defaults to \code{"^geo.*.VI3g$"} for
+#' standard NDVI3g.v0 files. A regular expression passed to \code{\link{list.files}}.
+#' @param pos \code{integer}, defaults to \code{c(4, 6, 11)} for standard
+#' NDVI3g.v0 files. The start positions of year, month and part of the month
+#' ('a' or 'b') in the target GIMMS files.
+#' @param ... Further arguments passed to \code{\link{list.files}}.
 #'
 #' @return
-#' A vector of filepaths arranged in ascending order of time.
-#'
-#' @author
-#' Florian Detsch
-#'
-#' @references
-#' \url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-#' (accessed on January 15, 2016).
+#' A \code{character} vector of filepaths arranged in ascending order of time.
 #'
 #' @seealso
 #' \code{\link{list.files}}
 #'
-#' @examples
-#' ## latest version of files inventory
-#' gimms_files <- updateInventory(sort = FALSE)
-#' head(gimms_files)
-#'
-#' ## re-arrange vector with available files according to date
-#' gimms_files_arr <- rearrangeFiles(gimms_files)
-#' head(gimms_files_arr)
-#'
 #' @export rearrangeFiles
 #' @name rearrangeFiles
-rearrangeFiles <- function(x = NULL,
+rearrangeFiles <- function(x,
                            dsn = getwd(),
                            pattern = "^geo.*.VI3g$",
                            pos = c(4, 6, 11),
@@ -48,20 +34,15 @@ rearrangeFiles <- function(x = NULL,
     stop("'pos' must be a vector of length 3 (i.e., start position of year, month and day); see ?rearrangeFiles. \n")
 
   ## if `is.null(fls)`, apply pattern matching in 'dsn'
-  if (is.null(x))
+  if (missing(x))
     x <- list.files(dsn, pattern = pattern, ...)
 
   ## vector to data.frame
   gimms_df <- data.frame(file = x, stringsAsFactors = FALSE)
 
-  ## switch current locale time to us standard
-  systime_locale <- Sys.getlocale(category = "LC_TIME")
-
-  if (Sys.info()[["sysname"]] == "Windows") {
-    invisible(Sys.setlocale(category = "LC_TIME", locale = "C"))
-  } else {
-    invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
-  }
+  ## backup current locale and switch to us standard
+  locale <- Sys.getlocale(category = "LC_TIME")
+  setLocale()
 
   ## create columns 'year', 'month' and 'day'
   gimms_df <- transform(gimms_df,
@@ -77,7 +58,7 @@ rearrangeFiles <- function(x = NULL,
   gimms_df <- gimms_df[order(gimms_df$date), ]
 
   ## revoke locale time adjustment
-  Sys.setlocale(category = "LC_TIME", locale = systime_locale)
+  setLocale(TRUE, locale = locale)
 
   ## return rearranged files
   gimms_fls <- gimms_df$file

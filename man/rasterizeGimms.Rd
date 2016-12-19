@@ -2,78 +2,71 @@
 % Please edit documentation in R/rasterizeGimms.R
 \name{rasterizeGimms}
 \alias{rasterizeGimms}
-\title{Rasterize GIMMS NDVI3g binary data}
+\title{Rasterize GIMMS NDVI3g Data}
 \usage{
-rasterizeGimms(x, flag = FALSE, header = NULL, water2na = TRUE,
-  nodata2na = TRUE, scaling = TRUE, remove_header = FALSE, cores = 1L,
-  filename = "", ...)
+rasterizeGimms(x, ext = NULL, snap = "out", keep = NULL, split = FALSE,
+  cores = 1L, filename = "", ...)
 }
 \arguments{
-\item{x}{Character. Vector of local filepaths.}
+\item{x}{\code{character}. Vector of local filepaths. Note that product
+versions must not be mixed, i.e. 'x' should represent files originating from
+either NDVI3g.v1 or NDVI3g.v0 only.}
 
-\item{flag}{Logical. If \code{TRUE}, returns flag values instead of NDVI. See
-'References' for further reading. Note that this will be ignored if
-\code{scaling = FALSE}.}
+\item{ext}{\code{Extent}, or any object from which an \code{Extent} can be
+extracted, see \code{\link[raster]{crop}}.}
 
-\item{header}{Character. Header file(s) corresponding to the binary data
-in 'x'. If missing, the standard header file for GIMMS NDVI3g binary data
-will be used.}
+\item{snap}{\code{character}, defaults to "out". Other available options are
+"in" and "near", see \code{\link[raster]{crop}}.}
 
-\item{water2na}{Logical. Determines whether or not to discard pixels with
-'mask-water' value (-10000; see 'References').}
+\item{keep}{\code{integer}. Flag values of NDVI3g pixels to spare during
+quality control. Pixels with non-included flag values are set to \code{NA}.
+If not specified (i.e., \code{NULL}; default), quality control is skipped.}
 
-\item{nodata2na}{Logical. Determines whether or not to discard pixels with
-'mask-nodata' value (-5000; see 'References').}
+\item{split}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
+\code{list} of \code{RasterStack} objects (of \code{length(x)}) is returned
+rather than a single \code{RasterStack}.}
 
-\item{scaling}{Logical. If \code{TRUE} (default), scaling is enabled which
-allows to retrieve NDVI or flag values (depending on 'flag').}
+\item{cores}{\code{integer}. Number of cores for parallel computing.}
 
-\item{remove_header}{Logical. If \code{TRUE}, the header file specified in
-'header' or, if not specified, created internally via
-\code{gimms:::createHeader} is removed after all operations have finished.}
+\item{filename}{\code{character}. Optional output filename. If specified,
+this must be of the same length as 'x'.}
 
-\item{cores}{Integer. Number of cores for parallel computing. If 'filename'
-is not specified, the parallel option is automatically disabled.}
-
-\item{filename}{Character. Optional vector of output filenames with the same
-length as 'x'; see \code{\link{writeRaster}}.}
-
-\item{...}{Further arguments passed on to \code{\link{writeRaster}} (except
-for 'bylayer' and 'suffix').}
+\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
 }
 \value{
-If 'x' is a single filename, an object of class 'RasterLayer';
-if 'x' is a vector of filenames, an object of class 'RasterStack'.
+If \code{split = TRUE}, a list of NDVI3g \code{RasterStack} objects
+corresponding to the files specified in 'x'; else a single NDVI3g
+\code{RasterStack} object.
 }
 \description{
-Import GIMMS NDVI3g binary data into R as 'Raster*' objects based on a
-companion header file.
+Import GIMMS NDVI3g (binary or NetCDF) data into R as \code{Raster*} objects.
 }
 \examples{
 \dontrun{
-## Download sample data
-gimms_dir <- paste0(getwd(), "/data")
-
+## Download NDVI3g.v1 sample data
 gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-                             y = as.Date("2000-06-30"), dsn = gimms_dir)
+                             y = as.Date("2000-12-31"))
 
-## Rasterize files
-gimms_raster <- rasterizeGimms(x = gimms_files, remove_header = TRUE)
+## Extent for clipping
+shp <- getData("GADM", country = "DEU", level = 0, path = tmpDir())
 
-plot(gimms_raster)
+## Rasterize without quality control
+gimms_raster <- rasterizeGimms(x = gimms_files,
+                               ext = shp) # clipping
+plot(gimms_raster[[1]])
+lines(shp)
+
+## Rasterize with quality control
+gimms_rasterq <- rasterizeGimms(x = gimms_files,
+                                ext = shp, # clipping
+                                keep = 0)  # quality control
+plot(gimms_rasterq[[1]])
+lines(shp)
 }
 
-}
-\author{
-Florian Detsch
-}
-\references{
-\url{https://nex.nasa.gov/nex/projects/1349/wiki/general_data_description_and_access/}
-(accessed on January 15, 2016).
-\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-(accessed on January 15, 2016).
 }
 \seealso{
-\code{gimms:::createHeader}, \code{\link{raster}}, \code{\link{writeRaster}}.
+\code{\link[raster]{crop}}, \code{\link{qualityControl}},
+\code{\link{writeRaster}}.
 }
 

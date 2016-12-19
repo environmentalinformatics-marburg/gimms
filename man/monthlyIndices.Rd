@@ -2,42 +2,49 @@
 % Please edit documentation in R/monthlyIndices.R
 \name{monthlyIndices}
 \alias{monthlyIndices}
-\title{Monthly indices from GIMMS filenames}
+\title{Create Monthly Indices from NDVI3g Files}
 \usage{
-monthlyIndices(x, pos1 = 4L, pos2 = 8L, timestamp = FALSE, ...)
+monthlyIndices(x, version = 1L, pos1 = ifelse(version == 1, 15L, 4L),
+  pos2 = ifelse(version == 1, 23L, 8L), timestamp = FALSE, ...)
 }
 \arguments{
-\item{x}{Character. Vector of (local or online) filenames.}
+\item{x}{\code{character}. Vector of (local or online) filenames.}
 
-\item{pos1, pos2}{Numeric. The first and last element of the date string in
-'x', defaults to the GIMMS naming convention.}
+\item{version}{\code{integer} (or any other class convertible to
+\code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
+\code{\link{updateInventory}}.}
 
-\item{timestamp}{Logical. If \code{TRUE}, an actual timestamp (formatted
-according to \code{...}) is returned rather than a vector of indices.}
+\item{pos1, pos2}{\code{numeric}. The first and last element of the date
+string in 'x', defaults to the GIMMS naming convention of the specified
+product version.}
 
-\item{...}{Further arguments passed on to \code{\link{strftime}}.}
+\item{timestamp}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE}, an
+actual \code{Date} object is returned rather than a \code{numeric} vector of
+indices.}
+
+\item{...}{Currently not used.}
 }
 \value{
-A 'numeric' vector with unique monthly indices or,
-if \code{timestamp = TRUE}, a 'character' vector with formatted timestamps.
+A \code{numeric} vector with unique monthly indices or, if
+\code{timestamp = TRUE}, the actual timestamps as \code{Date} objects.
 }
 \description{
-Create numeric monthly indices from (local or online) GIMMS filenames as
-input for the \code{\link{monthlyComposite}} function.
+Create numeric monthly indices from (local or online) GIMMS NDVI3g filenames
+as input for the \code{\link{monthlyComposite}} function.
 }
 \examples{
-## vector of filenames
-gimms_files <- c("geo85aug15a.n09-VI3g", "geo85aug15b.n09-VI3g",
-                 "geo85sep15a.n09-VI3g", "geo85sep15b.n09-VI3g",
-                 "geo85oct15a.n09-VI3g", "geo85oct15b.n09-VI3g")
+\dontrun{
+## NDVI3g.v1
+gimms_files_v1 <- updateInventory()
+monthlyIndices(gimms_files_v1[1], version = 1)                   # indices
+monthlyIndices(gimms_files_v1[1], version = 1, timestamp = TRUE) # dates
 
-## extract monthly indices
-monthlyIndices(gimms_files)
-monthlyIndices(gimms_files, timestamp = TRUE, format = "\%b \%y")
-
+## Similarly, NDVI3g.v0
+gimms_files_v0 <- updateInventory(version = 0)
+monthlyIndices(gimms_files_v0[1:12], version = 0)
+monthlyIndices(gimms_files_v0[1:12], version = 0, timestamp = TRUE)
 }
-\author{
-Florian Detsch
+
 }
 \seealso{
 \code{\link{monthlyComposite}}.

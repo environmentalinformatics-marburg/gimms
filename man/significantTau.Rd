@@ -5,42 +5,51 @@
 \alias{significantTau}
 \alias{significantTau,RasterStackBrick-method}
 \alias{significantTau,numeric-method}
-\title{Compute (pre-whitened) Kendall's tau}
+\title{Compute (Pre-Whitened) Kendall's \eqn{\tau}}
 \usage{
 \S4method{significantTau}{numeric}(x, p = 0.001, prewhitening = TRUE,
-  df = FALSE, ...)
+  method = c("yuepilon", "zhang"), df = FALSE)
 
 \S4method{significantTau}{RasterStackBrick}(x, p = 0.001,
-  prewhitening = TRUE, filename = "", ...)
+  prewhitening = TRUE, method = c("yuepilon", "zhang"), filename = "",
+  ...)
 }
 \arguments{
-\item{x}{A 'numeric' vector.}
+\item{x}{Either a \code{Raster*} object or a \code{numeric} vector.}
 
-\item{p}{Significance level to be tested.}
+\item{p}{\code{numeric}, defaults to \code{0.001}. Significance level to be
+tested.}
 
-\item{prewhitening}{Logical. If \code{TRUE}, pre-whitening is applied prior
-to the Mann-Kendall trend test.}
+\item{prewhitening}{\code{logical}. If \code{TRUE} (default), pre-whitening
+is applied prior to the Mann-Kendall trend test.}
 
-\item{df}{Logical. If \code{TRUE}, a 'data.frame' holding the value of
-Kendall's tau and the referring significance level.}
+\item{method}{\code{character}. The prewhitening method to apply, see
+\code{\link{zyp.trend.vector}}.}
 
-\item{...}{Further arguments passed on to \code{\link{zyp.trend.vector}}.}
+\item{df}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
+\code{data.frame} holding the value of Kendall's \eqn{\tau} and the referring
+significance level.}
 
-\item{filename}{Character. Optional output filename. Needs to include an
-appropriate file format extension, see \code{\link{writeFormats}}.}
+\item{filename}{\code{character}. Optional output filename.}
+
+\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
 }
 \value{
-If \code{df = FALSE} (default) and \code{p} was not exceeded, a
-single 'numeric'; if \code{df = FALSE} and \code{p} was exceeded, a 'logical'
-(\code{NA}); else a 'data.frame' with Kendall's tau and the corresponding
-significance level.
+\itemize{
+\item{\code{numeric} input: }{If \code{df = FALSE} (default), a single
+\code{numeric} or \code{logical} (i.e., \code{NA}) depending on whether or
+not 'p' was exceeded; else a \code{data.frame} with Kendall's \eqn{\tau} and
+the corresponding significance level.}
+\item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
+Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
+}
 }
 \description{
 Apply the Mann-Kendall trend test (Mann, 1945) to a series of observations
-and return Kendall's tau (Kendall, 1938) based on a predefined significance
-level. In contrast to other readily available implementations, it is left to
-the user to decide whether or not to apply pre-whitening as described in the
-\strong{zyp} package vignette (Bronaugh and Werner, 2013).
+and return Kendall's \eqn{\tau} (Kendall, 1938) based on a predefined
+significance level. In contrast to other readily available implementations,
+it is left to the user to decide whether or not to apply pre-whitening as
+described in the \strong{zyp} package vignette (Bronaugh and Werner, 2013).
 }
 \examples{
 ## Example taken from ?Kendall::MannKendall
@@ -56,47 +65,26 @@ significantTau(x, p = 0.001, prewhitening = FALSE, df = TRUE)
 significantTau(x, p = 0.001, prewhitening = TRUE, df = TRUE)
 
 #############################################################################
-### use case: significant (p < 0.001) mann-kendall trends (2009-13) #########
+### use case: significant mann-kendall trends in ndvi3g.v0          #########
 #############################################################################
 
 \dontrun{
-## download files from 2009-2013
-gimms_files <- downloadGimms(x = as.Date("2009-01-01"),
-                             dsn = paste0(getwd(), "/data"))
+## Sample data from 1982 to 2013
+data("kili3g.v0")
+rst <- kili3g.v0[[13:nlayers(kili3g.v0)]]
 
-## convert binary files to 'Raster*' format
-gimms_rasters <- rasterizeGimms(gimms_files, filename = gimms_files,
-                                format = "GTiff", overwrite = TRUE)
-
-## crop iran
-library(rworldmap)
-data(countriesLow)
-gimms_iran <- crop(gimms_rasters,
-                     subset(countriesLow, ADMIN == "Iran"))
-
-## remove seasonal signal via remote::deseason
+## Remove seasonal signal
 library(remote)
-gimms_deseason <- deseason(gimms_iran, cycle.window = 24, use.cpp = TRUE)
+dsn <- deseason(rst, cycle.window = 24)
 
-## identify long-term monotonous trends from mann-kendall trend test; all values
-## of kendall's tau with p >= 0.001 are set to NA; note that pre-whitening is
-## applied prior to the actual trend test
-gimms_trends <- significantTau(gimms_deseason, p = 0.001,
-                               prewhitening = TRUE)
+## Calculate trend-free pre-whitened Mann-Kendall trends (note that
+## non-significant pixels are set to NA)
+trd <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
 
-## create figure
-library(RColorBrewer)
-library(latticeExtra)
-cols <- colorRampPalette(brewer.pal(11, "BrBG"))
-spplot(gimms_trends, col.regions = cols(100), scales = list(draw = TRUE),
-       at = seq(-.525, .525, .025),
-       main = expression("Kendall's" ~ tau ~ "(2009-2013)")) +
-  layer(sp.polygons(countriesLow))
+library(mapview)
+mapview(trd)
 }
 
-}
-\author{
-Florian Detsch
 }
 \references{
 Kendall, M.G. (1938). A new measure of rank correlation. \emph{Biometrika}

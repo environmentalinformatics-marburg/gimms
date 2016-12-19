@@ -2,49 +2,34 @@
 % Please edit documentation in R/rearrangeFiles.R
 \name{rearrangeFiles}
 \alias{rearrangeFiles}
-\title{Rearrange GIMMS files by date}
+\title{Rearrange GIMMS NDVI3g.v0 Files}
 \usage{
-rearrangeFiles(x = NULL, dsn = getwd(), pattern = "^geo.*.VI3g$",
-  pos = c(4, 6, 11), ...)
+rearrangeFiles(x, dsn = getwd(), pattern = "^geo.*.VI3g$", pos = c(4, 6,
+  11), ...)
 }
 \arguments{
-\item{x}{Character. Vector of (local or online) filepaths. If \code{NULL},
-\code{dsn} will be searched for available files via pattern matching.}
+\item{x}{\code{character}. Vector of local filepaths. If missing, 'dsn' will
+be searched for available files via pattern matching.}
 
-\item{dsn}{Character. Path to look for GIMMS data. If not supplied and 'x' is
-missing, this defaults to the current working directory.}
+\item{dsn}{\code{character}, defaults to the current working directory. Path
+to look for GIMMS-related data if 'x' is missing.}
 
-\item{pattern}{Character. A regular expression passed on to
-\code{\link{list.files}}.}
+\item{pattern}{\code{character}, defaults to \code{"^geo.*.VI3g$"} for
+standard NDVI3g.v0 files. A regular expression passed to \code{\link{list.files}}.}
 
-\item{pos}{Integer. The start positions of year, month and period ('a' or
-'b') in the target GIMMS files. Unless modified, this usually defaults to
-\code{c(4, 6, 11)} (see 'References').}
+\item{pos}{\code{integer}, defaults to \code{c(4, 6, 11)} for standard
+NDVI3g.v0 files. The start positions of year, month and part of the month
+('a' or 'b') in the target GIMMS files.}
 
-\item{...}{Further arguments passed on to \code{\link{list.files}}.}
+\item{...}{Further arguments passed to \code{\link{list.files}}.}
 }
 \value{
-A vector of filepaths arranged in ascending order of time.
+A \code{character} vector of filepaths arranged in ascending order of time.
 }
 \description{
-Rearrange GIMMS-related files in ascending order of time.
-}
-\examples{
-## latest version of files inventory
-gimms_files <- updateInventory(sort = FALSE)
-head(gimms_files)
-
-## re-arrange vector with available files according to date
-gimms_files_arr <- rearrangeFiles(gimms_files)
-head(gimms_files_arr)
-
-}
-\author{
-Florian Detsch
-}
-\references{
-\url{http://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
-(accessed on January 15, 2016).
+Rearrange local GIMMS NDVI3g.v0 files in ascending order of time. Since the
+naming convention has significantly changed towards NDVI3g.v1, such a measure
+should only be relevant for older file formats.
 }
 \seealso{
 \code{\link{list.files}}

@@ -1,54 +1,61 @@
-#' Monthly indices from GIMMS filenames
+#' Create Monthly Indices from NDVI3g Files
 #'
 #' @description
-#' Create numeric monthly indices from (local or online) GIMMS filenames as
-#' input for the \code{\link{monthlyComposite}} function.
+#' Create numeric monthly indices from (local or online) GIMMS NDVI3g filenames
+#' as input for the \code{\link{monthlyComposite}} function.
 #'
-#' @param x Character. Vector of (local or online) filenames.
-#' @param pos1,pos2 Numeric. The first and last element of the date string in
-#' 'x', defaults to the GIMMS naming convention.
-#' @param timestamp Logical. If \code{TRUE}, an actual timestamp (formatted
-#' according to \code{...}) is returned rather than a vector of indices.
-#' @param ... Further arguments passed on to \code{\link{strftime}}.
+#' @param x \code{character}. Vector of (local or online) filenames.
+#' @param version \code{integer} (or any other class convertible to
+#' \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
+#' \code{\link{updateInventory}}.
+#' @param pos1,pos2 \code{numeric}. The first and last element of the date
+#' string in 'x', defaults to the GIMMS naming convention of the specified
+#' product version.
+#' @param timestamp \code{logical}, defaults to \code{FALSE}. If \code{TRUE}, an
+#' actual \code{Date} object is returned rather than a \code{numeric} vector of
+#' indices.
+#' @param ... Currently not used.
 #'
 #' @return
-#' A 'numeric' vector with unique monthly indices or,
-#' if \code{timestamp = TRUE}, a 'character' vector with formatted timestamps.
-#'
-#' @author
-#' Florian Detsch
+#' A \code{numeric} vector with unique monthly indices or, if
+#' \code{timestamp = TRUE}, the actual timestamps as \code{Date} objects.
 #'
 #' @seealso
 #' \code{\link{monthlyComposite}}.
 #'
 #' @examples
-#' ## vector of filenames
-#' gimms_files <- c("geo85aug15a.n09-VI3g", "geo85aug15b.n09-VI3g",
-#'                  "geo85sep15a.n09-VI3g", "geo85sep15b.n09-VI3g",
-#'                  "geo85oct15a.n09-VI3g", "geo85oct15b.n09-VI3g")
+#' \dontrun{
+#' ## NDVI3g.v1
+#' gimms_files_v1 <- updateInventory()
+#' monthlyIndices(gimms_files_v1[1], version = 1)                   # indices
+#' monthlyIndices(gimms_files_v1[1], version = 1, timestamp = TRUE) # dates
 #'
-#' ## extract monthly indices
-#' monthlyIndices(gimms_files)
-#' monthlyIndices(gimms_files, timestamp = TRUE, format = "%b %y")
+#' ## Similarly, NDVI3g.v0
+#' gimms_files_v0 <- updateInventory(version = 0)
+#' monthlyIndices(gimms_files_v0[1:12], version = 0)
+#' monthlyIndices(gimms_files_v0[1:12], version = 0, timestamp = TRUE)
+#' }
 #'
 #' @export monthlyIndices
 #' @name monthlyIndices
-monthlyIndices <- function(x, pos1 = 4L, pos2 = 8L, timestamp = FALSE, ...) {
+monthlyIndices <- function(x, version = 1L,
+                           pos1 = ifelse(version == 1, 15L, 4L),
+                           pos2 = ifelse(version == 1, 23L, 8L),
+                           timestamp = FALSE, ...) {
 
   ## extract timestamp
-  ch_id <- substr(basename(x), pos1, pos2)
+  ch_id <- if (version == 1) {
+    getV1dates(x, pos1, pos2, suffix = FALSE)
+  } else {
+    substr(basename(x), pos1, pos2)
+  }
 
   ## return formatted date
   if (timestamp) {
 
-    # switch current locale time to us standard
-
-    systime_locale <- Sys.getlocale(category = "LC_TIME")
-    if (Sys.info()[["sysname"]] == "Windows") {
-      invisible(Sys.setlocale(category = "LC_TIME", locale = "C"))
-    } else {
-      invisible(Sys.setlocale(category = "LC_TIME", locale = "en_US.UTF-8"))
-    }
+    # back-up current locale and subsequently swith to us standard
+    locale <- Sys.getlocale(category = "LC_TIME")
+    setLocale()
 
     # year
     ch_year <- substr(ch_id, 1, 2)
@@ -58,17 +65,20 @@ monthlyIndices <- function(x, pos1 = 4L, pos2 = 8L, timestamp = FALSE, ...) {
       ch_month[i] <- month.abb[which(tolower(month.abb) == ch_month[i])]
     }
     # day
-    ch_day <- substr(basename(x), pos2+3, pos2+3)
+    ch_day <- if (version == 1L) {
+        substr(getV1dates(x, pos1, pos2), 8, 8)
+      } else {
+        substr(basename(x), pos2+3, pos2+3)
+      }
     ch_day <- ifelse(ch_day == "a", 1, 15)
 
     # concatenate and reformat date string
     ch_date <- paste0(ch_day, ch_month, ch_year)
     dt_time <- as.Date(ch_date, format = "%d%b%y")
-    ch_time <- strftime(dt_time, ...)
 
     # revoke locale time adjustment
-    Sys.setlocale(category = "LC_TIME", locale = systime_locale)
-    return(ch_time)
+    setLocale(reset = TRUE, locale = locale)
+    return(dt_time)
 
   ## return numeric indices
   } else {
