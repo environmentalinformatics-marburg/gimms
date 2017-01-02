@@ -22,6 +22,8 @@ devtools::install_github("environmentalinformatics-marburg/gimms",
 ```
 to be able to use that function in the first place.
 
+<hr>
+
 ##### 2016-12-17, **gimms** 1.0.0 is now on CRAN
 I am happy to announce that the brand-new package update (v1.0.0) has successfully been built for all platforms and is now available from [CRAN](https://cran.r-project.org/package=gimms). Among the major improvements are:
 
