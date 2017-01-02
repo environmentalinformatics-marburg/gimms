@@ -8,11 +8,19 @@ This month      | In total
 
 #### Introducing the 'gimms' package
 
-... is an [open-access tutorial](https://www.gitbook.com/book/envin-marburg/introducing-the-r-gimms-package/details) about the **gimms** package which has been developed using [GitBook](https://www.gitbook.com/). The book will regularly be updated as **gimms** develops further, so make sure to check it out regularly!
+... is an [open-access tutorial](https://www.gitbook.com/book/envin-marburg/introducing-the-r-gimms-package/details) about the **gimms** package which has been developed using [GitBook](https://www.gitbook.com/). The book will regularly be updated as **gimms** develops further, so make sure to check it out every now and then!
 
 <hr>
 
 #### What's new?
+
+##### 2017-01-02, "traditional" NDVI3g.v0 names from new NDVI3g.v1 files via `oldNaming`
+For all users who prefer to work with the now outdated NDVI3g.v0 file names, I've added a function called `oldNaming` to the 'develop' branch. It takes a vector of .nc4 file names as input and transforms them to traditional half-monthly file names, optionally appending a suffix *e.g.* in preparation for `writeRaster`. As this is not on CRAN yet, remember to install the 'develop' version via 
+```r
+devtools::install_github("environmentalinformatics-marburg/gimms", 
+                         ref = "develop")
+```
+to be able to use that function in the first place.
 
 ##### 2016-12-17, **gimms** 1.0.0 is now on CRAN
 I am happy to announce that the brand-new package update (v1.0.0) has successfully been built for all platforms and is now available from [CRAN](https://cran.r-project.org/package=gimms). Among the major improvements are:
