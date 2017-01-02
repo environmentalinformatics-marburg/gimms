@@ -3,6 +3,7 @@
 export(downloadGimms)
 export(monthlyComposite)
 export(monthlyIndices)
+export(oldNaming)
 export(qualityControl)
 export(rasterizeGimms)
 export(rearrangeFiles)

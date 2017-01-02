@@ -27,3 +27,11 @@ Changes:
 * If 'timestamp = TRUE', monthlyIndices() now returns an object of class 'Date'
   (instead of 'character') and '...' is no longer available.
 
+
+gimms 1.1.x (2017-xx-xx)
+==============
+
+Changes:
+
+* New function oldNaming() to transform new .nc4 file names into "traditional"
+  NDVI3g.v0 naming convention, optionally appending a suffix (e.g., '.tif').
