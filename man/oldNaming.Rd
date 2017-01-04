@@ -2,14 +2,13 @@
 % Please edit documentation in R/oldNaming.R
 \name{oldNaming}
 \alias{oldNaming}
-\title{Create Old GIMMS NDVI3g File Names}
+\title{Create Traditional GIMMS NDVI3g File Names}
 \usage{
-oldNaming(x, sat = "XX", suffix = "")
+oldNaming(x, suffix = "")
 }
 \arguments{
-\item{x}{\code{character}. GIMMS NDVI3g.v1 file names to transform.}
-
-\item{sat}{\code{character}. Satellite number, see 'Details'.}
+\item{x}{\code{character}. GIMMS NDVI3g.v1 file names to reformat, see
+'Details'.}
 
 \item{suffix}{\code{character}. Optional suffix to append to the resulting
 file names, e.g. \code{".tif"} for GeoTiff files (see also
@@ -20,25 +19,34 @@ A \code{character} vector of file names following the "traditional" NDVI3g.v0
 naming convention.
 }
 \description{
-Transform NDVI3g.v1 file names into "traditional" NDVI3g.v0 naming
-convention.
+Reformat the names of local NDVI3g.v1 files according to "traditional"
+NDVI3g.v0 naming convention.
 }
 \details{
-The satellite number was an essential constituent of the NDVI3g.v0 file
-naming convention (see 'References'), but has been removed in NDVI3g.v1. In
-order to maintain a uniform file naming, the 'sat' argument accepts a single
-\code{character} placeholder (defaults to \code{"XX"}) which is inserted in
-newer files where no such information is available from NDVI3g.v0.
+The satellite number, which was an essential constituent of the NDVI3g.v0
+file naming convention (see 'References'), has been removed from NDVI3g.v1
+file names. However, it can easily be accessed via \code{\link{ncvar_get}}
+given that the file has previously been downloaded. If an NDVI3g.v1 file
+specified to 'x' is not available locally, by contrast, the satellite number
+is retrieved from the built-in NDVI3g.v0 file inventory (until end 2013; see
+'Examples') and newer files are tagged with \code{"XX"} indicating missing
+information.
 }
 \examples{
+\dontrun{
 fls <- system.file("extdata", "inventory_ecv1.rds", package = "gimms")
 fls <- basename(readRDS(fls))
 
-oldNaming(fls[1])
-oldNaming(fls[2:3], suffix = ".tif")
+oldNaming(fls[64:65], suffix = ".tif") # adds .tif extension
+oldNaming(fls[65:66])                  # tags newer files with 'XX'
+}
 
 }
 \references{
 \url{https://ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt}
+(accessed on 2017-01-04).
+}
+\seealso{
+\code{\link{nc_open}}, \code{\link{ncvar_get}}.
 }
 
