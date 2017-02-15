@@ -38,4 +38,3 @@ and return the input object.
 \seealso{
 \code{\link{rasterizeGimms}}, \code{\link{overlay}}.
 }
-

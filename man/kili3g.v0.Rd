@@ -12,4 +12,3 @@ Kilimanjaro NDVI3g.v0.
 This dataset contains NDVI3g.v0 observations for the Kilimanjaro
 region, northern Tanzania (Jul 1981 to Dec 2013).
 }
-

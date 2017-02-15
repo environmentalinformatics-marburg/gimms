@@ -49,4 +49,3 @@ oldNaming(fls[65:66])                  # tags newer files with 'XX'
 \seealso{
 \code{\link{nc_open}}, \code{\link{ncvar_get}}.
 }
-

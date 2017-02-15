@@ -12,4 +12,3 @@ Bale Mountains NDVI3g.v1.
 This dataset contains NDVI3g.v1 observations for the Bale Mountains
 National Park, southern Ethiopia (Jul 1981 to Dec 2015).
 }
-

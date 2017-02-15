@@ -44,4 +44,3 @@ updateInventory(version = 0) # NDVI3g.v0
 \seealso{
 \code{\link{rearrangeFiles}}.
 }
-

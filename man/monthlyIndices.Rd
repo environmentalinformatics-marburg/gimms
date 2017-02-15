@@ -49,4 +49,3 @@ monthlyIndices(gimms_files_v0[1:12], version = 0, timestamp = TRUE)
 \seealso{
 \code{\link{monthlyComposite}}.
 }
-

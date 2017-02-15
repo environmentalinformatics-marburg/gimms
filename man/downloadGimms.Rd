@@ -4,9 +4,9 @@
 \name{downloadGimms}
 \alias{downloadGimms}
 \alias{downloadGimms,Date-method}
+\alias{downloadGimms,numeric-method}
 \alias{downloadGimms,character-method}
 \alias{downloadGimms,missing-method}
-\alias{downloadGimms,numeric-method}
 \title{Download GIMMS NDVI3g Data}
 \usage{
 \S4method{downloadGimms}{Date}(x, y, version = 1L, dsn = getwd(),
@@ -83,4 +83,3 @@ gimms_files_full <- downloadGimms()
 \seealso{
 \code{\link{updateInventory}}, \code{\link{download.file}}.
 }
-

@@ -69,4 +69,3 @@ lines(shp)
 \code{\link[raster]{crop}}, \code{\link{qualityControl}},
 \code{\link{writeRaster}}.
 }
-

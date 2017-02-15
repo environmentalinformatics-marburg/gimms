@@ -3,8 +3,8 @@
 \docType{methods}
 \name{significantTau}
 \alias{significantTau}
-\alias{significantTau,RasterStackBrick-method}
 \alias{significantTau,numeric-method}
+\alias{significantTau,RasterStackBrick-method}
 \title{Compute (Pre-Whitened) Kendall's \eqn{\tau}}
 \usage{
 \S4method{significantTau}{numeric}(x, p = 0.001, prewhitening = TRUE,
@@ -110,4 +110,3 @@ Available online at \url{http://onlinelibrary.wiley.com/doi/10.1002/hyp.1095/abs
 \seealso{
 \code{\link{MannKendall}}, \code{\link{zyp.trend.vector}}.
 }
-
