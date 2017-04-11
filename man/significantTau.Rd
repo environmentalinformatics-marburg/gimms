@@ -48,8 +48,12 @@ Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
 Apply the Mann-Kendall trend test (Mann, 1945) to a series of observations
 and return Kendall's \eqn{\tau} (Kendall, 1938) based on a predefined
 significance level. In contrast to other readily available implementations,
-it is left to the user to decide whether or not to apply pre-whitening as
+it is up to the user to decide whether or not to apply pre-whitening as
 described in the \strong{zyp} package vignette (Bronaugh and Werner, 2013).
+}
+\details{
+If available, the function will automatically use open multi-core clusters
+for parallel processing (see \code{\link{beginCluster}} and Examples).
 }
 \examples{
 ## Example taken from ?Kendall::MannKendall
@@ -77,12 +81,16 @@ rst <- kili3g.v0[[13:nlayers(kili3g.v0)]]
 library(remote)
 dsn <- deseason(rst, cycle.window = 24)
 
-## Calculate trend-free pre-whitened Mann-Kendall trends (note that
+## Apply trend-free pre-whitened Mann-Kendall test (note that
 ## non-significant pixels are set to NA)
-trd <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
+trd1 <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
+plot(trd1)
 
-library(mapview)
-mapview(trd)
+## Or, alternatively, use multi-core functionality
+cores <- parallel::detectCores() - 1
+beginCluster(cores)
+trd2 <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
+endCluster()
 }
 
 }

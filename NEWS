@@ -35,3 +35,4 @@ Changes:
 
 * New function oldNaming() to transform new .nc4 file names into "traditional"
   NDVI3g.v0 naming convention, optionally appending a suffix (e.g., '.tif').
+* Added parallel support to significantTau(),'RasterStackBrick'-method
