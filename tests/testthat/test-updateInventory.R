@@ -7,6 +7,8 @@ context("Update file inventory")
 ## function is run on Windows.
 ping = function(x, count = 1L, interval = 1, deadline = 5, ...) {
 
+  skip_if_not(curl::has_internet())
+
   os = Sys.info()[["sysname"]]
   cnt = ifelse(os == "Windows", "-n", "-c")
   out = system2("ping", paste(cnt, count, if (os != "Windows") {
@@ -22,6 +24,9 @@ ping = function(x, count = 1L, interval = 1, deadline = 5, ...) {
 }
 
 test_that("serverPath() of ECOCAST is reachable", {
+
+  skip_if_not(curl::has_internet())
+
   for (i in 0:1) {
     x = serverPath(version = i)
     x = paste0(x, "/00FILE-LIST.txt")
