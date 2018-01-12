@@ -1,4 +1,4 @@
-gimms 1.1.0
+## gimms 1.1.0
 
 New features:
 
@@ -10,7 +10,7 @@ Changes:
 * Issued MIT license.  
 
 
-gimms 1.0.0
+## gimms 1.0.0
 
 New features: 
 
@@ -25,7 +25,7 @@ Changes:
   * If 'timestamp = TRUE', monthlyIndices() now returns an object of class 'Date' (instead of 'character') and '...' is no longer available.
 
 
-gimms 0.5.0
+## gimms 0.5.0
 
 New features:
 
