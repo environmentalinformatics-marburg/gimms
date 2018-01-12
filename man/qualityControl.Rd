@@ -32,7 +32,28 @@ If 'keep' is missing, the function will automatically skip quality control
 and return the input object.
 }
 \examples{
-## see 'Examples' section in ?rasterizeGimms
+\dontrun{
+tmp <- tempdir()
+
+## Download NDVI3g.v1 sample data
+ecocast <- system.file("extdata", "inventory_ecv1.rds", package = "gimms")
+gimms_files <- downloadGimms(readRDS(ecocast)[1], dsn = tmp)
+
+## Import data as 'Raster*' objects
+ndvi <- raster::raster(gimms_files, varname = "ndvi")
+ndvi[ndvi[] \%in\% c(-32768, -3000)] <- NA
+ndvi <- ndvi / 1e4
+
+flag <- floor(raster::raster(gimms_files, varname = "percentile") / 2e3)
+
+## Perform quality control and visualize
+to_check <- stack(ndvi[[1]], flag[[1]])
+qcl <- qualityControl(to_check, keep = 0)
+
+plot(qcl)
+}
+
+## see also 'Examples' section in ?rasterizeGimms for automated quality check
 
 }
 \seealso{

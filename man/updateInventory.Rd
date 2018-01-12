@@ -40,6 +40,13 @@ updateInventory()            # NDVI3g.v1
 updateInventory(version = 0) # NDVI3g.v0
 }
 
+## note that local versions of the online file inventories are also available
+ofl_v1 <- system.file("extdata", "inventory_ecv1.rds", package = "gimms")
+readRDS(ofl_v1)
+
+ofl_v0 <- system.file("extdata", "inventory_ecv0.rds", package = "gimms")
+readRDS(ofl_v0)
+
 }
 \seealso{
 \code{\link{rearrangeFiles}}.

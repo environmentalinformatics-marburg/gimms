@@ -43,12 +43,15 @@ Import GIMMS NDVI3g (binary or NetCDF) data into R as \code{Raster*} objects.
 }
 \examples{
 \dontrun{
+tmp <- tempdir()
+
 ## Download NDVI3g.v1 sample data
 gimms_files <- downloadGimms(x = as.Date("2000-01-01"),
-                             y = as.Date("2000-12-31"))
+                             y = as.Date("2000-12-31"),
+                             dsn = tmp)
 
 ## Extent for clipping
-shp <- getData("GADM", country = "DEU", level = 0, path = tmpDir())
+shp <- getData("GADM", country = "DEU", level = 0, path = tmp)
 
 ## Rasterize without quality control
 gimms_raster <- rasterizeGimms(x = gimms_files,

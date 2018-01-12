@@ -88,9 +88,11 @@ plot(trd1)
 
 ## Or, alternatively, use multi-core functionality
 cores <- parallel::detectCores() - 1
-beginCluster(cores)
-trd2 <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
-endCluster()
+if (require(snow)) {
+  beginCluster(cores)
+  trd2 <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
+  endCluster()
+}
 }
 
 }
