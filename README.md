@@ -14,6 +14,12 @@ This month      | In total
 
 #### What's new?
 
+##### 2018-01-13, **gimms** 1.1.0 is now on CRAN
+
+As of 2018-01-13, the next minor release of **gimms** has finally arrived on CRAN. Check out [NEWS](https://github.com/environmentalinformatics-marburg/gimms/blob/master/NEWS) for a full list of changes. In addition, note that the accompanying [GitBook](https://www.gitbook.com/book/envin-marburg/introducing-the-r-gimms-package/details) will be updated (and hopefully extended) soon.
+
+<hr>
+
 ##### 2017-01-02, "traditional" NDVI3g.v0 names from new NDVI3g.v1 files via `oldNaming`
 For all users who prefer to work with the now outdated NDVI3g.v0 file names, I've added a function called `oldNaming` to the 'develop' branch. It takes a vector of .nc4 file names as input and transforms them to traditional half-monthly file names, optionally appending a suffix *e.g.* in preparation for `writeRaster`. As this is not on CRAN yet, remember to install the 'develop' version via 
 ```r

@@ -71,4 +71,3 @@ mvc <- monthlyComposite(rst, indices = monthlyIndices(fls))
 \code{\link{stackApply}}, \code{\link{monthlyIndices}},
 \code{\link{writeRaster}}.
 }
-

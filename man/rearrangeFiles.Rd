@@ -34,4 +34,3 @@ should only be relevant for older file formats.
 \seealso{
 \code{\link{list.files}}
 }
-

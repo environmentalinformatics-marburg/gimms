@@ -19,9 +19,6 @@ As a special gimmick, a method is included to conveniently apply the
 Mann-Kendall trend test upon \code{Raster*} images, optionally featuring
 trend-free pre-whitening to account for lag-1 autocorrelation.
 }
-\author{
-Florian Detsch
-}
 \references{
 Pinzon, JE & Tucker, CJ (2014). A Non-Stationary 1981-2012 AVHRR
 NDVI3g Time Series. Remote Sensing, 6(8), 6929-6960. Available online at
@@ -31,5 +28,7 @@ Pinzon, JE & Tucker, CJ (2016). A Non-Stationary 1981-2015 AVHRR
 NDVI3g.v1 Time Series: an update. In preparation for submission to Remote
 Sensing.
 }
+\author{
+Florian Detsch
+}
 \keyword{package}
-

@@ -4,9 +4,9 @@
 \name{downloadGimms}
 \alias{downloadGimms}
 \alias{downloadGimms,Date-method}
+\alias{downloadGimms,numeric-method}
 \alias{downloadGimms,character-method}
 \alias{downloadGimms,missing-method}
-\alias{downloadGimms,numeric-method}
 \title{Download GIMMS NDVI3g Data}
 \usage{
 \S4method{downloadGimms}{Date}(x, y, version = 1L, dsn = getwd(),
@@ -63,24 +63,29 @@ optionally for a given period of time. Both NDVI3g.v1 (NetCDF, until end
 }
 \examples{
 \dontrun{
+tmp <- tempdir()
+
 ## 'Date' method
 gimms_files_date <- downloadGimms(x = as.Date("2000-01-01"),
-                                  y = as.Date("2000-12-31"))
+                                  y = as.Date("2000-12-31"),
+                                  dsn = tmp)
 
 ## 'numeric' method (i.e., particular years)
 gimms_files_year <- downloadGimms(x = 2000,
-                                  y = 2002)
+                                  y = 2002,
+                                  dsn = tmp)
 
 ## 'character' method (i.e., particular files)
-gimms_files_char <- updateInventory()
-gimms_files_char <- downloadGimms(x = gimms_files[1:6])
+ecocast <- system.file("extdata", "inventory_ecv1.rds", package = "gimms")
+gimms_files_char <- readRDS(ecocast)
+gimms_files_char <- downloadGimms(x = gimms_files_char[1:6],
+                                  dsn = tmp)
 
 ## 'missing' method (i.e., entire collection)
-gimms_files_full <- downloadGimms()
+gimms_files_full <- downloadGimms(dsn = tmp)
 }
 
 }
 \seealso{
 \code{\link{updateInventory}}, \code{\link{download.file}}.
 }
-

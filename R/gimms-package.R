@@ -17,10 +17,12 @@
 #' @author Florian Detsch
 #'
 #' @import methods raster parallel
+#' @importFrom ncdf4 nc_open ncvar_get
 #' @importFrom RCurl getURL
 #' @importFrom Kendall MannKendall
 #' @importFrom zyp zyp.trend.vector
 #' @importFrom utils download.file
+#' @importFrom curl has_internet
 #'
 #' @references
 #' Pinzon, JE & Tucker, CJ (2014). A Non-Stationary 1981-2012 AVHRR

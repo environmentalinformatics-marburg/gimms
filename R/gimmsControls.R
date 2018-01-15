@@ -136,8 +136,9 @@ setLocale <- function(reset = FALSE, ...) {
 }
 
 
-### get date strings from version-1 files -----
+### get date strings -----
 
+## from ndvi3g.v1 files
 getV1dates <- function(x, pos1 = 15L, pos2 = 23L, suffix = TRUE) {
 
   fls <- substr(basename(x), pos1, pos2)
@@ -168,6 +169,11 @@ getV1dates <- function(x, pos1 = 15L, pos2 = 23L, suffix = TRUE) {
   # revoke locale time adjustment and return date strings
   setLocale(reset = TRUE, locale = locale)
   return(unlist(lst))
+}
+
+## from ndvi3g.v0 files
+getV0dates <- function(x, pos1 = 4L, pos2 = 11L, suffix = TRUE) {
+  substr(basename(x), pos1, ifelse(suffix, pos2, pos2 - 1))
 }
 
 

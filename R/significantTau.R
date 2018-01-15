@@ -8,7 +8,7 @@ if ( !isGeneric("significantTau") ) {
 #' Apply the Mann-Kendall trend test (Mann, 1945) to a series of observations
 #' and return Kendall's \eqn{\tau} (Kendall, 1938) based on a predefined
 #' significance level. In contrast to other readily available implementations,
-#' it is left to the user to decide whether or not to apply pre-whitening as
+#' it is up to the user to decide whether or not to apply pre-whitening as
 #' described in the \strong{zyp} package vignette (Bronaugh and Werner, 2013).
 #'
 #' @param x Either a \code{Raster*} object or a \code{numeric} vector.
@@ -33,6 +33,10 @@ if ( !isGeneric("significantTau") ) {
 #' \item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
 #' Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
 #' }
+#'
+#' @details
+#' If available, the function will automatically use open multi-core clusters
+#' for parallel processing (see \code{\link{beginCluster}} and Examples).
 #'
 #' @seealso
 #' \code{\link{MannKendall}}, \code{\link{zyp.trend.vector}}.
@@ -84,12 +88,18 @@ if ( !isGeneric("significantTau") ) {
 #' library(remote)
 #' dsn <- deseason(rst, cycle.window = 24)
 #'
-#' ## Calculate trend-free pre-whitened Mann-Kendall trends (note that
+#' ## Apply trend-free pre-whitened Mann-Kendall test (note that
 #' ## non-significant pixels are set to NA)
-#' trd <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
+#' trd1 <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
+#' plot(trd1)
 #'
-#' library(mapview)
-#' mapview(trd)
+#' ## Or, alternatively, use multi-core functionality
+#' cores <- parallel::detectCores() - 1
+#' if (require(snow)) {
+#'   beginCluster(cores)
+#'   trd2 <- significantTau(dsn, p = 0.01, prewhitening = TRUE)
+#'   endCluster()
+#' }
 #' }
 #'
 #' @export significantTau
@@ -128,8 +138,9 @@ setMethod("significantTau",
                 tau <- mk[id_tau]
               }
 
-              # without prewhitening
+            # without prewhitening
             } else {
+
               mk <- Kendall::MannKendall(x)
 
               sig <- mk$sl
@@ -167,17 +178,23 @@ setMethod("significantTau",
           function(x, p = 0.001, prewhitening = TRUE,
                    method = c("yuepilon", "zhang"), filename = "", ...) {
 
-            rst_mk <- raster::overlay(x, fun = function(y, ...) {
-              significantTau(y, p = p,
-                             prewhitening = prewhitening, df = FALSE, ...)
-            })
+  ## custom tau function passed to calc()
+  tau <- function(y) {
+    significantTau(y, p, prewhitening, method, df = FALSE)
+  }
 
-            ## write to file
-            if (nchar(filename) > 0)
-              rst_mk <- raster::writeRaster(rst_mk, filename = filename,
-                                            overwrite = TRUE)
+  ## single-core: calc()
+  cl <- try(raster::getCluster(), silent = TRUE)
+  if (inherits(cl, "try-error")) {
+    raster::calc(x, fun = tau, filename = filename, ...)
 
-            ## return
-            return(rst_mk)
-          }
-)
+  ## multi-core: clusterR()
+  } else {
+    on.exit(raster::returnCluster())
+    parallel::clusterExport(cl, envir = environment(),
+                            varlist = c("p", "prewhitening", "method", "tau"))
+
+    raster::clusterR(x, raster::calc, args = list(fun = tau),
+                     filename = filename, ...)
+  }
+})
