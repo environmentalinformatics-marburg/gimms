@@ -1,3 +1,10 @@
+## gimms 1.1.1
+
+Changes:
+
+* Rasterized NDVI3g.v0 images are no longer kept in memory, but linked to corresponding file on disk if 'filename' is specified.
+
+
 ## gimms 1.1.0
 
 New features:
