@@ -26,6 +26,7 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
 
     ## initialize cluster
     cl <- parallel::makePSOCKcluster(cores)
+    on.exit(parallel::stopCluster(cl))
 
     ## export required variables
     parallel::clusterExport(cl, c("x", "cores", "dsn", "overwrite", "quiet",
@@ -42,9 +43,6 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                           quiet = quiet, ...), silent = TRUE)
       }
     })
-
-    ## deregister parallel backend
-    parallel::stopCluster(cl)
   }
 
   ## return downloaded files

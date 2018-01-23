@@ -121,6 +121,7 @@ setMethod("qualityControl",
 #
 #             ## initialize cluster
 #             cl <- parallel::makePSOCKcluster(cores)
+#             on.exit(parallel::stopCluster(cl))
 #
 #             ## export relevant objects to cluster
 #             dots <- list(...)
@@ -143,9 +144,6 @@ setMethod("qualityControl",
 #             ## if only one layer was supplied, return 'RasterLayer'
 #             if (nlayers(rst) == 1)
 #               rst <- unstack(rst)[[1]]
-#
-#             ## deregister parallel backend
-#             parallel::stopCluster(cl)
 #
 #             ## return quality-controlled raster layer
 #             return(rst)

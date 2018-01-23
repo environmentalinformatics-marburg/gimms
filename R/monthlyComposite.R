@@ -72,6 +72,7 @@ setMethod("monthlyComposite",
 
   ## initialize cluster
   cl <- parallel::makePSOCKcluster(cores)
+  on.exit(parallel::stopCluster(cl))
 
   ## export relevant objects to cluster
   dots <- list(...)
@@ -90,9 +91,6 @@ setMethod("monthlyComposite",
 
     do.call(raster::stackApply, args = dots_sub)
   })
-
-  # deregister parallel backend
-  parallel::stopCluster(cl)
 
   # stack layers
   if (length(lst_out) == 1) {
