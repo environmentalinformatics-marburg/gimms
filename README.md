@@ -1,8 +1,16 @@
-#### Package downloads from the [RStudio CRAN Mirror](http://cran-logs.rstudio.com/)</b>
+#### Package downloads and build status</b>
+
+##### Downloads from the [RStudio CRAN Mirror](http://cran-logs.rstudio.com/)
 
 This month      | In total
 --------------- | -----------
 ![month](http://cranlogs.r-pkg.org/badges/gimms) | ![total](http://cranlogs.r-pkg.org/badges/grand-total/gimms)
+
+##### Build status
+
+CRAN | Travis-CI (master) | Travis-CI (devel)
+---- | ------------------ | -----------------
+[![](http://www.r-pkg.org/badges/version/gimms)](http://www.r-pkg.org/pkg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=master)](https://travis-ci.org/environmentalinformatics-marburg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=devel)](https://travis-ci.org/environmentalinformatics-marburg/gimms)
 
 <hr>
 
