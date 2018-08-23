@@ -11,8 +11,8 @@
   method = c("yuepilon", "zhang"), df = FALSE)
 
 \S4method{significantTau}{RasterStackBrick}(x, p = 0.001,
-  prewhitening = TRUE, method = c("yuepilon", "zhang"), filename = "",
-  ...)
+  prewhitening = TRUE, method = c("yuepilon", "zhang"),
+  filename = "", ...)
 }
 \arguments{
 \item{x}{Either a \code{Raster*} object or a \code{numeric} vector.}

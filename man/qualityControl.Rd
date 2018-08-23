@@ -6,8 +6,8 @@
 \alias{qualityControl,RasterStackBrick-method}
 \title{Perform Quality Control on GIMMS NDVI3g Data}
 \usage{
-\S4method{qualityControl}{RasterStackBrick}(x, keep = NULL, filename = "",
-  ...)
+\S4method{qualityControl}{RasterStackBrick}(x, keep = NULL,
+  filename = "", ...)
 }
 \arguments{
 \item{x}{A single 2-layered \code{RasterStack} object (NDVI and flags).}

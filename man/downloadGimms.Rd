@@ -15,8 +15,8 @@
 \S4method{downloadGimms}{numeric}(x, y, version = 1L, dsn = getwd(),
   overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
 
-\S4method{downloadGimms}{character}(x, dsn = getwd(), overwrite = FALSE,
-  quiet = TRUE, mode = "wb", cores = 1L, ...)
+\S4method{downloadGimms}{character}(x, dsn = getwd(),
+  overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)
 
 \S4method{downloadGimms}{missing}(version = 1L, dsn = getwd(),
   overwrite = FALSE, quiet = TRUE, mode = "wb", cores = 1L, ...)

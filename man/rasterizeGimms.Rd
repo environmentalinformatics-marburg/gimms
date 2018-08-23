@@ -4,8 +4,8 @@
 \alias{rasterizeGimms}
 \title{Rasterize GIMMS NDVI3g Data}
 \usage{
-rasterizeGimms(x, ext = NULL, snap = "out", keep = NULL, split = FALSE,
-  cores = 1L, filename = "", ...)
+rasterizeGimms(x, ext = NULL, snap = "out", keep = NULL,
+  split = FALSE, cores = 1L, filename = "", ...)
 }
 \arguments{
 \item{x}{\code{character}. Vector of local filepaths. Note that product

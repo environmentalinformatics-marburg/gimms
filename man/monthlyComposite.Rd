@@ -11,8 +11,8 @@
   cores = 1L, filename = "", ...)
 
 \S4method{monthlyComposite}{character}(x, version = 1L,
-  pos1 = ifelse(version == 1, 15L, 4L), pos2 = ifelse(version == 1, 23L,
-  8L), fun = max, cores = 1L, filename = "", ...)
+  pos1 = ifelse(version == 1, 15L, 4L), pos2 = ifelse(version == 1,
+  23L, 8L), fun = max, cores = 1L, filename = "", ...)
 }
 \arguments{
 \item{x}{Multi-layered \code{Raster*} object or \code{character} vector of
