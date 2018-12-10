@@ -32,13 +32,11 @@
 #' (accessed on 2017-01-04).
 #'
 #' @examples
-#' \dontrun{
 #' fls <- system.file("extdata", "inventory_ecv1.rds", package = "gimms")
 #' fls <- basename(readRDS(fls))
 #'
 #' oldNaming(fls[64:65], suffix = ".tif") # adds .tif extension
 #' oldNaming(fls[65:66])                  # tags newer files with 'XX'
-#' }
 #'
 #' @export oldNaming
 #' @name oldNaming

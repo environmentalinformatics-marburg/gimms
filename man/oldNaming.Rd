@@ -33,13 +33,11 @@ is retrieved from the built-in NDVI3g.v0 file inventory (until end 2013; see
 information.
 }
 \examples{
-\dontrun{
 fls <- system.file("extdata", "inventory_ecv1.rds", package = "gimms")
 fls <- basename(readRDS(fls))
 
 oldNaming(fls[64:65], suffix = ".tif") # adds .tif extension
 oldNaming(fls[65:66])                  # tags newer files with 'XX'
-}
 
 }
 \references{
