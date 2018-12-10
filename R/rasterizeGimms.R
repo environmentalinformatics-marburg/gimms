@@ -97,9 +97,11 @@ rasterizeGimmsV0 <- function(x,
 
   ## initialize cluster
   cl <- parallel::makePSOCKcluster(cores)
+  on.exit(parallel::stopCluster(cl))
 
   ## create header files
   headers <- createHeader(x)
+  on.exit(file.remove(headers))
 
   ## export relevant objects to cluster
   dots <- list(...)
@@ -149,17 +151,11 @@ rasterizeGimmsV0 <- function(x,
       dots_sub <- list(x = rst, filename = filename[i])
       dots_sub <- append(dots, dots_sub)
 
-      do.call(raster::writeRaster, args = dots_sub)
+      rst = do.call(raster::writeRaster, args = dots_sub)
     }
 
     return(rst)
   })
-
-  ## remove header files
-  file.remove(headers)
-
-  ## deregister parallel backend
-  parallel::stopCluster(cl)
 
   ## return (list of) ndvi raster stack(s)
   if (!split) {
@@ -183,6 +179,7 @@ rasterizeGimmsV1 <- function(x,
 
   ## initialize cluster
   cl <- parallel::makePSOCKcluster(cores)
+  on.exit(parallel::stopCluster(cl))
 
   ## export relevant objects to cluster
   dots <- list(...)
@@ -241,9 +238,6 @@ rasterizeGimmsV1 <- function(x,
 
     return(nc4)
   })
-
-  ## deregister parallel backend
-  parallel::stopCluster(cl)
 
   ## return (list of) ndvi raster stack(s)
   if (!split) {

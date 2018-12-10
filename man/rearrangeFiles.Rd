@@ -4,8 +4,8 @@
 \alias{rearrangeFiles}
 \title{Rearrange GIMMS NDVI3g.v0 Files}
 \usage{
-rearrangeFiles(x, dsn = getwd(), pattern = "^geo.*.VI3g$", pos = c(4, 6,
-  11), ...)
+rearrangeFiles(x, dsn = getwd(), pattern = "^geo.*.VI3g$", pos = c(4,
+  6, 11), ...)
 }
 \arguments{
 \item{x}{\code{character}. Vector of local filepaths. If missing, 'dsn' will

@@ -11,8 +11,8 @@
   method = c("yuepilon", "zhang"), df = FALSE)
 
 \S4method{significantTau}{RasterStackBrick}(x, p = 0.001,
-  prewhitening = TRUE, method = c("yuepilon", "zhang"), filename = "",
-  ...)
+  prewhitening = TRUE, method = c("yuepilon", "zhang"),
+  filename = "", ...)
 }
 \arguments{
 \item{x}{Either a \code{Raster*} object or a \code{numeric} vector.}
@@ -98,24 +98,18 @@ if (require(snow)) {
 }
 \references{
 Kendall, M.G. (1938). A new measure of rank correlation. \emph{Biometrika}
-30(1/2), 81-93, doi: 10.2307/2332226. Available online at
-\url{http://www.jstor.org/stable/2332226} (accessed 2015-11-06).
+30(1/2), 81-93, \doi{10.2307/2332226}.
 
 Mann, H.B. (1945). Nonparametric tests against trend. \emph{Econometrica}
-13(3), 245-259, doi: 10.2307/1907187. Available online at
-\url{http://www.jstor.org/stable/1907187} (accessed 2015-11-06).
+13(3), 245-259, \doi{10.2307/1907187}.
 
 Zhang, X., Vincent, L.A., Hogg, W.D. and A. Niitsoo (2000). Temperature and
 Precipitation Trends in Canada during the 20th Century. \emph{Atmosphere-Ocean}
-38(3), 395-429, doi: 10.1080/07055900.2000.9649654. Available online at
-\url{http://www.tandfonline.com/doi/abs/10.1080/07055900.2000.9649654}
-(accessed 2015-11-06).
+38(3), 395-429, \doi{10.1080/07055900.2000.9649654}.
 
 Yue, S., Pilon, P., Phinney, B. and G. Cavadias (2002). The influence of
 autocorrelation on the ability to detect trend in hydrological series.
-\emph{Hydrological Processes} 16, 1807-1829, doi: 10.1002/hyp.1095.
-Available online at \url{http://onlinelibrary.wiley.com/doi/10.1002/hyp.1095/abstract}
-(accessed 2015-11-06).
+\emph{Hydrological Processes} 16, 1807-1829,\doi{10.1002/hyp.1095}.
 }
 \seealso{
 \code{\link{MannKendall}}, \code{\link{zyp.trend.vector}}.
