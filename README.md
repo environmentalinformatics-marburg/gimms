@@ -22,6 +22,12 @@ CRAN | Travis-CI (master) | Travis-CI (devel)
 
 #### What's new?
 
+##### 2018-12-07, **gimms** 1.1.1 is out now
+
+Starting with this update, rasterized NDVI3g.v0 images are no longer kept in memory, but properly linked to their corresponding files on disk (only applicable if 'filename' is specified in `rasterizeGimms()`).
+
+<hr>
+
 ##### 2018-01-13, **gimms** 1.1.0 is now on CRAN
 
 As of 2018-01-13, the next minor release of **gimms** has finally arrived on CRAN. Check out [NEWS](https://github.com/environmentalinformatics-marburg/gimms/blob/master/NEWS) for a full list of changes. In addition, note that the accompanying [GitBook](https://www.gitbook.com/book/envin-marburg/introducing-the-r-gimms-package/details) will be updated (and hopefully extended) soon.
