@@ -10,7 +10,7 @@ This month      | In total
 
 CRAN | Travis-CI (master) | Travis-CI (devel)
 ---- | ------------------ | -----------------
-[![](http://www.r-pkg.org/badges/version/gimms)](http://www.r-pkg.org/pkg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=master)](https://travis-ci.org/environmentalinformatics-marburg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=devel)](https://travis-ci.org/environmentalinformatics-marburg/gimms)
+[![](http://www.r-pkg.org/badges/version/gimms)](http://www.r-pkg.org/pkg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=master)](https://travis-ci.org/environmentalinformatics-marburg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=develop)](https://travis-ci.org/environmentalinformatics-marburg/gimms)
 
 <hr>
 
