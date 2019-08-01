@@ -18,7 +18,6 @@
 #'
 #' @import methods raster parallel
 #' @importFrom ncdf4 nc_open ncvar_get
-#' @importFrom RCurl getURL
 #' @importFrom Kendall MannKendall
 #' @importFrom zyp zyp.trend.vector
 #' @importFrom utils download.file

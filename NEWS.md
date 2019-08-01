@@ -1,3 +1,10 @@
+## gimms 1.1.2
+
+Changes:
+
+* Removed 'RCurl' dependency.
+
+
 ## gimms 1.1.1
 
 Changes:

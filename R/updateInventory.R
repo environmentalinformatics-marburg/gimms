@@ -97,9 +97,9 @@ updateEcocast <- function(version = 1L) {
 ### update from nasanex -----
 
 updateNasanex <- function() {
-  con <- serverPath("nasanex")
 
-  cnt <- try(RCurl::getURL(con, dirlistonly = TRUE), silent = TRUE)
+  # list available folders
+  cnt = try(readLines(serverPath("nasanex"), warn = FALSE)[2], silent = TRUE)
 
   if (class(cnt) != "try-error") {
     cnt <- sapply(strsplit(strsplit(cnt, "<Key>")[[1]], "</Key>"), "[[", 1)
