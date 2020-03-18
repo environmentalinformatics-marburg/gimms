@@ -4,8 +4,14 @@
 \alias{monthlyIndices}
 \title{Create Monthly Indices from NDVI3g Files}
 \usage{
-monthlyIndices(x, version = 1L, pos1 = ifelse(version == 1, 15L, 4L),
-  pos2 = ifelse(version == 1, 23L, 8L), timestamp = FALSE, ...)
+monthlyIndices(
+  x,
+  version = 1L,
+  pos1 = ifelse(version == 1, 15L, 4L),
+  pos2 = ifelse(version == 1, 23L, 8L),
+  timestamp = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{\code{character}. Vector of (local or online) filenames.}

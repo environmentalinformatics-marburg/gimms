@@ -4,7 +4,9 @@
 \name{bale3g.v1}
 \alias{bale3g.v1}
 \title{Bale Mountains NDVI3g.v1}
-\format{\code{raster::RasterStack}}
+\format{
+\code{raster::RasterStack}
+}
 \description{
 Bale Mountains NDVI3g.v1.
 }

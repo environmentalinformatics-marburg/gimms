@@ -4,7 +4,9 @@
 \name{kili3g.v0}
 \alias{kili3g.v0}
 \title{Kilimanjaro NDVI3g.v0}
-\format{\code{raster::RasterStack}}
+\format{
+\code{raster::RasterStack}
+}
 \description{
 Kilimanjaro NDVI3g.v0.
 }

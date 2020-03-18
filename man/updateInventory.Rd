@@ -4,8 +4,7 @@
 \alias{updateInventory}
 \title{Update GIMMS NDVI3g File Inventory}
 \usage{
-updateInventory(server = c("ecocast", "nasanex"), version = 1L,
-  quiet = FALSE)
+updateInventory(server = c("ecocast", "nasanex"), version = 1L, quiet = FALSE)
 }
 \arguments{
 \item{server}{\code{character}. Specifies the remote server to use. Currently
