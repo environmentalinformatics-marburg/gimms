@@ -50,7 +50,7 @@ updateInventory <- function(server = c("ecocast", "nasanex"), version = 1L,
   fls <- if (is_ecocast) updateEcocast(version) else updateNasanex()
 
   ## if first-choice server is not available, try alternative server
-  if (class(fls) == "try-error" & length(server) == 2) {
+  if (inherits(fls, "try-error") & length(server) == 2) {
     if (!quiet)
       cat("Priority server ('", server[1],
           "') is not available. Contacting alternative server ('", server[2],
@@ -59,7 +59,7 @@ updateInventory <- function(server = c("ecocast", "nasanex"), version = 1L,
   }
 
   ## available files (offline)
-  if (class(fls) == "try-error") {
+  if (inherits(fls, "try-error")) {
     if (!quiet)
       cat("Failed to retrieve online information. Using local file inventory...\n")
 
@@ -86,7 +86,18 @@ updateInventory <- function(server = c("ecocast", "nasanex"), version = 1L,
 updateEcocast <- function(version = 1L) {
 
   version <- as.integer(version)
-  con <- paste0(serverPath(version = version), "/00FILE-LIST.txt")
+
+  ## handle expired certificate using 'curl'
+  h = curl::new_handle(
+    ssl_verifypeer = 0L
+  )
+  con = curl::curl(
+    paste0(serverPath(version = version), "/00FILE-LIST.txt")
+    , handle = h
+  )
+  on.exit(
+    close(con)
+  )
 
   suppressWarnings(
     try(readLines(con), silent = TRUE)
@@ -99,9 +110,10 @@ updateEcocast <- function(version = 1L) {
 updateNasanex <- function() {
 
   # list available folders
-  cnt = try(readLines(serverPath("nasanex"), warn = FALSE)[2], silent = TRUE)
+  con = serverPath("nasanex")
+  cnt = try(readLines(con, warn = FALSE)[2], silent = TRUE)
 
-  if (class(cnt) != "try-error") {
+  if (!inherits(cnt, "try-error")) {
     cnt <- sapply(strsplit(strsplit(cnt, "<Key>")[[1]], "</Key>"), "[[", 1)
 
     id <- sapply(cnt, function(i) {
@@ -110,7 +122,7 @@ updateNasanex <- function() {
     cnt <- cnt[id]
   }
 
-  return(cnt)
+  return(file.path(con, cnt))
 }
 
 
