@@ -26,6 +26,7 @@ CRAN | Travis-CI (master) | Travis-CI (devel)
 
 Online file retrieval from ECOCAST was recently unavailable due to SSL certificate issues. This has been fixed as of **gimms-1.1.3**. In addition, `gimms:::updateNasanex()` now yields correct online filepaths as outlined in [#3](https://github.com/environmentalinformatics-marburg/gimms/issues/3). 
 
+<hr>
 
 ##### 2018-12-07, **gimms** 1.1.1 is out now
 
