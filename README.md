@@ -58,7 +58,7 @@ I am happy to announce that the brand-new package update (v1.0.0) has successful
 ##### 2016-01-15, **gimms** 0.5.0 is now on CRAN
 As of today, **gimms** 0.5.0 is available from [CRAN](https://cran.r-project.org/package=gimms) and has some new functionality:
 
-* enabled flag support in `rasterizeGimms`. In addition to the raw and scaled values of NDVI3g, the function now optionally returns flag layers which can subsequently be used for quality control. Please refer to the official [README](ecocast.arc.nasa.gov/data/pub/gimms/3g.v0/00READMEgeo.txt) for further reading. 
+* enabled flag support in `rasterizeGimms`. In addition to the raw and scaled values of NDVI3g, the function now optionally returns flag layers which can subsequently be used for quality control. Please refer to the official [README](http://nasanex.s3.amazonaws.com/AVHRR/GIMMS/3G/00READMEgeo.txt) for further reading. 
 * improved performance of parallel processing.
 * revised package documentation.
 
