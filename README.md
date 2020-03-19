@@ -22,6 +22,11 @@ CRAN | Travis-CI (master) | Travis-CI (devel)
 
 #### What's new?
 
+##### 2020-03-19, **gimms** 1.1.3 re-enables ECOCAST file retrieval
+
+Online file retrieval from ECOCAST was recently unavailable due to SSL certificate issues. This has been fixed as of **gimms-1.1.3**. In addition, `gimms:::updateNasanex()` now yields correct online filepaths as outlined in [#3](https://github.com/environmentalinformatics-marburg/gimms/issues/3). 
+
+
 ##### 2018-12-07, **gimms** 1.1.1 is out now
 
 Starting with this update, rasterized NDVI3g.v0 images are no longer kept in memory, but properly linked to their corresponding files on disk (only applicable if 'filename' is specified in `rasterizeGimms()`).
@@ -90,10 +95,12 @@ devtools::install_github("environmentalinformatics-marburg/gimms",
 and will be submitted to CRAN soon.
 
 <hr>
+
 ##### 2015-11-06, pre-whitened Mann-Kendall trend test via `significantTau`
 In order to account for lag-1 autocorrelation when trying to deduce reliable long-term monotonous trends, **gimms** now features a function called `significantTau`. The code imports the standard (i.e., without pre-whitening) procedure included in package **Kendall** (McLeod, 2011) or, if the user decides to apply pre-whitening prior to the actual trend test, one of the algorithms included in **zyp** (Bronaugh and Consortium, 2013). Check out `?significantTau` for further details. 
 
 <hr> 
+
 ##### 2015-10-26, `downloadGimms` now works properly on Windows
 I recently received a bug report about some strange behavior of `downloadGimms` (when working on Windows platforms) which resulted in a rather awkward look of the rasterized images. 
 
