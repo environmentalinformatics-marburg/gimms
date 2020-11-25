@@ -8,9 +8,13 @@ This month      | In total
 
 ##### Build status
 
-CRAN | Travis-CI (master) | Travis-CI (devel)
----- | ------------------ | -----------------
-[![](http://www.r-pkg.org/badges/version/gimms)](http://www.r-pkg.org/pkg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=master)](https://travis-ci.org/environmentalinformatics-marburg/gimms) | [![](https://travis-ci.org/environmentalinformatics-marburg/gimms.svg?branch=develop)](https://travis-ci.org/environmentalinformatics-marburg/gimms)
+<!-- badges: start -->
+[![R build status](https://github.com/environmentalinformatics-marburg/gimms/workflows/R-CMD-check/badge.svg)](https://github.com/environmentalinformatics-marburg/gimms/actions)
+<!-- badges: end -->
+
+CRAN | 
+---- | 
+[![](http://www.r-pkg.org/badges/version/gimms)](http://www.r-pkg.org/pkg/gimms) | 
 
 <hr>
 
