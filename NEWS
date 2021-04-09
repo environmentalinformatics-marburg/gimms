@@ -1,6 +1,8 @@
 gimms 1.1.4
 
-tbc.
+Changes:
+
+* In case server is unavailable, updateInventory() returns offline files list for target server straight away without testing alternate servers first.
 
 
 gimms 1.1.3
