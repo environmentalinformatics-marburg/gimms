@@ -66,16 +66,16 @@ rasterizeGimms <- function(x,
                            cores = 1L,
                            filename = "",
                            ...) {
-
+  
   ## check 'cores'
   cores <- checkCores(cores)
-
+  
   ## check 'filename'
   filename <- checkFls(x, filename)
-
+  
   ## determine product version
   version <- productVersion(x, uniform = TRUE)
-
+  
   if (all(version == 0)) {
     rasterizeGimmsV0(x, ext, snap, keep, split, cores, filename, ...)
   } else {
@@ -94,36 +94,36 @@ rasterizeGimmsV0 <- function(x,
                              cores = 1L,
                              filename = "",
                              ...) {
-
+  
   ## initialize cluster
   cl <- parallel::makePSOCKcluster(cores)
   on.exit(parallel::stopCluster(cl))
-
+  
   ## create header files
   headers <- createHeader(x)
   on.exit(file.remove(headers))
-
+  
   ## export relevant objects to cluster
   dots <- list(...)
   parallel::clusterExport(cl, c("x", "ext", "snap", "keep", "filename", "dots"),
                           envir = environment())
-
+  
   ## loop over files in 'x'
   lst <- parallel::parLapply(cl, 1:length(x), function(i) {
-
+    
     # import binary data as 'RasterLayer' and flip
     rst <- raster::raster(x[i])
     rst <- raster::t(rst)
-
+    
     # set extent and projection
     ref <- raster::extent(c(-180, 180, -90, 90))
     rst <- raster::setExtent(rst, ref)
     raster::projection(rst) <- "+init=epsg:4326"
-
+    
     # clip images (optional)
     if (!is.null(ext))
       rst <- raster::crop(rst, ext, snap = snap)
-
+    
     # discard 'water-mask' (-10000) and 'nodata-mask' pixels (-5000)
     for (z in c(-10000, -5000)) {
       val <- raster::getValues(rst)
@@ -131,32 +131,32 @@ rasterizeGimmsV0 <- function(x,
       val[ids] <- NA
       rst <- raster::setValues(rst, val)
     }
-
+    
     # retrieve ndvi and flags
     ndvi <- floor(rst/10) / 1000
     flag <- rst - floor(rst/10) * 10 + 1
-
+    
     rst <- raster::stack(ndvi, flag)
     names(rst) <- c("ndvi", "flag")
-
+    
     # carry out quality control (optional)
     rst <- if (!is.null(keep)) {
       qualityControl(rst, keep = keep)
     } else {
       rst[[1]]
     }
-
+    
     # write to file (optional)
     if (nchar(filename[i]) > 0) {
       dots_sub <- list(x = rst, filename = filename[i])
       dots_sub <- append(dots, dots_sub)
-
+      
       rst = do.call(raster::writeRaster, args = dots_sub)
     }
-
+    
     return(rst)
   })
-
+  
   ## return (list of) ndvi raster stack(s)
   if (!split) {
     return(raster::stack(lst))
@@ -176,37 +176,37 @@ rasterizeGimmsV1 <- function(x,
                              cores = 1L,
                              filename = "",
                              ...) {
-
+  
   ## initialize cluster
   cl <- parallel::makePSOCKcluster(cores)
   on.exit(parallel::stopCluster(cl))
-
+  
   ## export relevant objects to cluster
   dots <- list(...)
   parallel::clusterExport(cl, c("ext", "snap", "keep", "filename", "dots"),
                           envir = environment())
-
+  
   ## loop over files in 'x'
   lst <- lapply(1:length(x), function(i) {
-
+    
     ndvi <- raster::stack(x[i], varname = "ndvi")
     flag <- raster::stack(x[i], varname = "percentile")
-
+    
     ## export relevant sub-objects to cluster
     parallel::clusterExport(cl, c("ndvi", "flag"), envir = environment())
-
+    
     ## loop over half-monthly layers
     nc4 <- parallel::parLapply(cl, 1:(raster::nlayers(ndvi)), function(j) {
-
+      
       # clip images (optional)
       rst_ndvi <- ndvi[[j]]
       rst_flag <- flag[[j]]
-
+      
       if (!is.null(ext)) {
         rst_ndvi <- raster::crop(rst_ndvi, ext, snap = snap)
         rst_flag <- raster::crop(rst_flag, ext, snap = snap)
       }
-
+      
       # discard 'water-mask' (-32768) and 'nodata-mask' pixels (-3000)
       for (z in c(-32768, -3000)) {
         val <- raster::getValues(rst_ndvi)
@@ -214,14 +214,14 @@ rasterizeGimmsV1 <- function(x,
         val[ids] <- NA
         rst_ndvi <- raster::setValues(rst_ndvi, val)
       }
-
+      
       # apply scale factor and add 'flag' layer to raster stack
       rst_ndvi <- rst_ndvi / 10000
       rst_flag <- floor(rst_flag / 2000)
-
+      
       rst <- raster::stack(rst_ndvi, rst_flag)
       names(rst) <- c("ndvi", "flag")
-
+      
       # carry out quality control (optional)
       if (!is.null(keep)) {
         qualityControl(rst, keep = keep)
@@ -229,16 +229,16 @@ rasterizeGimmsV1 <- function(x,
         rst[[1]]
       }
     })
-
+    
     nc4 <- raster::stack(nc4)
-
+    
     ## write to file
     if (nchar(filename[i]) > 0)
       nc4 <- writeRaster(nc4, filename[i], ...)
-
+    
     return(nc4)
   })
-
+  
   ## return (list of) ndvi raster stack(s)
   if (!split) {
     return(raster::stack(lst))

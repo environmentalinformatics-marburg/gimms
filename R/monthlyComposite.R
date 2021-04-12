@@ -59,69 +59,86 @@ if ( !isGeneric("monthlyComposite") ) {
 ### function using 'RasterStack' or 'RasterBrick' ##############################
 #' @aliases monthlyComposite,RasterStackBrick-method
 #' @rdname monthlyComposite
-setMethod("monthlyComposite",
-          signature(x = "RasterStackBrick"),
-          function(x, indices, fun = max, cores = 1L, filename = "", ...) {
-
-  ## stop if 'indices' is missing
-  if (missing(indices))
-    stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
-
-  ## check 'cores'
-  cores <- checkCores(cores)
-
-  ## initialize cluster
-  cl <- parallel::makePSOCKcluster(cores)
-  on.exit(parallel::stopCluster(cl))
-
-  ## export relevant objects to cluster
-  dots <- list(...)
-  parallel::clusterExport(cl, c("x", "indices", "fun", "filename", "dots"),
-                          envir = environment())
-
-  # loop over unique layer indices and apply 'fun'
-  lst_out <- parallel::parLapply(cl, unique(indices), function(i) {
-    x_sub <- raster::subset(x, which(indices == i))
-
-    dots_sub <- list(x = raster::subset(x, which(indices == i)),
-                     fun = fun,
-                     indices = rep(1, length(which(indices == i))),
-                     filename = filename)
-    dots_sub <- append(dots, dots_sub)
-
-    do.call(raster::stackApply, args = dots_sub)
-  })
-
-  # stack layers
-  if (length(lst_out) == 1) {
-    lst_out[[1]]
-  } else {
-    raster::stack(lst_out)
+setMethod(
+  "monthlyComposite"
+  , signature(x = "RasterStackBrick")
+  , function(
+    x
+    , indices
+    , fun = max
+    , cores = 1L
+    , filename = ""
+    , ...
+  ) {
+    
+    ## stop if 'indices' is missing
+    if (missing(indices))
+      stop("Please supply a valid set of indices, e.g. returned by monthlyIndices().")
+    
+    ## check 'cores'
+    cores <- checkCores(cores)
+    
+    ## initialize cluster
+    cl <- parallel::makePSOCKcluster(cores)
+    on.exit(parallel::stopCluster(cl))
+    
+    ## export relevant objects to cluster
+    dots <- list(...)
+    parallel::clusterExport(cl, c("x", "indices", "fun", "filename", "dots"),
+                            envir = environment())
+    
+    # loop over unique layer indices and apply 'fun'
+    lst_out <- parallel::parLapply(cl, unique(indices), function(i) {
+      x_sub <- raster::subset(x, which(indices == i))
+      
+      dots_sub <- list(x = raster::subset(x, which(indices == i)),
+                       fun = fun,
+                       indices = rep(1, length(which(indices == i))),
+                       filename = filename)
+      dots_sub <- append(dots, dots_sub)
+      
+      do.call(raster::stackApply, args = dots_sub)
+    })
+    
+    # stack layers
+    if (length(lst_out) == 1) {
+      lst_out[[1]]
+    } else {
+      raster::stack(lst_out)
+    }
   }
-})
+)
 
 
 ################################################################################
 ### function using 'character' #################################################
 #' @aliases monthlyComposite,character-method
 #' @rdname monthlyComposite
-setMethod("monthlyComposite",
-          signature(x = "character"),
-          function(x, version = 1L,
-                   pos1 = ifelse(version == 1, 15L, 4L),
-                   pos2 = ifelse(version == 1, 23L, 8L),
-                   fun = max, cores = 1L, filename = "", ...) {
-
-            ## check 'cores'
-            cores <- checkCores(cores)
-
-            ## extract timestamp from 'x'
-            indices <- monthlyIndices(x, pos1 = pos1, pos2 = pos2)
-
-            ## stack files and run 'monthlyComposite,RasterStackBrick-method'
-            rst <- raster::stack(x)
-            monthlyComposite(rst, indices = indices, fun = fun, cores = cores,
-                             filename = filename, ...)
-
-          })
+setMethod(
+  "monthlyComposite"
+  , signature(x = "character")
+  , function(
+    x
+    , version = 1L
+    , pos1 = ifelse(version == 1, 15L, 4L)
+    , pos2 = ifelse(version == 1, 23L, 8L)
+    , fun = max
+    , cores = 1L
+    , filename = ""
+    , ...
+  ) {
+    
+    ## check 'cores'
+    cores <- checkCores(cores)
+    
+    ## extract timestamp from 'x'
+    indices <- monthlyIndices(x, pos1 = pos1, pos2 = pos2)
+    
+    ## stack files and run 'monthlyComposite,RasterStackBrick-method'
+    rst <- raster::stack(x)
+    monthlyComposite(rst, indices = indices, fun = fun, cores = cores,
+                     filename = filename, ...)
+    
+  }
+)
 

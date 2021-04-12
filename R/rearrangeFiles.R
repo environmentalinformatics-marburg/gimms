@@ -29,37 +29,37 @@ rearrangeFiles <- function(x,
                            pattern = "^geo.*.VI3g$",
                            pos = c(4, 6, 11),
                            ...) {
-
+  
   if (length(pos) != 3)
     stop("'pos' must be a vector of length 3 (i.e., start position of year, month and day); see ?rearrangeFiles. \n")
-
+  
   ## if `is.null(fls)`, apply pattern matching in 'dsn'
   if (missing(x))
     x <- list.files(dsn, pattern = pattern, ...)
-
+  
   ## vector to data.frame
   gimms_df <- data.frame(file = x, stringsAsFactors = FALSE)
-
+  
   ## backup current locale and switch to us standard
   locale <- Sys.getlocale(category = "LC_TIME")
   setLocale()
-
+  
   ## create columns 'year', 'month' and 'day'
   gimms_df <- transform(gimms_df,
                         "year" = substr(basename(file), pos[1], pos[1] + 1),
                         "month" = substr(basename(file), pos[2], pos[2] + 2),
                         "day" = ifelse(substr(basename(file), pos[3], pos[3]) == "a", 1, 15))
-
+  
   ## create column 'date'
   gimms_df$date <- as.Date(paste0(gimms_df$day, gimms_df$month, gimms_df$year),
                            format = "%d%b%y")
-
+  
   ## re-arrange rows by 'date'
   gimms_df <- gimms_df[order(gimms_df$date), ]
-
+  
   ## revoke locale time adjustment
   setLocale(TRUE, locale = locale)
-
+  
   ## return rearranged files
   gimms_fls <- gimms_df$file
   return(gimms_fls)

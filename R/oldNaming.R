@@ -41,27 +41,27 @@
 #' @export oldNaming
 #' @name oldNaming
 oldNaming <- function(x, suffix = "") {
-
+  
   ## available ndvi3g.v0 files (hold satellite number)
   fls_v0 <- basename(updateInventory(version = 0, quiet = TRUE))
   dts_v0 <- getV0dates(fls_v0)
-
+  
   dts_v1 <- getV1dates(x)
-
+  
   ## loop over input files
   nmb <- lapply(x, function(i) {
-
+    
     # if current file exists, read satellite number
     if (file.exists(i)) {
       nc4 <- ncdf4::nc_open(i)
       formatC(ncdf4::ncvar_get(nc4, "satellites"), width = 2, flag = "0")
-
-    # else determine satellite number from corresponding ndvi3g.v0 file (if
-    # available)
+      
+      # else determine satellite number from corresponding ndvi3g.v0 file (if
+      # available)
     } else {
       dts <- getV1dates(i)
       ids <- match(dts, dts_v0)
-
+      
       if (sum(is.na(ids)) == 0) {
         substr(fls_v0[ids], 14, 15)
       } else {
@@ -69,9 +69,9 @@ oldNaming <- function(x, suffix = "") {
       }
     }
   })
-
+  
   nmb <- unlist(nmb)
-
+  
   ## create and return output names
   out <- paste0("geo", dts_v1, ".n", nmb, "-VI3g", suffix)
   paste0(dirname(x), "/", out)

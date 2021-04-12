@@ -104,62 +104,68 @@ NULL
 ### function using 'numeric' input #############################################
 #' @aliases significantTau,numeric-method
 #' @rdname significantTau
-setMethod("significantTau",
-          signature(x = "numeric"),
-          function(x, p = 0.001, prewhitening = TRUE,
-                   method = c("yuepilon", "zhang"), df = FALSE) {
-
-            # if only one unique value exists in 'x', return NA
-            if (length(unique(x)) == 1)
-              return(NA)
-
-            # with prewhitening
-            if (prewhitening) {
-
-              # try to compute pre-whitened mann-kendall trend test
-              try(mk <- zyp::zyp.trend.vector(x, method = method[1]), silent = TRUE)
-
-              # if previous computation fails, return NA
-              if (!exists("mk")) {
-                sig <- tau <- NA
-                # else return kendall's tau and referring p value
-              } else {
-
-                id_sig <- grep("sig", names(mk))
-                sig <- mk[id_sig]
-
-                id_tau <- grep("tau", names(mk))
-                tau <- mk[id_tau]
-              }
-
-            # without prewhitening
-            } else {
-
-              mk <- Kendall::MannKendall(x)
-
-              sig <- mk$sl
-              tau <- mk$tau
-            }
-
-            # return data.frame
-            if (df) {
-              return(data.frame(tau = tau, p = sig))
-
-              # reject value of tau if p >= 0.001
-            } else {
-
-              if (is.logical(sig) | is.logical(p)) {
-                return(NA)
-              } else {
-                if (sig >= p) {
-                  return(NA)
-                  # keep value of tau if p < 0.001
-                } else {
-                  return(tau)
-                }
-              }
-            }
-          }
+setMethod(
+  "significantTau"
+  , signature(x = "numeric")
+  , function(
+    x
+    , p = 0.001
+    , prewhitening = TRUE
+    , method = c("yuepilon", "zhang")
+    , df = FALSE
+  ) {
+    
+    # if only one unique value exists in 'x', return NA
+    if (length(unique(x)) == 1)
+      return(NA)
+    
+    # with prewhitening
+    if (prewhitening) {
+      
+      # try to compute pre-whitened mann-kendall trend test
+      try(mk <- zyp::zyp.trend.vector(x, method = method[1]), silent = TRUE)
+      
+      # if previous computation fails, return NA
+      if (!exists("mk")) {
+        sig <- tau <- NA
+        # else return kendall's tau and referring p value
+      } else {
+        
+        id_sig <- grep("sig", names(mk))
+        sig <- mk[id_sig]
+        
+        id_tau <- grep("tau", names(mk))
+        tau <- mk[id_tau]
+      }
+      
+      # without prewhitening
+    } else {
+      
+      mk <- Kendall::MannKendall(x)
+      
+      sig <- mk$sl
+      tau <- mk$tau
+    }
+    
+    # return data.frame
+    if (df) {
+      return(data.frame(tau = tau, p = sig))
+      
+      # reject value of tau if p >= 0.001
+    } else {
+      
+      if (is.logical(sig) | is.logical(p)) {
+        return(NA)
+      } else {
+        if (sig >= p) {
+          return(NA)
+          # keep value of tau if p < 0.001
+        } else {
+          return(tau)
+        }
+      }
+    }
+  }
 )
 
 
@@ -167,28 +173,36 @@ setMethod("significantTau",
 ### function using 'RasterStack' or 'RasterBrick' input ########################
 #' @aliases significantTau,RasterStackBrick-method
 #' @rdname significantTau
-setMethod("significantTau",
-          signature(x = "RasterStackBrick"),
-          function(x, p = 0.001, prewhitening = TRUE,
-                   method = c("yuepilon", "zhang"), filename = "", ...) {
-
-  ## custom tau function passed to calc()
-  tau <- function(y) {
-    significantTau(y, p, prewhitening, method, df = FALSE)
+setMethod(
+  "significantTau"
+  , signature(x = "RasterStackBrick")
+  , function(
+    x
+    , p = 0.001
+    , prewhitening = TRUE
+    , method = c("yuepilon", "zhang")
+    , filename = ""
+    , ...
+  ) {
+    
+    ## custom tau function passed to calc()
+    tau <- function(y) {
+      significantTau(y, p, prewhitening, method, df = FALSE)
+    }
+    
+    ## single-core: calc()
+    cl <- try(raster::getCluster(), silent = TRUE)
+    if (inherits(cl, "try-error")) {
+      raster::calc(x, fun = tau, filename = filename, ...)
+      
+      ## multi-core: clusterR()
+    } else {
+      on.exit(raster::returnCluster())
+      parallel::clusterExport(cl, envir = environment(),
+                              varlist = c("p", "prewhitening", "method", "tau"))
+      
+      raster::clusterR(x, raster::calc, args = list(fun = tau),
+                       filename = filename, ...)
+    }
   }
-
-  ## single-core: calc()
-  cl <- try(raster::getCluster(), silent = TRUE)
-  if (inherits(cl, "try-error")) {
-    raster::calc(x, fun = tau, filename = filename, ...)
-
-  ## multi-core: clusterR()
-  } else {
-    on.exit(raster::returnCluster())
-    parallel::clusterExport(cl, envir = environment(),
-                            varlist = c("p", "prewhitening", "method", "tau"))
-
-    raster::clusterR(x, raster::calc, args = list(fun = tau),
-                     filename = filename, ...)
-  }
-})
+)

@@ -56,24 +56,31 @@ if ( !isGeneric("qualityControl") ) {
 ### function using 'RasterStack' or 'RasterBrick' ##############################
 #' @aliases qualityControl,RasterStackBrick-method
 #' @rdname qualityControl
-setMethod("qualityControl",
-          signature(x = "RasterStackBrick"),
-          function(x, keep = NULL, filename = "", ...) {
-
-            ## if keep is not specified, return ndvi layer
-            if (is.null(keep)) {
-              raster::overlay(x[[1]], fun = function(y) {
-                return(y)
-              }, filename = filename, ...)
-
-            ## else overlay ndvi and flag layer
-            } else {
-              raster::overlay(x[[1]], x[[2]], fun = function(y, z) {
-                y[!z[] %in% keep] <- NA
-                return(y)
-              }, filename = filename, ...)
-            }
-          })
+setMethod(
+  "qualityControl"
+  , signature(x = "RasterStackBrick")
+  , function(
+    x
+    , keep = NULL
+    , filename = ""
+    , ...
+  ) {
+    
+    ## if keep is not specified, return ndvi layer
+    if (is.null(keep)) {
+      raster::overlay(x[[1]], fun = function(y) {
+        return(y)
+      }, filename = filename, ...)
+      
+      ## else overlay ndvi and flag layer
+    } else {
+      raster::overlay(x[[1]], x[[2]], fun = function(y, z) {
+        y[!z[] %in% keep] <- NA
+        return(y)
+      }, filename = filename, ...)
+    }
+  }
+)
 
 
 # ################################################################################
