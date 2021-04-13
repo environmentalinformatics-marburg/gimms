@@ -221,3 +221,27 @@ checkFls <- function(x, filename) {
     filename
   }
 }
+
+
+### . check version ----
+
+checkVersion = function(server, version) {
+  version = switch(
+    server
+    , "ecocast" = intersect(version, c(0, 1))
+    , "nasanex" = intersect(version, 0)
+    , "poles"   = intersect(version, 1)
+  )
+  
+  if (length(version) == 0) {
+    stop(
+      sprintf(
+        "NDVI3g version %s is not available from server %s."
+        , version
+        , server
+      )
+    )
+  }
+  
+  return(version)
+}
