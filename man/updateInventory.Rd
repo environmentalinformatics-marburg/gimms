@@ -23,7 +23,7 @@ Currently ignored if \code{server != "ecocast"}.}
 console output is disabled.}
 }
 \value{
-A \code{character} vector of online file paths.
+A \code{character} vector of online filepaths.
 }
 \description{
 Download the latest version of the GIMMS NDVI3g file inventory from the NASA

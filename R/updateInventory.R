@@ -17,7 +17,7 @@
 #' console output is disabled.
 #'
 #' @return
-#' A \code{character} vector of online file paths.
+#' A \code{character} vector of online filepaths.
 #'
 #' @details
 #' GIMMS NDVI3g.v1 is currently available from ECOCAST and A Big Earth Data 
