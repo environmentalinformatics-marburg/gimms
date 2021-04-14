@@ -2,7 +2,7 @@ library(gimms)
 
 expect_identical(
   gimms:::serverPath("poles")
-  , "ftp://download_403193:72855006@210.72.14.198"
+  , "ftp://210.72.14.198"
 )
 
 
@@ -56,4 +56,24 @@ expect_error(
     "poles"
     , 0
   )
+)
+
+
+### . dates_*v1.rds ----
+
+## ecocast
+dts_ecv1 = readRDS(
+  system.file("extdata", "dates_ecv1.rds", package = "gimms")
+  # "inst/extdata/dates_ecv1.rds"
+)
+
+## poles
+dts_plv1 = readRDS(
+  system.file("extdata", "dates_plv1.rds", package = "gimms")
+  # "inst/extdata/dates_plv1.rds"
+)
+
+expect_equivalent(
+  dts_ecv1
+  , dts_plv1
 )
