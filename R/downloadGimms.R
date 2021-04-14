@@ -29,6 +29,7 @@ if ( !isGeneric("downloadGimms") ) {
 #' @param cores \code{integer}, defaults to \code{1L}. Number of cores used for
 #' parallel processing. Note that a fast internet connection is required in
 #' order for parallelization to take effect.
+#' @param server See \code{\link[gimms]{updateInventory}}.
 #' @param ... Further arguments passed to \code{\link{download.file}}, e.g.
 #' 'method'.
 #'
@@ -81,8 +82,11 @@ setMethod(
     , quiet = TRUE
     , mode = "wb"
     , cores = 1L
+    , server = c("ecocast", "nasanex", "poles")
     , ...
   ) {
+    
+    server = match.arg(server)
     
     ## check if target folder exists
     checkDsn(dsn)
@@ -90,13 +94,19 @@ setMethod(
     ## check 'cores'
     cores <- checkCores(cores)
     
+    ## check `version`
+    version = checkVersion(
+      server
+      , version
+    )
+    
     ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
     if (missing(x) & missing(y))
       downloadGimms(version = version, dsn = dsn, overwrite = overwrite,
-                    quiet = quiet, mode = mode, cores = cores, ...)
+                    quiet = quiet, mode = mode, cores = cores, server = server, ...)
     
     ## available files and corresponding dates
-    fls <- updateInventory(version = version)
+    fls <- updateInventory(server = server, version = version)
     dts <- monthlyIndices(fls, version = version, timestamp = TRUE)
     
     ## start (finish) with the first (last) timestamp available if 'x'
@@ -115,8 +125,17 @@ setMethod(
       ## ...from version 1
     } else {
       # identify .nc4 files with at least 1 required date
-      lst <- readRDS(system.file("extdata", "dates_ecv1.rds",
-                                 package = "gimms"))
+      lst <- readRDS(
+        system.file(
+          "extdata"
+          , switch(
+            server
+            , "ecocast" = "dates_ecv1.rds"
+            , "poles"   = "dates_plv1.rds"
+          )
+          , package = "gimms"
+        )
+      )
       
       mat <- sapply(usr_dts, function(i) {
         sapply(lst, function(j) any(i == j))
@@ -126,7 +145,7 @@ setMethod(
     
     ## download files
     downloader(fls, dsn = dsn, overwrite = overwrite,
-               quiet = quiet, mode = mode, cores = cores, ...)
+               quiet = quiet, mode = mode, cores = cores, server = server, ...)
   }
 )
 
@@ -147,6 +166,7 @@ setMethod(
     , quiet = TRUE
     , mode = "wb"
     , cores = 1L
+    , server = c("ecocast", "nasanex", "poles")
     , ...
   ) {
     
@@ -156,13 +176,19 @@ setMethod(
     ## check 'cores'
     cores <- checkCores(cores)
     
+    ## check `version`
+    version = checkVersion(
+      server
+      , version
+    )
+    
     ## jump to downloadGimms,missing-method if neither 'x' nor 'y' is specified
     if (missing(x) & missing(y))
-      downloadGimms(dsn = dsn, overwrite = overwrite, quiet = quiet,
-                    mode = mode, cores = cores, ...)
+      downloadGimms(version = version, dsn = dsn, overwrite = overwrite, quiet = quiet,
+                    mode = mode, cores = cores, server = server, ...)
     
     ## available files
-    fls <- updateInventory(version = version)
+    fls <- updateInventory(server = server, version = version)
     
     ## if specified, subset available files by time frame
     bsn <- basename(fls)
@@ -190,7 +216,7 @@ setMethod(
     
     ## download
     downloader(fls, dsn = dsn, overwrite = overwrite,
-               quiet = quiet, mode = mode, cores = cores, ...)
+               quiet = quiet, mode = mode, cores = cores, server = server, ...)
   }
 )
 
@@ -239,6 +265,7 @@ setMethod(
     , quiet = TRUE
     , mode = "wb"
     , cores = 1L
+    , server = c("ecocast", "nasanex", "poles")
     , ...
   ) {
     
@@ -248,8 +275,14 @@ setMethod(
     ## check 'cores'
     cores <- checkCores(cores)
     
+    ## check `version`
+    version = checkVersion(
+      server
+      , version
+    )
+    
     ## download all available files
-    downloader(updateInventory(version = version), dsn = dsn,
+    downloader(updateInventory(server = server, version = version), dsn = dsn,
                overwrite = overwrite, quiet = quiet, mode = mode,
                cores = cores, ...)
   }

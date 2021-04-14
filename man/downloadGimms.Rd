@@ -17,6 +17,7 @@
   quiet = TRUE,
   mode = "wb",
   cores = 1L,
+  server = c("ecocast", "nasanex", "poles"),
   ...
 )
 
@@ -29,6 +30,7 @@
   quiet = TRUE,
   mode = "wb",
   cores = 1L,
+  server = c("ecocast", "nasanex", "poles"),
   ...
 )
 
@@ -49,6 +51,7 @@
   quiet = TRUE,
   mode = "wb",
   cores = 1L,
+  server = c("ecocast", "nasanex", "poles"),
   ...
 )
 }
@@ -80,6 +83,8 @@ reduced.}
 \item{cores}{\code{integer}, defaults to \code{1L}. Number of cores used for
 parallel processing. Note that a fast internet connection is required in
 order for parallelization to take effect.}
+
+\item{server}{See \code{\link[gimms]{updateInventory}}.}
 
 \item{...}{Further arguments passed to \code{\link{download.file}}, e.g.
 'method'.}

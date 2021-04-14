@@ -3,7 +3,7 @@
 downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                        mode = "wb", cores = 1L, ...) {
   
-  ### single core
+  ### . single core ----
   
   if (cores == 1L) {
     
@@ -14,13 +14,27 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
         if (!quiet)
           cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
       } else {
-        try(download.file(i, destfile = destfile, mode = mode,
-                          quiet = quiet, ...), silent = TRUE)
+        if (grepl("^ftp://", i)) {
+          h = curl::new_handle(
+            userpwd = "download_403193:72855006"
+          )
+          try(
+            curl::curl_download(
+              i
+              , destfile = destfile
+              , handle = h
+            )
+            , silent = TRUE
+          )
+        } else {
+          try(download.file(i, destfile = destfile, mode = mode,
+                            quiet = quiet, ...), silent = TRUE)
+        }
       }
     }
     
     
-    ### multi-core
+    ### . multi-core ----
     
   } else {
     
@@ -39,8 +53,22 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
         if (!quiet)
           cat("File", destfile, "already exists in destination folder. Proceeding to next file ...\n")
       } else {
-        try(download.file(i, destfile = destfile, mode = mode,
-                          quiet = quiet, ...), silent = TRUE)
+        if (grepl("^ftp://", i)) {
+          h = curl::new_handle(
+            userpwd = "download_403193:72855006"
+          )
+          try(
+            curl::curl_download(
+              i
+              , destfile = destfile
+              , handle = h
+            )
+            , silent = TRUE
+          )
+        } else {
+          try(download.file(i, destfile = destfile, mode = mode,
+                            quiet = quiet, ...), silent = TRUE)
+        }
       }
     })
   }

@@ -21,7 +21,7 @@
 #' @importFrom Kendall MannKendall
 #' @importFrom zyp zyp.trend.vector
 #' @importFrom utils download.file
-#' @importFrom curl curl new_handle
+#' @importFrom curl curl curl_download new_handle
 #'
 #' @references
 #' Pinzon, JE & Tucker, CJ (2014). A Non-Stationary 1981-2012 AVHRR
