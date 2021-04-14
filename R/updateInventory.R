@@ -159,8 +159,8 @@ updateNasanex <- function(...) {
 updatePoles = function(...) {
   
   h = curl::new_handle(
-    ftp_use_epsv = TRUE
-    , dirlistonly = TRUE
+    dirlistonly = TRUE
+    , userpwd = "download_403193:72855006"
   )
   con = curl::curl(
     serverPath("poles")
@@ -219,6 +219,6 @@ serverPath = function(
       , ifelse(as.integer(version) == 1, "v1", "v0")
     )
     , "nasanex" = "https://nasanex.s3.amazonaws.com"
-    , "poles"   = "ftp://download_403193:72855006@210.72.14.198"
+    , "poles"   = "ftp://210.72.14.198"
   )
 }
