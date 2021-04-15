@@ -17,7 +17,7 @@
   quiet = TRUE,
   mode = "wb",
   cores = 1L,
-  server = c("ecocast", "nasanex", "poles"),
+  server = c("poles", "nasanex", "ecocast"),
   ...
 )
 
@@ -30,7 +30,7 @@
   quiet = TRUE,
   mode = "wb",
   cores = 1L,
-  server = c("ecocast", "nasanex", "poles"),
+  server = c("poles", "nasanex", "ecocast"),
   ...
 )
 
@@ -51,7 +51,7 @@
   quiet = TRUE,
   mode = "wb",
   cores = 1L,
-  server = c("ecocast", "nasanex", "poles"),
+  server = c("poles", "nasanex", "ecocast"),
   ...
 )
 }
@@ -60,7 +60,7 @@
 \code{as.Date("2000-01-01")}) or \code{numeric} year (e.g., \code{2000}).
 Alternatively, a \code{character} vector of online filepaths to download
 created from \code{\link{updateInventory}}. If \code{missing}, all files
-available only are being downloaded.}
+available online are being downloaded.}
 
 \item{y}{End time for data download as either \code{Date} object or
 \code{numeric} year. Ignored if 'x' is a \code{character} object or missing.}
@@ -93,9 +93,10 @@ order for parallelization to take effect.}
 A \code{character} vector of local filepaths.
 }
 \description{
-Download GIMMS NDVI3g data from the NASA Ames Ecological Forecasting Lab,
-optionally for a given period of time. Both NDVI3g.v1 (NetCDF, until end
-2015) and NDVI3g.v0 (ENVI binary, until end 2013) are available.
+Download GIMMS NDVI3g data from The National Center for Atmospheric Research 
+or NASA Ames Ecological Forecasting Lab, optionally for a given period of 
+time. NDVI3g.v1 (NetCDF, until end 2015) is available from both platforms, 
+whereas NDVI3g.v0 (ENVI binary, until end 2013) is ECOCAST only.
 }
 \examples{
 \dontrun{

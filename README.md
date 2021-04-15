@@ -20,7 +20,7 @@ CRAN |
 
 #### Introducing the 'gimms' package
 
-... is an [open-access tutorial](https://www.gitbook.com/book/envin-marburg/introducing-the-r-gimms-package/details) about the **gimms** package which has been developed using [GitBook](https://www.gitbook.com/). The book will regularly be updated as **gimms** develops further, so make sure to check it out every now and then!
+... is an [open-access tutorial](https://fdetsch.gitbooks.io/gimmsgitbook/content/) about the **gimms** package which has been developed using [GitBook](https://www.gitbook.com/).
 
 <hr>
 

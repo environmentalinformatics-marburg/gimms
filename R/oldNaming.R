@@ -29,7 +29,7 @@
 #'
 #' @references
 #' \url{http://nasanex.s3.amazonaws.com/AVHRR/GIMMS/3G/00READMEgeo.txt}
-#' (accessed on 2020-03-18).
+#' (accessed on 2021-04-15).
 #'
 #' @examples
 #' fls <- system.file("extdata", "inventory_ecv1.rds", package = "gimms")
@@ -43,7 +43,11 @@
 oldNaming <- function(x, suffix = "") {
   
   ## available ndvi3g.v0 files (hold satellite number)
-  fls_v0 <- basename(updateInventory(version = 0, quiet = TRUE))
+  fls_v0 = basename(
+    readRDS(
+      system.file("extdata", "inventory_ecv0.rds", package = "gimms")
+    )
+  )
   dts_v0 <- getV0dates(fls_v0)
   
   dts_v1 <- getV1dates(x)

@@ -5,15 +5,15 @@
 \title{Update GIMMS NDVI3g File Inventory}
 \usage{
 updateInventory(
-  server = c("ecocast", "nasanex", "poles"),
+  server = c("poles", "nasanex", "ecocast"),
   version = 1L,
   quiet = FALSE
 )
 }
 \arguments{
 \item{server}{\code{character}. Specifies the remote server to use. Currently
-available options are \code{"ecocast"} (default), \code{"nasanex"} and 
-\code{"poles"}.}
+available options are \code{"poles"} (default), \code{"nasanex"} and 
+\code{"ecocast"}.}
 
 \item{version}{\code{integer} (or any other convertible class), defaults to
 \code{1L}. Specifies desired GIMMS NDVI3g product version, see 'Details'.
@@ -26,22 +26,22 @@ console output is disabled.}
 A \code{character} vector of online filepaths.
 }
 \description{
-Download the latest version of the GIMMS NDVI3g file inventory from the NASA
-Ames Ecological Forecasting Lab (ECOCAST), NASA Earth Exchange (NEX) Amazon
-AWS or A Big Earth Data Platform for Three Poles. If the specified endpoint 
+Download the latest version of the GIMMS NDVI3g file inventory from the 
+National Center for Atmospheric Research, NASA Earth Exchange (NEX) Amazon
+AWS or Ames Ecological Forecasting Lab (ECOCAST). If the specified endpoint 
 is not reachable (e.g., if there is no active internet connection), the 
 latest local version of the file inventory is used.
 }
 \details{
-GIMMS NDVI3g.v1 is currently available from ECOCAST and A Big Earth Data 
-Platform for Three Poles until end 2015 and comes in NetCDF (\code{.nc4}) 
+GIMMS NDVI3g.v1 is currently available from ECOCAST and The National Center 
+for Atmospheric Research until end 2015 and comes in NetCDF (\code{.nc4}) 
 format. In contrast, NDVI3g.v0 is available as ENVI binary imagery and 
 available from ECOCAST (NASANEX) until end 2013 (2012) only.
 }
 \examples{
 \dontrun{
-updateInventory()            # NDVI3g.v1
-updateInventory(version = 0) # NDVI3g.v0
+updateInventory()                  # NDVI3g.v1
+updateInventory(server = "nasanex") # NDVI3g.v0
 }
 
 ## note that local versions of the online file inventories are also available
@@ -54,6 +54,12 @@ readRDS(ofl_v0)
 ofl_plv1 <- system.file("extdata", "inventory_plv1.rds", package = "gimms")
 readRDS(ofl_plv1)
 
+}
+\references{
+The National Center for Atmospheric Research (2018). A Big Earth Data 
+Platform for Three Poles. Global GIMMS NDVI3g v1 dataset (1981-2015). 
+Available online at \url{http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
+(accessed on 2021-04-15).
 }
 \seealso{
 \code{\link{rearrangeFiles}}.

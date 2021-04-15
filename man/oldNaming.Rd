@@ -42,7 +42,7 @@ oldNaming(fls[65:66])                  # tags newer files with 'XX'
 }
 \references{
 \url{http://nasanex.s3.amazonaws.com/AVHRR/GIMMS/3G/00READMEgeo.txt}
-(accessed on 2020-03-18).
+(accessed on 2021-04-15).
 }
 \seealso{
 \code{\link{nc_open}}, \code{\link{ncvar_get}}.
