@@ -1,2 +1,7 @@
-[ ] file download from nasanex
-[ ] run code from gitbook
+[ ] test file download from nasanex
+[x] run code from gitbook
+[ ] gitbook access
+[ ] check version in `updateInventory()`
+[ ] intercept 'poles' connection timeout
+[ ] central `check*()` function
+[x] `curl_download()` in parallel
