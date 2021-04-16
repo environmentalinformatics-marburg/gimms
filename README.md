@@ -14,7 +14,7 @@ This month      | In total
 
 CRAN | 
 ---- | 
-[![](http://www.r-pkg.org/badges/version/gimms)](http://www.r-pkg.org/pkg/gimms) | 
+[![](http://www.r-pkg.org/badges/version/gimms)](https://www.r-pkg.org:443/pkg/gimms) | 
 
 <hr>
 
