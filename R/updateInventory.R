@@ -36,8 +36,8 @@
 #' 
 #' @examples
 #' \dontrun{
-#' updateInventory()                  # NDVI3g.v1
-#' updateInventory(server = "nasanex") # NDVI3g.v0
+#' updateInventory()
+#' updateInventory(server = "nasanex", version = 0)
 #' }
 #'
 #' ## note that local versions of the online file inventories are also available
@@ -59,6 +59,12 @@ updateInventory <- function(
 ) {
   
   server = match.arg(server)
+  
+  ## check version
+  version = checkVersion(
+    server = server
+    , version = version
+  )
   
   ## available files (online)
   fls = do.call(
@@ -110,6 +116,12 @@ updateInventory <- function(
   fls <- fls[!duplicated(basename(fls))]
   fls <- rearrangeFiles(fls)
   
+  ## append `server` and `version` attributes
+  attributes(fls) = list(
+    server = server
+    , version = version
+  )
+  
   ## return files
   return(fls)
 }
@@ -118,8 +130,6 @@ updateInventory <- function(
 ### update from ecocast -----
 
 updateEcocast <- function(version = 1L) {
-  
-  version <- as.integer(version)
   
   ## handle expired certificate using 'curl'
   h = curl::new_handle(
@@ -165,7 +175,8 @@ updateNasanex <- function(...) {
 updatePoles = function(...) {
   
   h = curl::new_handle(
-    dirlistonly = TRUE
+    connecttimeout = 30L
+    , dirlistonly = TRUE
     , userpwd = "download_403193:72855006"
   )
   con = curl::curl(

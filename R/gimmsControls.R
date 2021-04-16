@@ -3,6 +3,13 @@
 downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
                        mode = "wb", cores = 1L, ...) {
   
+  ## check if target folder exists
+  checkDsn(dsn)
+  
+  ## check 'cores'
+  cores <- checkCores(cores)
+  
+  
   ### . single core ----
   
   if (cores == 1L) {
@@ -43,8 +50,11 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
     on.exit(parallel::stopCluster(cl))
     
     ## export required variables
-    parallel::clusterExport(cl, c("x", "cores", "dsn", "overwrite", "quiet",
-                                  "mode"), envir = environment())
+    parallel::clusterExport(
+      cl
+      , c("x", "dsn", "overwrite", "quiet", "mode")
+      , envir = environment()
+    )
     
     ## download files in parallel
     parallel::parLapply(cl, x, function(i) {
@@ -254,6 +264,11 @@ checkFls <- function(x, filename) {
 ### . check version ----
 
 checkVersion = function(server, version) {
+  input = version
+  version = suppressWarnings(
+    as.integer(version)
+  )
+  
   version = switch(
     server
     , "ecocast" = intersect(version, c(0, 1))
@@ -264,8 +279,8 @@ checkVersion = function(server, version) {
   if (length(version) == 0) {
     stop(
       sprintf(
-        "NDVI3g version %s is not available from server %s."
-        , version
+        "NDVI3g version '%s' is not available from server '%s'."
+        , input
         , server
       )
     )
