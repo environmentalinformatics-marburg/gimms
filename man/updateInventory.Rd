@@ -40,8 +40,8 @@ available from ECOCAST (NASANEX) until end 2013 (2012) only.
 }
 \examples{
 \dontrun{
-updateInventory()                  # NDVI3g.v1
-updateInventory(server = "nasanex") # NDVI3g.v0
+updateInventory()
+updateInventory(server = "nasanex", version = 0)
 }
 
 ## note that local versions of the online file inventories are also available
