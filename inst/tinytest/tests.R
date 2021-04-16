@@ -58,6 +58,22 @@ expect_error(
   )
 )
 
+## 'character' input
+expect_identical(
+  gimms:::checkVersion(
+    "poles"
+    , "1"
+  )
+  , 1
+)
+
+expect_error(
+  gimms:::checkVersion(
+    "poles"
+    , "v1"
+  )
+)
+
 
 ### . dates_*v1.rds ----
 
