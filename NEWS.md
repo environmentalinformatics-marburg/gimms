@@ -4,7 +4,11 @@
 
 #### 🐛 bug fixes
 
+  * Read `"poles"` FTP download info directly from website to avoid problems associated with changed username or password (#4).
+
 #### 💬 documentation etc
+
+  * Turned on markdown support for roxygen
 
 #### 🍬 miscellaneous
 
