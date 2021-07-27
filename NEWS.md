@@ -1,4 +1,4 @@
-## gimms 1.2.0.9000 (2021-04-15)
+## gimms 1.2.0.9001 (2021-07-27)
 
 #### ✨ features and improvements
 
