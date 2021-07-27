@@ -9,6 +9,16 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
   ## check 'cores'
   cores <- checkCores(cores)
   
+  ## username, password (applicable for `poles` download, only)
+  userpwd = if (any(grepl("^ftp://", x))) {
+    nfo = getPolesFTPInfo()
+    paste(
+      nfo$username
+      , nfo$password
+      , sep = ":"
+    )
+  }
+  
   
   ### . single core ----
   
@@ -23,7 +33,7 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
       } else {
         if (grepl("^ftp://", i)) {
           h = curl::new_handle(
-            userpwd = "download_403193:72855006"
+            userpwd = userpwd
           )
           try(
             curl::curl_download(
@@ -52,7 +62,7 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
     ## export required variables
     parallel::clusterExport(
       cl
-      , c("x", "dsn", "overwrite", "quiet", "mode")
+      , c("x", "dsn", "overwrite", "quiet", "mode", "userpwd")
       , envir = environment()
     )
     
@@ -65,7 +75,7 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
       } else {
         if (grepl("^ftp://", i)) {
           h = curl::new_handle(
-            userpwd = "download_403193:72855006"
+            userpwd = userpwd
           )
           try(
             curl::curl_download(
