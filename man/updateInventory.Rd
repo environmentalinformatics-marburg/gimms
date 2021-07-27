@@ -12,7 +12,7 @@ updateInventory(
 }
 \arguments{
 \item{server}{\code{character}. Specifies the remote server to use. Currently
-available options are \code{"poles"} (default), \code{"nasanex"} and 
+available options are \code{"poles"} (default), \code{"nasanex"} and
 \code{"ecocast"}.}
 
 \item{version}{\code{integer} (or any other convertible class), defaults to
@@ -26,16 +26,16 @@ console output is disabled.}
 A \code{character} vector of online filepaths.
 }
 \description{
-Download the latest version of the GIMMS NDVI3g file inventory from the 
+Download the latest version of the GIMMS NDVI3g file inventory from the
 National Center for Atmospheric Research, NASA Earth Exchange (NEX) Amazon
-AWS or Ames Ecological Forecasting Lab (ECOCAST). If the specified endpoint 
-is not reachable (e.g., if there is no active internet connection), the 
+AWS or Ames Ecological Forecasting Lab (ECOCAST). If the specified endpoint
+is not reachable (e.g., if there is no active internet connection), the
 latest local version of the file inventory is used.
 }
 \details{
-GIMMS NDVI3g.v1 is currently available from ECOCAST and The National Center 
-for Atmospheric Research until end 2015 and comes in NetCDF (\code{.nc4}) 
-format. In contrast, NDVI3g.v0 is available as ENVI binary imagery and 
+GIMMS NDVI3g.v1 is currently available from ECOCAST and The National Center
+for Atmospheric Research until end 2015 and comes in NetCDF (\code{.nc4})
+format. In contrast, NDVI3g.v0 is available as ENVI binary imagery and
 available from ECOCAST (NASANEX) until end 2013 (2012) only.
 }
 \examples{
@@ -56,8 +56,8 @@ readRDS(ofl_plv1)
 
 }
 \references{
-The National Center for Atmospheric Research (2018). A Big Earth Data 
-Platform for Three Poles. Global GIMMS NDVI3g v1 dataset (1981-2015). 
+The National Center for Atmospheric Research (2018). A Big Earth Data
+Platform for Three Poles. Global GIMMS NDVI3g v1 dataset (1981-2015).
 Available online at \url{http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
 (accessed on 2021-04-15).
 }
