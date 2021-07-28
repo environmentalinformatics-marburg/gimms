@@ -174,27 +174,22 @@ updateNasanex <- function(...) {
 
 updatePoles = function(...) {
   
-  nfo = try(
-    getPolesFTPInfo()
-    , silent = TRUE
-  )
-  if (inherits(nfo, "try-error")) {
-    return(nfo)
-  }
+  ## query `poles` ftp info
+  nfo = getPolesFTPOpts()
   
   h = curl::new_handle(
     connecttimeout = 30L
     , dirlistonly = TRUE
     , userpwd = paste(
-      nfo$username
-      , nfo$password
+      nfo[["gimms.poles.username"]]
+      , nfo[["gimms.poles.password"]]
       , sep = ":"
     )
   )
   con = curl::curl(
     serverPath(
       "poles"
-      , ip = nfo$server
+      , ip = nfo[["gimms.poles.server"]]
     )
     , handle = h
   )
@@ -208,7 +203,10 @@ updatePoles = function(...) {
   }
   
   file.path(
-    serverPath("poles")
+    serverPath(
+      "poles"
+      , ip = nfo[["gimms.poles.server"]]
+    )
     , grep(
       "ndvi3g_geo_v1.*.nc4$"
       , cnt
@@ -218,17 +216,60 @@ updatePoles = function(...) {
 }
 
 
-getPolesFTPInfo = function() {
+getPolesFTPOpts = function() {
+  
+  ## query local `poles` ftp info
+  opts = c(
+    "gimms.poles.server"
+    , "gimms.poles.username"
+    , "gimms.poles.password"
+  )
+  
+  nfo = Map(
+    getOption
+    , opts
+  )
+  
+  ## if not available, retrieve online `poles` ftp info
+  if (any(lengths(nfo) == 0)) {
+    
+    # read from website
+    nfo = try(
+      getPolesFTPInfo()
+      , silent = TRUE
+    )
+    if (inherits(nfo, "try-error")) {
+      return(nfo)
+    }
+    
+    # save to `options()`
+    do.call(
+      options
+      , nfo
+    )
+  }
+  
+  return(
+    nfo
+  )
+}
+
+
+getPolesFTPInfo = function(
+  con = NULL # enables testing with local files
+) {
   
   ## read website content
-  con = url(
-    "http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/"
-  )
-  on.exit(
-    close(
-      con
+  if (is.null(con)) {
+    con = url(
+      "http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/"
     )
-  )
+    on.exit(
+      close(
+        con
+      )
+    )
+  }
   
   lns = readLines(
     con
@@ -260,9 +301,9 @@ getPolesFTPInfo = function() {
     }
     # ftp components
     , x = list(
-      server = "Ftp server"
-      , username = "Ftp username"
-      , password = "Ftp password"
+      "gimms.poles.server" = "Ftp server"
+      , "gimms.poles.username" = "Ftp username"
+      , "gimms.poles.password" = "Ftp password"
     )
     # regex
     , y = list(

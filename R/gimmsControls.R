@@ -11,10 +11,10 @@ downloader <- function(x, dsn = getwd(), overwrite = FALSE, quiet = TRUE,
   
   ## username, password (applicable for `poles` download, only)
   userpwd = if (any(grepl("^ftp://", x))) {
-    nfo = getPolesFTPInfo()
+    nfo = getPolesFTPOpts()
     paste(
-      nfo$username
-      , nfo$password
+      nfo$gimms.poles.username
+      , nfo$gimms.poles.password
       , sep = ":"
     )
   }
