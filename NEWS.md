@@ -1,7 +1,5 @@
 ## gimms 1.2.0.9002 (2021-07-27)
 
-#### ✨ features and improvements
-
 #### 🐛 bug fixes
 
   * Read `"poles"` FTP download info directly from website to avoid problems associated with changed username or password (#4).
@@ -9,8 +7,6 @@
 #### 💬 documentation etc
 
   * Turned on markdown support for roxygen
-
-#### 🍬 miscellaneous
 
 
 ## gimms 1.2.0
