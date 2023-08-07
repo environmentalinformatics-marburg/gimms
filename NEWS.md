@@ -4,6 +4,9 @@
 
 #### 🐛 bug fixes
 
+  * Resolves `curl::handle_setopt()` error during inventory update from the 
+    default `"poles"` server (#9)
+
 #### 💬 documentation etc
 
 #### 🍬 miscellaneous
