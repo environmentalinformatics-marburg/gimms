@@ -291,13 +291,15 @@ getPolesFTPInfo = function(
         , value = TRUE
       )
       
-      regmatches(
+      hits = regmatches(
         txt
         , regexpr(
           y
           , text = txt
         )
       )
+      
+      unique(hits)
     }
     # ftp components
     , x = list(
@@ -307,10 +309,7 @@ getPolesFTPInfo = function(
     )
     # regex
     , y = list(
-      paste(
-        rep("\\d{2,3}", 4)
-        , collapse = "."
-      )
+      "ftp\\d?[a-z.]+\\.cn"
       , "download_\\d+"
       , "\\d+"
     )
