@@ -202,7 +202,7 @@ updatePoles = function(...) {
     return(cnt)
   }
   
-  file.path(
+  nc4 = file.path(
     serverPath(
       "poles"
       , ip = nfo[["gimms.poles.server"]]
@@ -213,6 +213,8 @@ updatePoles = function(...) {
       , value = TRUE
     )
   )
+  
+  sort(nc4)
 }
 
 
