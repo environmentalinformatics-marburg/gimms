@@ -1,3 +1,17 @@
+# gimms 1.2.1.9001 (2023-08-07)
+
+#### ✨ features and improvements
+
+#### 🐛 bug fixes
+
+  * Resolves `curl::handle_setopt()` error during inventory update from the 
+    default `"poles"` server (#9)
+
+#### 💬 documentation etc
+
+#### 🍬 miscellaneous
+
+
 ## gimms 1.2.1 (2021-07-30)
 
 #### 🐛 bug fixes
