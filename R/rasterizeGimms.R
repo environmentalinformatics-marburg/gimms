@@ -19,7 +19,7 @@
 #' @param cores \code{integer}. Number of cores for parallel computing.
 #' @param filename \code{character}. Optional output filename. If specified,
 #' this must be of the same length as 'x'.
-#' @param ... Further arguments passed to \code{\link{writeRaster}}.
+#' @param ... Further arguments passed to \code{\link[raster]{writeRaster}}.
 #'
 #' @return
 #' If \code{split = TRUE}, a list of NDVI3g \code{RasterStack} objects
@@ -28,7 +28,7 @@
 #'
 #' @seealso
 #' \code{\link[raster]{crop}}, \code{\link{qualityControl}},
-#' \code{\link{writeRaster}}.
+#' \code{\link[raster]{writeRaster}}.
 #'
 #' @examples
 #' \dontrun{

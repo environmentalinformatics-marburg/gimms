@@ -6,6 +6,8 @@
 
 #### 💬 documentation etc
 
+  * Provides package anchors (#12)
+
 #### 🍬 miscellaneous
 
 

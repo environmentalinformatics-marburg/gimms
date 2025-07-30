@@ -33,7 +33,7 @@ tested.}
 is applied prior to the Mann-Kendall trend test.}
 
 \item{method}{\code{character}. The prewhitening method to apply, see
-\code{\link{zyp.trend.vector}}.}
+\code{\link[zyp]{zyp.trend.vector}}.}
 
 \item{df}{\code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
 \code{data.frame} holding the value of Kendall's \eqn{\tau} and the referring
@@ -41,7 +41,7 @@ significance level.}
 
 \item{filename}{\code{character}. Optional output filename.}
 
-\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed to \code{\link[raster]{writeRaster}}.}
 }
 \value{
 \itemize{
@@ -62,7 +62,7 @@ described in the \strong{zyp} package vignette (Bronaugh and Werner, 2013).
 }
 \details{
 If available, the function will automatically use open multi-core clusters
-for parallel processing (see \code{\link{beginCluster}} and Examples).
+for parallel processing (see \code{\link[raster]{beginCluster}} and Examples).
 }
 \examples{
 ## Example taken from ?Kendall::MannKendall
@@ -121,5 +121,5 @@ autocorrelation on the ability to detect trend in hydrological series.
 \emph{Hydrological Processes} 16, 1807-1829,\doi{10.1002/hyp.1095}.
 }
 \seealso{
-\code{\link{MannKendall}}, \code{\link{zyp.trend.vector}}.
+\code{\link[Kendall]{MannKendall}}, \code{\link[zyp]{zyp.trend.vector}}.
 }
