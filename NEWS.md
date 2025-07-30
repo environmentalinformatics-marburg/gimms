@@ -31,7 +31,7 @@
 New features:
 
   * File retrieval from A Big Earth Data Platform for Three Poles provided by
-The National Center for Atmospheric Research at http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/.
+The National Center for Atmospheric Research at https://data.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/.
   * Initialized 'tinytest' unit testing (tbc).
 
 Changes:
