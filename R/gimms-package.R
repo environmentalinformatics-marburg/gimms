@@ -11,7 +11,6 @@
 #' trend-free pre-whitening to account for lag-1 autocorrelation.
 #'
 #' @name gimms-package
-#' @docType package
 #' @title Download and Process GIMMS NDVI3g Data
 #' @author Florian Detsch
 #'
@@ -33,6 +32,8 @@
 #'
 #' @keywords package
 #'
+"_PACKAGE"
+
 NULL
 #'
 #' @docType data
