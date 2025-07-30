@@ -25,14 +25,12 @@ if ( !isGeneric("significantTau") ) {
 #' @param ... Further arguments passed to \code{\link[raster]{writeRaster}}.
 #'
 #' @return
-#' \itemize{
 #' \item{\code{numeric} input: }{If \code{df = FALSE} (default), a single
 #' \code{numeric} or \code{logical} (i.e., \code{NA}) depending on whether or
 #' not 'p' was exceeded; else a \code{data.frame} with Kendall's \eqn{\tau} and
 #' the corresponding significance level.}
 #' \item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
 #' Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
-#' }
 #'
 #' @details
 #' If available, the function will automatically use open multi-core clusters

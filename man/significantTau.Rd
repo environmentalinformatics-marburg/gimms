@@ -44,14 +44,12 @@ significance level.}
 \item{...}{Further arguments passed to \code{\link[raster]{writeRaster}}.}
 }
 \value{
-\itemize{
 \item{\code{numeric} input: }{If \code{df = FALSE} (default), a single
 \code{numeric} or \code{logical} (i.e., \code{NA}) depending on whether or
 not 'p' was exceeded; else a \code{data.frame} with Kendall's \eqn{\tau} and
 the corresponding significance level.}
 \item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
 Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
-}
 }
 \description{
 Apply the Mann-Kendall trend test (Mann, 1945) to a series of observations
