@@ -107,10 +107,10 @@ if (require(snow)) {
 }
 \references{
 Kendall, M.G. (1938). A new measure of rank correlation. \emph{Biometrika}
-30(1/2), 81-93, \doi{10.2307/2332226}.
+30(1/2), 81-93, doi: 10.2307/2332226.
 
 Mann, H.B. (1945). Nonparametric tests against trend. \emph{Econometrica}
-13(3), 245-259, \doi{10.2307/1907187}.
+13(3), 245-259, doi: 10.2307/1907187.
 
 Zhang, X., Vincent, L.A., Hogg, W.D. and A. Niitsoo (2000). Temperature and
 Precipitation Trends in Canada during the 20th Century. \emph{Atmosphere-Ocean}

@@ -98,9 +98,9 @@ order for parallelization to take effect.}
 A \code{character} vector of local filepaths.
 }
 \description{
-Download GIMMS NDVI3g data, optionally for a given period of time. NDVI3g.v1 
-(NetCDF, until end 2015) is available from the \code{"poles"} and 
-\code{"ecocast"} servers, whereas NDVI3g.v0 (ENVI binary, until end 2013) is 
+Download GIMMS NDVI3g data, optionally for a given period of time. NDVI3g.v1
+(NetCDF, until end 2015) is available from the \code{"poles"} and
+\code{"ecocast"} servers, whereas NDVI3g.v0 (ENVI binary, until end 2013) is
 \code{"ecocast"} and \code{"nasanex"} exclusive.
 }
 \examples{

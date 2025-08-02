@@ -174,13 +174,23 @@ updateNasanex <- function(...) {
 
 updatePoles = function(...) {
   
+  ## query `poles` ftp info
+  nfo = getPolesFTPOpts()
+  
   h = curl::new_handle(
     connecttimeout = 30L
     , dirlistonly = TRUE
-    , userpwd = "download_403193:72855006"
+    , userpwd = paste(
+      nfo[["gimms.poles.username"]]
+      , nfo[["gimms.poles.password"]]
+      , sep = ":"
+    )
   )
   con = curl::curl(
-    serverPath("poles")
+    serverPath(
+      "poles"
+      , ip = nfo[["gimms.poles.server"]]
+    )
     , handle = h
   )
   on.exit(
@@ -192,12 +202,118 @@ updatePoles = function(...) {
     return(cnt)
   }
   
-  file.path(
-    serverPath("poles")
+  nc4 = file.path(
+    serverPath(
+      "poles"
+      , ip = nfo[["gimms.poles.server"]]
+    )
     , grep(
       "ndvi3g_geo_v1.*.nc4$"
       , cnt
       , value = TRUE
+    )
+  )
+  
+  sort(nc4)
+}
+
+
+getPolesFTPOpts = function() {
+  
+  ## query local `poles` ftp info
+  opts = c(
+    "gimms.poles.server"
+    , "gimms.poles.username"
+    , "gimms.poles.password"
+  )
+  
+  nfo = Map(
+    getOption
+    , opts
+  )
+  
+  ## if not available, retrieve online `poles` ftp info
+  if (any(lengths(nfo) == 0)) {
+    
+    # read from website
+    nfo = try(
+      getPolesFTPInfo()
+      , silent = TRUE
+    )
+    if (inherits(nfo, "try-error")) {
+      return(nfo)
+    }
+    
+    # save to `options()`
+    do.call(
+      options
+      , nfo
+    )
+  }
+  
+  return(
+    nfo
+  )
+}
+
+
+getPolesFTPInfo = function(
+  con = NULL # enables testing with local files
+) {
+  
+  ## read website content
+  if (is.null(con)) {
+    con = url(
+      "http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/"
+    )
+    on.exit(
+      close(
+        con
+      )
+    )
+  }
+  
+  lns = readLines(
+    con
+  )
+  
+  ## find lines with ftp download info
+  ftp_dl_info = grep(
+    "Ftp (server|username|password)"
+    , lns
+    , value = TRUE
+  )
+  
+  ## extract ftp components
+  Map(
+    function(x, y) {
+      txt = grep(
+        x
+        , ftp_dl_info
+        , value = TRUE
+      )
+      
+      hits = regmatches(
+        txt
+        , regexpr(
+          y
+          , text = txt
+        )
+      )
+      
+      unique(hits)
+    }
+    # ftp components
+    , x = list(
+      "gimms.poles.server" = "Ftp server"
+      , "gimms.poles.username" = "Ftp username"
+      , "gimms.poles.password" = "Ftp password"
+    )
+    # regex
+    , y = list(
+      "ftp\\d?[a-z.]+\\.cn"
+      , "download_\\d+"
+      , "\\d+"
     )
   )
 }
@@ -228,6 +344,7 @@ readInventory <- function(server = c("ecocast", "nasanex"), version = 1L) {
 serverPath = function(
   server = c("ecocast", "nasanex", "poles")
   , version = 1L
+  , ip = NULL
 ) {
   switch(
     match.arg(server)
@@ -236,6 +353,9 @@ serverPath = function(
       , ifelse(as.integer(version) == 1, "v1", "v0")
     )
     , "nasanex" = "https://nasanex.s3.amazonaws.com"
-    , "poles"   = "ftp://210.72.14.198"
+    , "poles"   = paste0(
+      "ftp://"
+      , ip
+    )
   )
 }

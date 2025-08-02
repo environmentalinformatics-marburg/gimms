@@ -1,7 +1,15 @@
 library(gimms)
 
+
+### serverPath() ----
+
 expect_identical(
   gimms:::serverPath("poles")
+  , "ftp://"
+)
+
+expect_identical(
+  gimms:::serverPath("poles", ip = "210.72.14.198")
   , "ftp://210.72.14.198"
 )
 
