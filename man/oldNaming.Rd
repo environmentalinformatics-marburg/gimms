@@ -12,7 +12,7 @@ oldNaming(x, suffix = "")
 
 \item{suffix}{\code{character}. Optional suffix to append to the resulting
 file names, e.g. \code{".tif"} for GeoTiff files (see also
-\code{\link{writeFormats}}).}
+\code{\link[raster]{writeFormats}}).}
 }
 \value{
 A \code{character} vector of file names following the "traditional" NDVI3g.v0
@@ -25,7 +25,7 @@ NDVI3g.v0 naming convention.
 \details{
 The satellite number, which was an essential constituent of the NDVI3g.v0
 file naming convention (see 'References'), has been removed from NDVI3g.v1
-file names. However, it can easily be accessed via \code{\link{ncvar_get}}
+file names. However, it can easily be accessed via \code{\link[ncdf4]{ncvar_get}}
 given that the file has previously been downloaded. If an NDVI3g.v1 file
 specified to 'x' is not available locally, by contrast, the satellite number
 is retrieved from the built-in NDVI3g.v0 file inventory (until end 2013; see
@@ -45,5 +45,5 @@ oldNaming(fls[65:66])                  # tags newer files with 'XX'
 (accessed on 2021-04-15).
 }
 \seealso{
-\code{\link{nc_open}}, \code{\link{ncvar_get}}.
+\code{\link[ncdf4]{nc_open}}, \code{\link[ncdf4]{ncvar_get}}.
 }

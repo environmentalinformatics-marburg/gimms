@@ -6,14 +6,14 @@ if ( !isGeneric("qualityControl") ) {
 #'
 #' @description
 #' Perform quality control on GIMMS NDVI3g data based on the companion flag
-#' information. This is merely a wrapper around \code{\link{overlay}} and, since
+#' information. This is merely a wrapper around \code{\link[raster]{overlay}} and, since
 #' quality control is readily available through \code{\link{rasterizeGimms}}, it
 #' is strongly recommended to use the latter function for this purpose.
 #'
 #' @param x A single 2-layered \code{RasterStack} object (NDVI and flags).
 #' @param keep \code{integer}. Accepted flag values (see 'Details').
 #' @param filename \code{character}. Optional output filename.
-#' @param ... Further arguments passed to \code{\link{writeRaster}}.
+#' @param ... Further arguments passed to \code{\link[raster]{writeRaster}}.
 #'
 #' @return
 #' A quality-controlled 'RasterLayer' object.
@@ -23,7 +23,7 @@ if ( !isGeneric("qualityControl") ) {
 #' and return the input object.
 #'
 #' @seealso
-#' \code{\link{rasterizeGimms}}, \code{\link{overlay}}.
+#' \code{\link{rasterizeGimms}}, \code{\link[raster]{overlay}}.
 #'
 #' @examples
 #' \dontrun{

@@ -17,29 +17,27 @@ if ( !isGeneric("significantTau") ) {
 #' @param prewhitening \code{logical}. If \code{TRUE} (default), pre-whitening
 #' is applied prior to the Mann-Kendall trend test.
 #' @param method \code{character}. The prewhitening method to apply, see
-#' \code{\link{zyp.trend.vector}}.
+#' \code{\link[zyp]{zyp.trend.vector}}.
 #' @param df \code{logical}, defaults to \code{FALSE}. If \code{TRUE}, a
 #' \code{data.frame} holding the value of Kendall's \eqn{\tau} and the referring
 #' significance level.
 #' @param filename \code{character}. Optional output filename.
-#' @param ... Further arguments passed to \code{\link{writeRaster}}.
+#' @param ... Further arguments passed to \code{\link[raster]{writeRaster}}.
 #'
 #' @return
-#' \itemize{
 #' \item{\code{numeric} input: }{If \code{df = FALSE} (default), a single
 #' \code{numeric} or \code{logical} (i.e., \code{NA}) depending on whether or
 #' not 'p' was exceeded; else a \code{data.frame} with Kendall's \eqn{\tau} and
 #' the corresponding significance level.}
 #' \item{\code{RasterStackBrick} input: }{A \code{RasterLayer} with values of
 #' Kendall's \eqn{\tau}. Values exceeding the specified 'p' are discarded.}
-#' }
 #'
 #' @details
 #' If available, the function will automatically use open multi-core clusters
-#' for parallel processing (see \code{\link{beginCluster}} and Examples).
+#' for parallel processing (see \code{\link[raster]{beginCluster}} and Examples).
 #'
 #' @seealso
-#' \code{\link{MannKendall}}, \code{\link{zyp.trend.vector}}.
+#' \code{\link[Kendall]{MannKendall}}, \code{\link[zyp]{zyp.trend.vector}}.
 #'
 #' @references
 #' Kendall, M.G. (1938). A new measure of rank correlation. \emph{Biometrika}
