@@ -1,6 +1,6 @@
 Package: gimms
 Title: Download and Process GIMMS NDVI3g Data
-Version: 1.2.2.9001
+Version: 1.2.3
 URL: https://github.com/environmentalinformatics-marburg/gimms
 BugReports: https://github.com/environmentalinformatics-marburg/gimms/issues
 Authors@R: person("Florian", "Detsch", email = "fdetsch@web.de", role = c("cre", "aut"))

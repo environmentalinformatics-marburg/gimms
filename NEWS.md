@@ -1,14 +1,8 @@
-# gimms 1.2.2.9001 (2025-07-30)
-
-#### ✨ features and improvements
-
-#### 🐛 bug fixes
+# gimms 1.2.3 (2025-08-06)
 
 #### 💬 documentation etc
 
   * Provides package anchors (#12)
-
-#### 🍬 miscellaneous
 
 
 # gimms 1.2.2 (2023-08-09)
