@@ -2,6 +2,7 @@
 % Please edit documentation in R/gimms-package.R
 \docType{package}
 \name{gimms-package}
+\alias{gimms}
 \alias{gimms-package}
 \title{Download and Process GIMMS NDVI3g Data}
 \description{
@@ -24,8 +25,16 @@ NDVI3g Time Series. Remote Sensing, 6(8), 6929-6960, \doi{10.3390/rs6086929}.
 
 The National Center for Atmospheric Research (2018). A Big Earth Data
 Platform for Three Poles. Global GIMMS NDVI3g v1 dataset (1981-2015).
-Available online at \url{http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
+Available online at \url{https://data.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
 (accessed on 2021-04-15).
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/environmentalinformatics-marburg/gimms}
+  \item Report bugs at \url{https://github.com/environmentalinformatics-marburg/gimms/issues}
+}
+
 }
 \author{
 Florian Detsch
