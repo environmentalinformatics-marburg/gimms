@@ -8,6 +8,8 @@
 
 #### 🍬 miscellaneous
 
+  * Move {Kendall} and {zyp} to `Suggests` (#14)
+
 
 # gimms 1.2.3 (2025-08-06)
 
