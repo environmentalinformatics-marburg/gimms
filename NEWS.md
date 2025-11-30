@@ -1,3 +1,16 @@
+# gimms 1.2.3.9001 (2025-11-30)
+
+#### ✨ features and improvements
+
+#### 🐛 bug fixes
+
+#### 💬 documentation etc
+
+#### 🍬 miscellaneous
+
+  * Move {Kendall} and {zyp} to `Suggests` (#14)
+
+
 # gimms 1.2.3 (2025-08-06)
 
 #### 💬 documentation etc

@@ -63,9 +63,9 @@ If available, the function will automatically use open multi-core clusters
 for parallel processing (see \code{\link[raster]{beginCluster}} and Examples).
 }
 \examples{
+\dontrun{
 ## Example taken from ?Kendall::MannKendall
 library(Kendall)
-data(PrecipGL)
 plot(PrecipGL)
 
 ## Mann-Kendall trend test without pre-whitening
@@ -79,7 +79,6 @@ significantTau(x, p = 0.001, prewhitening = TRUE, df = TRUE)
 ### use case: significant mann-kendall trends in ndvi3g.v0          #########
 #############################################################################
 
-\dontrun{
 ## Sample data from 1982 to 2013
 data("kili3g.v0")
 rst <- kili3g.v0[[13:nlayers(kili3g.v0)]]
