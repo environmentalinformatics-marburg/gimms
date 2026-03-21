@@ -2,6 +2,8 @@
 
 #### ✨ features and improvements
 
+  * Revert {Kendall} and {zyp} removal (#16)
+
 #### 🐛 bug fixes
 
 #### 💬 documentation etc

@@ -20,11 +20,13 @@ Depends:
     methods
 Imports: 
     curl,
+    Kendall,
     parallel,
-    ncdf4
+    ncdf4,
+    zyp
 License: MIT + file LICENSE
 LazyData: TRUE
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Encoding: UTF-8
-Suggests: Kendall, tinytest, zyp
+Suggests: tinytest
