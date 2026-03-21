@@ -41,3 +41,15 @@ undebug(
     files_1985
   )
 )
+
+
+# 2026-03-21 ====
+
+## DOCUMENT, CHECK, AND BUILD PACKAGE ====
+
+devtools::document()
+devtools::check()
+pak::local_install(ask = FALSE)
+
+tinytest::run_test_dir()
+covr::report()

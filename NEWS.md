@@ -3,6 +3,7 @@
 #### ✨ features and improvements
 
   * Revert {Kendall} and {zyp} removal (#16)
+  * Add initial unit tests for `significantTau()`
 
 #### 🐛 bug fixes
 
