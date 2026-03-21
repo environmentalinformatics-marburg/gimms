@@ -49,7 +49,11 @@ undebug(
 
 devtools::document()
 devtools::check()
+# devtools::build()
 pak::local_install(ask = FALSE)
 
 tinytest::run_test_dir()
 covr::report()
+
+# remotes::install_git("https://codeberg.org/tim-salabim/oiseasy.git")
+oiseasy::bumpDevVersion()
