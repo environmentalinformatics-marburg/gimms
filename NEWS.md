@@ -1,3 +1,11 @@
+# gimms 1.2.5 (2026-03-21)
+
+#### ✨ features and improvements
+
+  * Revert {Kendall} and {zyp} removal (#16)
+  * Add initial unit tests for `significantTau()`
+
+
 # gimms 1.2.4 (2025-11-30)
 
 #### 🍬 miscellaneous

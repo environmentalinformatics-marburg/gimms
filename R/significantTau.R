@@ -55,7 +55,6 @@ if ( !isGeneric("significantTau") ) {
 #' \emph{Hydrological Processes} 16, 1807-1829,\doi{10.1002/hyp.1095}.
 #'
 #' @examples
-#' \dontrun{
 #' ## Example taken from ?Kendall::MannKendall
 #' library(Kendall)
 #' plot(PrecipGL)
@@ -71,6 +70,7 @@ if ( !isGeneric("significantTau") ) {
 #' ### use case: significant mann-kendall trends in ndvi3g.v0          #########
 #' #############################################################################
 #'
+#' \dontrun{
 #' ## Sample data from 1982 to 2013
 #' data("kili3g.v0")
 #' rst <- kili3g.v0[[13:nlayers(kili3g.v0)]]
@@ -116,23 +116,9 @@ setMethod(
     if (length(unique(x)) == 1)
       return(NA)
     
-    if (!requireNamespace("Kendall", quietly = TRUE)) {
-      stop(
-        "This function requires {Kendall}, please install it."
-        , call. = FALSE
-      )
-    }
-
     # with prewhitening
     if (prewhitening) {
       
-      if (!requireNamespace("zyp", quietly = TRUE)) {
-        stop(
-          "The {zyp} package is required for pre-whitening, please install it."
-          , call. = FALSE
-        )
-      }
-
       # try to compute pre-whitened mann-kendall trend test
       try(mk <- zyp::zyp.trend.vector(x, method = method[1]), silent = TRUE)
       
