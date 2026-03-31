@@ -20,7 +20,7 @@ CRAN |
 
 #### Introducing the 'gimms' package
 
-... is an [open-access tutorial](https://fdetsch.gitbooks.io/gimmsgitbook/content/) about the **gimms** package which has been developed using [GitBook](https://www.gitbook.com/).
+.. was an open-access tutorial that's unfortunately currently unavailable. The aim is to make it available soon and provide documentation and usage examples in future updates. For now, please refer to the package documentation for guidance.
 
 <hr>
 
@@ -28,7 +28,7 @@ CRAN |
 
 ##### 2021-04-16, **gimms** 1.2.0 changes the default server for file retrieval
 
-The default server for online file retrieval changed from ECOCAST to [A Big Earth Data Platform for Three Poles](http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/) operated by The National Center for Atmospheric Research. ECOCAST is currently not reachable, and will likely no longer be considered in future releases. This change does not affect the core functionality provided by the package.
+The default server for online file retrieval changed from ECOCAST to [A Big Earth Data Platform for Three Poles](https://data.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/) operated by The National Center for Atmospheric Research. ECOCAST is currently not reachable, and will likely no longer be considered in future releases. This change does not affect the core functionality provided by the package.
 
 <hr>
 

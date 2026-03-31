@@ -58,7 +58,7 @@ readRDS(ofl_plv1)
 \references{
 The National Center for Atmospheric Research (2018). A Big Earth Data
 Platform for Three Poles. Global GIMMS NDVI3g v1 dataset (1981-2015).
-Available online at \url{http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
+Available online at \url{https://data.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
 (accessed on 2021-04-15).
 }
 \seealso{

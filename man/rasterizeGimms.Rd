@@ -39,7 +39,7 @@ rather than a single \code{RasterStack}.}
 \item{filename}{\code{character}. Optional output filename. If specified,
 this must be of the same length as 'x'.}
 
-\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed to \code{\link[raster]{writeRaster}}.}
 }
 \value{
 If \code{split = TRUE}, a list of NDVI3g \code{RasterStack} objects
@@ -78,5 +78,5 @@ lines(shp)
 }
 \seealso{
 \code{\link[raster]{crop}}, \code{\link{qualityControl}},
-\code{\link{writeRaster}}.
+\code{\link[raster]{writeRaster}}.
 }

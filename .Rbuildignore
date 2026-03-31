@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^data-raw$
 ^dev_history\.R$
 ^inst/extdata/dates\.R$

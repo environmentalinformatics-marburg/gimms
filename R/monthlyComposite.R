@@ -18,11 +18,11 @@ if ( !isGeneric("monthlyComposite") ) {
 #' identical months.
 #' @param fun \code{function}. Used to calculate monthly composite layers,
 #' defaults to \code{\link{max}}. Note that a separate 'na.rm' argument is
-#' passed down to \code{\link{stackApply}} via '...' and hence should not be
+#' passed down to \code{\link[raster]{stackApply}} via '...' and hence should not be
 #' included here.
 #' @param cores \code{integer}. Number of cores for parallel computing.
 #' @param filename \code{character}. Optional output filename passed to
-#' \code{\link{stackApply}}.
+#' \code{\link[raster]{stackApply}}.
 #' @param version \code{integer} (or any other class convertible to
 #' \code{integer}). Specifies GIMMS NDVI3g product version, see 'Details' in
 #' \code{\link{updateInventory}}.
@@ -30,16 +30,16 @@ if ( !isGeneric("monthlyComposite") ) {
 #' and last element of the date string to build monthly indices from. Defaults
 #' to the 'version'-specific NDVI3g naming convention, see
 #' \code{\link{monthlyIndices}}.
-#' @param ... Further arguments passed to \code{\link{stackApply}} (i.e.,
-#' 'na.rm') and its underlying \code{\link{writeRaster}} call.
+#' @param ... Further arguments passed to \code{\link[raster]{stackApply}} (i.e.,
+#' 'na.rm') and its underlying \code{\link[raster]{writeRaster}} call.
 #'
 #' @return
 #' If \code{length(x) == 2}, a single \code{RasterLayer} object, else a
 #' \code{RasterStack} object with monthly composite layers.
 #'
 #' @seealso
-#' \code{\link{stackApply}}, \code{\link{monthlyIndices}},
-#' \code{\link{writeRaster}}.
+#' \code{\link[raster]{stackApply}}, \code{\link{monthlyIndices}},
+#' \code{\link[raster]{writeRaster}}.
 #'
 #' @examples
 #' data("bale3g.v1")

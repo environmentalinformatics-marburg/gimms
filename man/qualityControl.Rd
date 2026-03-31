@@ -14,14 +14,14 @@
 
 \item{filename}{\code{character}. Optional output filename.}
 
-\item{...}{Further arguments passed to \code{\link{writeRaster}}.}
+\item{...}{Further arguments passed to \code{\link[raster]{writeRaster}}.}
 }
 \value{
 A quality-controlled 'RasterLayer' object.
 }
 \description{
 Perform quality control on GIMMS NDVI3g data based on the companion flag
-information. This is merely a wrapper around \code{\link{overlay}} and, since
+information. This is merely a wrapper around \code{\link[raster]{overlay}} and, since
 quality control is readily available through \code{\link{rasterizeGimms}}, it
 is strongly recommended to use the latter function for this purpose.
 }
@@ -55,5 +55,5 @@ plot(qcl)
 
 }
 \seealso{
-\code{\link{rasterizeGimms}}, \code{\link{overlay}}.
+\code{\link{rasterizeGimms}}, \code{\link[raster]{overlay}}.
 }

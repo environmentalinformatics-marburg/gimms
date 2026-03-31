@@ -31,7 +31,7 @@
 #' @references 
 #' The National Center for Atmospheric Research (2018). A Big Earth Data 
 #' Platform for Three Poles. Global GIMMS NDVI3g v1 dataset (1981-2015). 
-#' Available online at \url{http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
+#' Available online at \url{https://data.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/}
 #' (accessed on 2021-04-15). 
 #' 
 #' @examples
@@ -202,7 +202,7 @@ updatePoles = function(...) {
     return(cnt)
   }
   
-  file.path(
+  nc4 = file.path(
     serverPath(
       "poles"
       , ip = nfo[["gimms.poles.server"]]
@@ -213,6 +213,8 @@ updatePoles = function(...) {
       , value = TRUE
     )
   )
+  
+  sort(nc4)
 }
 
 
@@ -262,7 +264,7 @@ getPolesFTPInfo = function(
   ## read website content
   if (is.null(con)) {
     con = url(
-      "http://poles.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/"
+      "https://data.tpdc.ac.cn/en/data/9775f2b4-7370-4e5e-a537-3482c9a83d88/"
     )
     on.exit(
       close(
@@ -291,13 +293,15 @@ getPolesFTPInfo = function(
         , value = TRUE
       )
       
-      regmatches(
+      hits = regmatches(
         txt
         , regexpr(
           y
           , text = txt
         )
       )
+      
+      unique(hits)
     }
     # ftp components
     , x = list(
@@ -307,10 +311,7 @@ getPolesFTPInfo = function(
     )
     # regex
     , y = list(
-      paste(
-        rep("\\d{2,3}", 4)
-        , collapse = "."
-      )
+      "ftp\\d?[a-z.]+\\.cn"
       , "download_\\d+"
       , "\\d+"
     )
