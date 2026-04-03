@@ -37,30 +37,61 @@ rearrangeFiles <- function(x,
   if (missing(x))
     x <- list.files(dsn, pattern = pattern, ...)
   
-  ## vector to data.frame
-  gimms_df <- data.frame(file = x, stringsAsFactors = FALSE)
+  ## map month abbreviations to numeric strings
+  mns = c(
+    jan = "01"
+    , feb = "02"
+    , mar = "03"
+    , apr = "04"
+    , may = "05"
+    , jun = "06"
+    , jul = "07"
+    , aug = "08"
+    , sep = "09"
+    , oct = "10"
+    , nov = "11"
+    , dec = "12"
+  )
   
-  ## backup current locale and switch to us standard
-  locale <- Sys.getlocale(category = "LC_TIME")
-  setLocale()
-  
-  ## create columns 'year', 'month' and 'day'
-  gimms_df <- transform(gimms_df,
-                        "year" = substr(basename(file), pos[1], pos[1] + 1),
-                        "month" = substr(basename(file), pos[2], pos[2] + 2),
-                        "day" = ifelse(substr(basename(file), pos[3], pos[3]) == "a", 1, 15))
-  
-  ## create column 'date'
-  gimms_df$date <- as.Date(paste0(gimms_df$day, gimms_df$month, gimms_df$year),
-                           format = "%d%b%y")
-  
-  ## re-arrange rows by 'date'
-  gimms_df <- gimms_df[order(gimms_df$date), ]
-  
-  ## revoke locale time adjustment
-  setLocale(TRUE, locale = locale)
-  
-  ## return rearranged files
-  gimms_fls <- gimms_df$file
-  return(gimms_fls)
+  nfo = rep(
+    basename(x)
+    , each = 3L
+  ) |> 
+    substring(
+      first = c(pos[1], pos[2], pos[3])
+      , last = c(pos[1] + 1L, pos[2] + 2L, pos[3])
+    ) |> 
+    split(
+      f = rep(
+        1:3
+        , times = length(x)
+      )
+    )
+
+  dts = with(
+    nfo
+    , {
+      mn = mns[
+        match(
+          `2`
+          , names(mns)
+        )
+      ]
+      
+      dy = ifelse(
+        `3` == "a"
+        , "01"
+        , "15"
+      )
+      
+      as.Date(
+        paste(dy, mn, `1`)
+        , format = "%d%m%y"
+      )
+    }
+  )
+
+  x[
+    order(dts)
+  ]
 }
