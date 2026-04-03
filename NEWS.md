@@ -1,3 +1,18 @@
+# gimms 1.2.5.9000 (2026-03-31)
+
+#### ✨ features and improvements
+
+  * `rearrangeFiles()` no longer overwrites time locale
+
+#### 🐛 bug fixes
+
+#### 💬 documentation etc
+
+#### 🍬 miscellaneous
+
+  * Extend code coverage
+
+
 # gimms 1.2.5 (2026-03-21)
 
 #### ✨ features and improvements
